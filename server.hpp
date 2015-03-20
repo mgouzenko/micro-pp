@@ -16,9 +16,13 @@
 #include <boost/array.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
-//#include "coroutine.hpp"
+#include <unordered_map>
 #include <boost/asio/coroutine.hpp>
 #include "request_parser.hpp"
+#include <functional>
+#include "types.hpp"
+#include "request_handler.hpp"
+
 
 namespace http {
 namespace server4 {
@@ -29,23 +33,33 @@ struct reply;
 /// The top-level coroutine of the HTTP server.
 class server : boost::asio::coroutine
 {
+
+
+
 public:
   /// Construct the server to listen on the specified TCP address and port, and
   /// serve up files from the given directory.
   explicit server(boost::asio::io_service& io_service,
-      const std::string& address, const std::string& port,
-      boost::function<void(const request&, reply&)> request_handler);
+      			  const std::string& address, 
+				  const std::string& port,
+      			  request_handler req,
+	  			  std::unordered_map<std::string, Callback> url_callback_map 
+	  			);
 
   /// Perform work associated with the server.
   void operator()(
       boost::system::error_code ec = boost::system::error_code(),
       std::size_t length = 0);
 
+  void route(std::string url, Callback); 
 private:
   typedef boost::asio::ip::tcp tcp;
 
   /// The user-supplied handler for all incoming requests.
-  boost::function<void(const request&, reply&)> request_handler_;
+  request_handler request_handler_;
+
+  /// The table to map urls to function callbacks
+  std::unordered_map<std::string, Callback > url_callback_map; 
 
   /// Acceptor used to listen for incoming connections.
   boost::shared_ptr<tcp::acceptor> acceptor_;

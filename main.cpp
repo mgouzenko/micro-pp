@@ -13,7 +13,8 @@
 #include <boost/bind.hpp>
 #include <signal.h>
 #include "server.hpp"
-#include "file_handler.hpp"
+#include "request_handler.hpp"
+
 
 int main(int argc, char* argv[])
 {
@@ -33,9 +34,13 @@ int main(int argc, char* argv[])
     boost::asio::io_service io_service;
 
     // Launch the initial server coroutine.
-    http::server4::server(io_service, argv[1], argv[2],
-        http::server4::file_handler(argv[3]))();
+    //http::server4::server(io_service, argv[1], argv[2], http::server4::file_handler(argv[3]))();
 
+
+	std::unordered_map<std::string, Callback > urls; 	
+	http::server4::request_handler handler("."); 
+
+	http::server4::server(io_service, "0.0.0.0", "8080", handler, urls )();
     // Wait for signals indicating time to shut down.
     boost::asio::signal_set signals(io_service);
     signals.add(SIGINT);
