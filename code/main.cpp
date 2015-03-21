@@ -37,11 +37,11 @@ int main(int argc, char* argv[])
     //http::server4::server(io_service, argv[1], argv[2], http::server4::file_handler(argv[3]))();
 
 
-	std::unordered_map<std::string, Callback > urls; 	
+	//std::unordered_map<std::string, Callback > urls; 	
 	http::server4::request_handler handler("."); 
-
-	http::server4::server(io_service, "0.0.0.0", "8080", handler, urls )();
-    // Wait for signals indicating time to shut down.
+	http::server4::server(io_service, "0.0.0.0", "8080", handler)();
+    
+	// Wait for signals indicating time to shut down.
     boost::asio::signal_set signals(io_service);
     signals.add(SIGINT);
     signals.add(SIGTERM);

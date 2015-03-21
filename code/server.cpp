@@ -21,9 +21,8 @@ namespace server4 {
 server::server(boost::asio::io_service& io_service,
     const std::string& address,
 	const std::string& port,
-    request_handler req,
-  	std::unordered_map<std::string, Callback> urls) 
-   : request_handler_(req), url_callback_map(urls) 
+    request_handler req)
+   : request_handler_(req)  
 {
   tcp::resolver resolver(io_service);
   tcp::resolver::query query(address, port);
@@ -31,10 +30,6 @@ server::server(boost::asio::io_service& io_service,
   
   acceptor_.reset(new tcp::acceptor(io_service, *resolver.resolve(query)));
   std::cout << "hi\n"; 
-}
-
-void server::route(std::string url, Callback func){ 
-	url_callback_map.emplace(url, func);
 }
 
 #include <boost/asio/yield.hpp> // Enable the pseudo-keywords reenter, yield and fork.
@@ -103,7 +98,7 @@ void server::operator()(boost::system::error_code ec, std::size_t length)
         // A valid request was received. Call the user-supplied function object
         // to process the request and compose a reply.
 		  std::cout << request_->uri << std::endl;
-		request_handler_(*request_, *reply_, url_callback_map);
+		request_handler_(*request_, *reply_);
       }
       else
       {

@@ -42,8 +42,7 @@ public:
   explicit server(boost::asio::io_service& io_service,
       			  const std::string& address, 
 				  const std::string& port,
-      			  request_handler req,
-	  			  std::unordered_map<std::string, Callback> url_callback_map 
+      			  request_handler req
 	  			);
 
   /// Perform work associated with the server.
@@ -57,9 +56,6 @@ private:
 
   /// The user-supplied handler for all incoming requests.
   request_handler request_handler_;
-
-  /// The table to map urls to function callbacks
-  std::unordered_map<std::string, Callback > url_callback_map; 
 
   /// Acceptor used to listen for incoming connections.
   boost::shared_ptr<tcp::acceptor> acceptor_;

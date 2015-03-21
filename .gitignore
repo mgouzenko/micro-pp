@@ -1,0 +1,4 @@
+test_app
+*.a
+*.o
+*.swp

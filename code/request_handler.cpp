@@ -29,7 +29,7 @@ request_handler::request_handler(const std::string& doc_root)
 {
 }
 
-void request_handler::operator()(const request& req, reply& rep, std::unordered_map<std::string, Callback > callback_urls)
+void request_handler::operator()(const request& req, reply& rep)
 {
   // Decode url to path.
   std::string request_path;
@@ -62,20 +62,31 @@ void request_handler::operator()(const request& req, reply& rep, std::unordered_
     extension = request_path.substr(last_dot_pos + 1);
   }
 
-  auto func = callback_urls.at(req.uri); 
-  std::string response_str = func(req);
-  std::istringstream is(response_str); 
+  try{
+	  auto func = callback_urls.at(req.uri); 
+	  std::string response_str = func(req);
+	  std::istringstream is(response_str); 
 
-  // Fill out the reply to be sent to the client.
-  rep.status = reply::ok;
-  char buf[512];
-  while (is.read(buf, sizeof(buf)).gcount() > 0)
-    rep.content.append(buf, is.gcount());
-  rep.headers.resize(2);
-  rep.headers[0].name = "Content-Length";
-  rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
-  rep.headers[1].name = "Content-Type";
-  rep.headers[1].value = mime_types::extension_to_type(extension);
+	  // Fill out the reply to be sent to the client.
+	  rep.status = reply::ok;
+	  char buf[512];
+	  while (is.read(buf, sizeof(buf)).gcount() > 0)
+		rep.content.append(buf, is.gcount());
+	  rep.headers.resize(2);
+	  rep.headers[0].name = "Content-Length";
+	  rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+	  rep.headers[1].name = "Content-Type";
+	  rep.headers[1].value = mime_types::extension_to_type(extension);
+   } catch(std::exception& e){
+   		rep = reply::stock_reply(reply::not_found);
+   		return;
+   } 
+
+
+}
+
+void request_handler::route(std::string url, Callback func){ 
+	callback_urls.emplace(url, func);
 }
 
 bool request_handler::url_decode(const std::string& in, std::string& out)
