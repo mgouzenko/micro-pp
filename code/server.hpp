@@ -50,7 +50,6 @@ public:
       boost::system::error_code ec = boost::system::error_code(),
       std::size_t length = 0);
 
-  void route(std::string url, Callback); 
 private:
   typedef boost::asio::ip::tcp tcp;
 

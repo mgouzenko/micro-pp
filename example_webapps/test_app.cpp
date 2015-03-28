@@ -1,10 +1,11 @@
 
 #include "app.hpp"
 #include "request.hpp" 
+#include "reply.hpp"
 
 
-std::string hello(const http::server4::request&){
-	return "hello world!"; 
+void hello(const http::server4::request& req, http::server4::reply& rep){
+	rep.render_string("hello world!"); 
 }
 
 

@@ -63,15 +63,11 @@ void request_handler::operator()(const request& req, reply& rep)
   }
 
   try{
-	  auto func = callback_urls.at(req.uri); 
-	  std::string response_str = func(req);
-	  std::istringstream is(response_str); 
-
+	  auto routeCallback = callback_urls.at(req.uri); 
+	  routeCallback(req, rep);
 	  // Fill out the reply to be sent to the client.
 	  rep.status = reply::ok;
-	  char buf[512];
-	  while (is.read(buf, sizeof(buf)).gcount() > 0)
-		rep.content.append(buf, is.gcount());
+
 	  rep.headers.resize(2);
 	  rep.headers[0].name = "Content-Length";
 	  rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
@@ -89,12 +85,20 @@ void request_handler::route(std::string url, Callback func){
 	callback_urls.emplace(url, func);
 }
 
+/*
+* Takes a url that has encoded special characters and decodes to find
+* the correc path
+* param in: encoded url from request
+* param out: decoded url
+* return bool: true on success, false on fail 
+*/
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {
   out.clear();
   out.reserve(in.size());
   for (std::size_t i = 0; i < in.size(); ++i)
   {
+    //Special character decoded from %Hex values
     if (in[i] == '%')
     {
       if (i + 3 <= in.size())

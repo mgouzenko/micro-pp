@@ -97,6 +97,7 @@ void server::operator()(boost::system::error_code ec, std::size_t length)
       {
         // A valid request was received. Call the user-supplied function object
         // to process the request and compose a reply.
+        // Print the uri (route) from the request
 		  std::cout << request_->uri << std::endl;
 		request_handler_(*request_, *reply_);
       }
