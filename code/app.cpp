@@ -30,18 +30,16 @@ namespace micro{
 	void app::run()
 	{
 	  try
-	  {
-
-		std::vector<std::thread> workers;
+	  {	
 
 		for(int i=0; i<1; i++){
 			std::cout << "added worker\n";
-			workers.push_back(std::thread(&app::handle_requests, this));
+			thread_pool.push_back(std::thread(&app::handle_requests, this));
 		}
 		
 		//for(int i=0; i<workers.size(); i++) workers[i].detach(); 
 
-		boost::asio::io_service io_service;
+		
 		
 		
 		http::server4::server(io_service, "0.0.0.0", "8080", q)();
@@ -52,8 +50,14 @@ namespace micro{
 		#if defined(SIGQUIT)
 		signals.add(SIGQUIT);
 		#endif // defined(SIGQUIT)
+	
+
 		signals.async_wait(boost::bind(
-			  &boost::asio::io_service::stop, &io_service));
+			  &app::shut_down, this));
+
+
+		//signals.async_wait(boost::bind(
+		//	  &boost::asio::io_service::stop, &io_service));
 
 		// Run the server.
 		io_service.run();
@@ -70,7 +74,7 @@ namespace micro{
 	}
 
 	void app::handle_requests(){
-		for(;;){
+		while(!shutting_down){
 			if(!q.empty() ){
 				auto serv = q.front();
 				q.pop();
@@ -78,5 +82,12 @@ namespace micro{
 			} else
 				std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
+	}
+
+	void app::shut_down(){
+		shutting_down = true; 
+		for(int i = 0; i < thread_pool.size(); i++) thread_pool[i].join(); 
+		io_service.stop(); 
+	
 	}
 }
