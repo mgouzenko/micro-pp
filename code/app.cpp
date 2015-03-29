@@ -15,6 +15,9 @@
 #include "server.hpp"
 #include "file_handler.hpp"
 #include "app.hpp"
+#include <thread>
+#include "request_handler.hpp"
+#include <chrono>
 
 namespace micro{
 
@@ -29,10 +32,19 @@ namespace micro{
 	  try
 	  {
 
+		std::vector<std::thread> workers;
+
+		for(int i=0; i<1; i++){
+			std::cout << "added worker\n";
+			workers.push_back(std::thread(&app::handle_requests, this));
+		}
+		
+		//for(int i=0; i<workers.size(); i++) workers[i].detach(); 
+
 		boost::asio::io_service io_service;
 		
 		
-		http::server4::server(io_service, "0.0.0.0", "8080", handler)();
+		http::server4::server(io_service, "0.0.0.0", "8080", q)();
 		// Wait for signals indicating time to shut down.
 		boost::asio::signal_set signals(io_service);
 		signals.add(SIGINT);
@@ -57,5 +69,14 @@ namespace micro{
 		handler.route(url, func); 	
 	}
 
-	
+	void app::handle_requests(){
+		for(;;){
+			if(!q.empty() ){
+				auto serv = q.front();
+				q.pop();
+				handler(serv); 
+			} else
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+		}
+	}
 }

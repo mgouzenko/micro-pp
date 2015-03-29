@@ -21,8 +21,10 @@
 #include "request_parser.hpp"
 #include <functional>
 #include "types.hpp"
-#include "request_handler.hpp"
-
+#include <boost/lockfree/queue.hpp>
+#include <utility> 
+#include <memory>
+#include <queue>
 
 namespace http {
 namespace server4 {
@@ -34,7 +36,8 @@ struct reply;
 class server : boost::asio::coroutine
 {
 
-
+private:
+  typedef boost::asio::ip::tcp tcp;
 
 public:
   /// Construct the server to listen on the specified TCP address and port, and
@@ -42,7 +45,7 @@ public:
   explicit server(boost::asio::io_service& io_service,
       			  const std::string& address, 
 				  const std::string& port,
-      			  request_handler req
+				  std::queue<server>& q
 	  			);
 
   /// Perform work associated with the server.
@@ -50,12 +53,10 @@ public:
       boost::system::error_code ec = boost::system::error_code(),
       std::size_t length = 0);
 
-  void route(std::string url, Callback); 
-private:
-  typedef boost::asio::ip::tcp tcp;
+  void route(std::string url, Callback);
 
-  /// The user-supplied handler for all incoming requests.
-  request_handler request_handler_;
+  /// The work queue
+  std::queue<server>& queue; 
 
   /// Acceptor used to listen for incoming connections.
   boost::shared_ptr<tcp::acceptor> acceptor_;

@@ -8,13 +8,14 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef HTTP_SERVER4_FILE_HANDLER_HPP
-#define HTTP_SERVER4_FILE_HANDLER_HPP
+#ifndef __REQUEST_HANDLER_HPP__
+#define __REQUEST_HANDLER_HPP__
 
 #include <string>
 #include <unordered_map> 
 #include <functional> 
 #include "types.hpp"
+#include "server.hpp"
 
 namespace http {
 namespace server4 {
@@ -30,7 +31,7 @@ public:
   explicit request_handler(const std::string& doc_root);
 
   /// Handle a request and produce a reply.
-  void operator()(const request& req, reply& rep);
+  void operator()(server& serv);
 
   void route(std::string url, Callback func); 
 

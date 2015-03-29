@@ -8,12 +8,15 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include "request.hpp"
+#include "reply.hpp"
+#include "types.hpp"
+#include <memory> 
 #include "server.hpp"
 #include "request.hpp"
 #include "reply.hpp"
 #include <iostream> 
 #include <functional>
-
 
 namespace http {
 namespace server4 {
@@ -21,15 +24,12 @@ namespace server4 {
 server::server(boost::asio::io_service& io_service,
     const std::string& address,
 	const std::string& port,
-    request_handler req)
-   : request_handler_(req)  
+	std::queue<server>& q )
+   : queue{q}
 {
   tcp::resolver resolver(io_service);
   tcp::resolver::query query(address, port);
-  std::cout << (*resolver.resolve(query)).endpoint() << std::endl; 
-  
   acceptor_.reset(new tcp::acceptor(io_service, *resolver.resolve(query)));
-  std::cout << "hi\n"; 
 }
 
 #include <boost/asio/yield.hpp> // Enable the pseudo-keywords reenter, yield and fork.
@@ -91,27 +91,40 @@ void server::operator()(boost::system::error_code ec, std::size_t length)
       } while (boost::indeterminate(valid_request_));
 
       // Create the reply object that will be sent back to the client.
-      reply_.reset(new reply);
+      reply_.reset(new reply);	
 
       if (valid_request_)
       {
         // A valid request was received. Call the user-supplied function object
         // to process the request and compose a reply.
-		  std::cout << request_->uri << std::endl;
-		request_handler_(*request_, *reply_);
-      }
+		
+		  
+		  //std::cout << request_->uri << std::endl;
+		  //std::unique_ptr<WorkItem> ptr{new WorkItem(*request_, *reply_) }; 
+		  //work_item item(request_.get(), reply_.get()); 
+		  
+		  reply_->content = "content\n"; 
+		  
+		  yield queue.push(*this);
+	  }
       else
       {
         // The request was invalid.
         *reply_ = reply::stock_reply(reply::bad_request);
       }
 
-      // Send the reply back to the client.
-      yield boost::asio::async_write(*socket_, reply_->to_buffers(), *this);
-
-      // Initiate graceful connection closure.
+	  std::cerr << "before cerr\n";
+      std::cerr << (reply_->content + "\n"); 
+	  // Send the reply back to the client.
+	  std::cerr << "before write\n";
+	  
+	  yield boost::asio::async_write(*socket_, reply_->to_buffers(), *this);
+	  
+	  
+	  
+	  // Initiate graceful connection closure.
       socket_->shutdown(tcp::socket::shutdown_both, ec);
-    }
+	}
   }
 
   // If an error occurs then the coroutine is not reentered. Consequently, no

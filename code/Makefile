@@ -1,5 +1,5 @@
-CXX = g++ 
-CC = g++
+CXX = clang++ 
+CC = clang++
 LDLIBS = -lboost_system
 CXXFLAGS = -std=gnu++11
 
@@ -12,7 +12,7 @@ request_handler.o: request_handler.hpp
 server.o: server.hpp
 request_parser.o: request_parser.hpp
 reply.o: reply.hpp
-app.o: app.hpp
+app.o: app.hpp server.hpp
 
 .PHONY: clean
 clean:
