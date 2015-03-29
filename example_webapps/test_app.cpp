@@ -6,6 +6,8 @@
 
 void hello(const http::server4::request& req, http::server4::reply& rep){
 	rep.render_string("hello world!"); 
+  rep.set_cookie("first", "1");
+  rep.set_cookie("second", "2");
 }
 
 

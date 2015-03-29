@@ -252,5 +252,14 @@ reply reply::stock_reply(reply::status_type status)
   return rep;
 }
 
+void reply::render_string(std::string message) {
+    content.append(message);
+}
+
+void reply::set_cookie(std::string key, std::string val) {
+  std::string str = key + "=" + val;
+  cookies.push_back(str);
+}
+
 } // namespace server4
 } // namespace http

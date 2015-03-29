@@ -39,13 +39,21 @@ struct reply
   /// The content to be sent in the reply.
   std::string content;
 
+  // Vector of cookies to be added to header
+  std::vector<std::string> cookies;
+
   /*
   * Sets the message content of a HTTP response
   * param my_content: Content string you want to send in response 
   */
-  void render_string(std::string message) {
-      content.append(message);
-  }
+  void render_string(std::string message);
+
+  /*
+  * Set the key and value of cookie to send back to client
+  * param key: key of cookie
+  * param value: value of cookie
+  */
+  void set_cookie(std::string key, std::string val);
 
   /// Convert the reply into a vector of buffers. The buffers do not own the
   /// underlying memory blocks, therefore the reply object must remain valid and

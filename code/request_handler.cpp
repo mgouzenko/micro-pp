@@ -68,11 +68,16 @@ void request_handler::operator()(const request& req, reply& rep)
 	  // Fill out the reply to be sent to the client.
 	  rep.status = reply::ok;
 
-	  rep.headers.resize(2);
+    // Make sure to set size of header vector
+	  rep.headers.resize(2 + rep.cookies.size());
 	  rep.headers[0].name = "Content-Length";
 	  rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
 	  rep.headers[1].name = "Content-Type";
 	  rep.headers[1].value = mime_types::extension_to_type(extension);
+    for (int i = 0; i < rep.cookies.size(); i++) {
+      rep.headers[i+2].name = "Set-Cookie";
+      rep.headers[i+2].value = rep.cookies[i];
+    }
    } catch(std::exception& e){
    		rep = reply::stock_reply(reply::not_found);
    		return;
