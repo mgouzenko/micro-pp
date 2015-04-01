@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "header.hpp"
 
 namespace http {
@@ -38,6 +39,9 @@ struct request
 
   /// The optional content sent with the request.
   std::string content;
+
+  // Fields populated after the URL is matched:
+  std::unordered_map<std::string, std::string> label_values;
 };
 
 } // namespace server4
