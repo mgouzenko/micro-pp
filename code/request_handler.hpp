@@ -15,6 +15,7 @@
 #include <unordered_map> 
 #include <functional> 
 #include "types.hpp"
+#include "response.hpp"
 
 namespace http {
 namespace server4 {
@@ -44,6 +45,9 @@ private:
   /// Perform URL-decoding on a string. Returns false if the encoding was
   /// invalid.
   static bool url_decode(const std::string& in, std::string& out);
+
+  response response_;
+
 };
 
 } // namespace server4
