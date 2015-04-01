@@ -15,7 +15,7 @@ int main(int argc, char** argv){
 	micro::url test2 ("/hello", {"GET"}, hello);
 	micro::url test3 ("/user/<int:id>/photo", {"GET"}, hello);
 	micro::url test4 ("/", {"GET"}, hello);
-	micro::url test5 ("/user/<name>/profile", {"POST"}, hello);
+	micro::url test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
 
 	http::server4::request r;
     r.method = "GET";
@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 	assert(test4.match(r));
 
     r.method = "POST";
-	r.uri = "/user/adamchel/profile";
+	r.uri = "/user/adamchel/pro-fi_le";
 	assert(test5.match(r));
     assert(r.label_values["name"] == "adamchel");
 

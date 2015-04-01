@@ -9,7 +9,7 @@ namespace micro {
     {
         callback_ = callback;
         methods_ = methods;
-        internal_regex_ = std::regex("^/[A-Za-z0-9\\./]*$");
+        internal_regex_ = std::regex("^/[A-Za-z0-9_\\-\\./]*$");
     }
 
     url::url(std::string specifier, std::vector<std::string> methods, Callback callback)
@@ -17,12 +17,12 @@ namespace micro {
         callback_ = callback;
         methods_ = methods;
 
-        std::regex specifier_format ("^(/((<[A-Za-z0-9]+>)|(<int:[A-Za-z0-9]+>)|([A-Za-z0-9\\.]+)))*/?$");
+        std::regex specifier_format ("^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$");
 
         if(std::regex_match(specifier, specifier_format)) {
             std::string new_regex = "^" + specifier + "$";
-            new_regex = std::regex_replace(new_regex, std::regex("<[A-Za-z0-9]+>"), "([A-Za-z0-9]+)");
-            new_regex = std::regex_replace(new_regex, std::regex("<int:[A-Za-z0-9]+>"), "([0-9]+)");
+            new_regex = std::regex_replace(new_regex, std::regex("<[A-Za-z0-9_\\-]+>"), "([A-Za-z0-9_\\-]+)");
+            new_regex = std::regex_replace(new_regex, std::regex("<int:[A-Za-z0-9_\\-]+>"), "([0-9]+)");
             new_regex = std::regex_replace(new_regex, std::regex("[\\.]"), "\\.");
 
             // TODO: For debugging only
@@ -31,18 +31,20 @@ namespace micro {
             internal_regex_ = std::regex(new_regex);
 
             // Extract labels from the route specification
-            std::regex label_extractor ("(?:<([A-Za-z0-9]+)>)|(?:<int:([A-Za-z0-9]+)>)");
+            std::regex label_extractor ("(?:<([A-Za-z0-9_\\-]+)>)|(?:<int:([A-Za-z0-9_\\-]+)>)");
             std::smatch m;
             std::vector<std::string> labels;
             while(std::regex_search (specifier, m, label_extractor)) {
+
+                // This must be a standard label
                 if (m[1] != "") {
                     labels_.push_back(m[1]);
-                    std::cout << "New label: " << m[1] << "\n";
                 }
-                else  {
+                // This must be an int label
+                else {
                     labels_.push_back(m[2]);
-                    std::cout << "New label: " << m[2] << "\n";
                 }
+
                 specifier = m.suffix().str();
             }
         }
@@ -75,7 +77,7 @@ namespace micro {
             // Extract the values and associate them with labels
             auto val_it = ++m.begin();
             auto label_it = labels_.begin();
-            while (val_it != m.end()) {
+            while (label_it != labels_.end()) {
                 request.label_values.emplace(*label_it++, *val_it++);
             }
 
