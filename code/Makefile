@@ -13,12 +13,9 @@ server.o: server.hpp
 request_parser.o: request_parser.hpp
 reply.o: reply.hpp
 app.o: app.hpp
-<<<<<<< HEAD
 response.o: response.hpp
 cookie.o: cookie.hpp
-=======
 url.o: url.hpp
->>>>>>> 7673ff91210763e8e0f9750d79c33c66932ef028
 
 .PHONY: clean
 clean:
