@@ -4,7 +4,7 @@ CXXFLAGS = -std=gnu++11
 
 
 url_demo: url_demo.cpp
-	$(CXX) -std=gnu++11 -I../code url_demo.cpp -lboost_system -L../code -lmicro  -o url_demo
+	$(CXX) -std=gnu++11 -I../src url_demo.cpp -lboost_system -L../src -lmicro  -o url_demo
 
 .PHONY: clean
 clean:
