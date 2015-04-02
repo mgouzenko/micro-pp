@@ -18,14 +18,22 @@ int main(int argc, char** argv){
 	micro::url_route test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
 
 	http::server4::request r;
+    http::server4::response resp;
     r.method = "GET";
 	r.uri = "/yo/i.s/37/c0ol";
 	assert(test1.match(r));
     assert(r.label_values["id"] == "37");
 	r.uri = "/hello";
+
+
+    test3.callback(r, resp);
+
 	assert(test2.match(r));
 	r.uri = "/user/61347/photo";
 	assert(test3.match(r));
+
+
+
 	r.uri = "/";
 	assert(test4.match(r));
 

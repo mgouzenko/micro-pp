@@ -5,14 +5,14 @@ namespace micro {
 
     // A constructor for a catch-all URL that accepts any validly formed URL
     // This is going to be registered with a static file handler callback by default
-    url_route::url_route(std::vector<std::string> methods, Callback callback)
+    url_route::url_route(std::vector<std::string> methods, micro::callback callback)
     {
         callback_ = callback;
         methods_ = methods;
         internal_regex_ = std::regex("^/[A-Za-z0-9_\\-\\./]*$");
     }
 
-    url_route::url_route(std::string specifier, std::vector<std::string> methods, Callback callback)
+    url_route::url_route(std::string specifier, std::vector<std::string> methods, micro::callback callback)
     {
         callback_ = callback;
         methods_ = methods;

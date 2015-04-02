@@ -5,7 +5,11 @@
 #include "reply.hpp"
 #include "response.hpp"
 #include <functional>
-#include <utility> 
+#include <utility>
 
-typedef std::function<void(const http::server4::request& req, http::server4::response& res)>  Callback;
+namespace micro {
+
+    typedef std::function<void(const http::server4::request& req, http::server4::response& res)>  callback;
+
+}
 #endif

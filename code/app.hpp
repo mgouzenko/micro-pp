@@ -1,33 +1,33 @@
 #include "request_handler.hpp"
-#include "types.hpp" 
-#include <boost/lockfree/queue.hpp> 
+#include "types.hpp"
+#include <boost/lockfree/queue.hpp>
 #include <queue>
 #include <thread>
 
-namespace micro{	
-	
+namespace micro{
+
 	class app{
 		private:
-			bool shutting_down = false; 
+			bool shutting_down = false;
 
-			http::server4::request_handler	handler;    //The request handler in charge of routing requests to callbacks. 
-		
-			std::queue<http::server4::server> q;	
+			http::server4::request_handler	handler;    //The request handler in charge of routing requests to callbacks.
+
+			std::queue<http::server4::server> q;
 
 			std::vector<std::thread> thread_pool;
 
 			void handle_requests();//http::server4::request_handler& handler, boost::lockfree::queue<http::server4::work_item> q);
 
-			void shut_down(); 
+			void shut_down();
 
 			boost::asio::io_service io_service;
-		
+
 		public:
-			app(); 
+			app();
 
-			void run(); 
+			void run();
 
-			void route(std::string url, Callback func); 
+			void route(std::string url, micro::callback func); 
 	};
 
 

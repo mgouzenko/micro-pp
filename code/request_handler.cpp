@@ -71,11 +71,11 @@ void request_handler::operator()(server& serv)
     extension = request_path.substr(last_dot_pos + 1);
   }
 
-  
-  
+
+
   try{
 
-	  auto routeCallback = callback_urls.at(req.uri); 
+	  auto routeCallback = callback_urls.at(req.uri);
 	  routeCallback(req, response_);
     rep.handle_response(response_, extension);
 
@@ -93,13 +93,13 @@ void request_handler::operator()(server& serv)
    } catch(std::exception& e){
    		rep = reply::stock_reply(reply::not_found);
 		serv();
-   } 
+   }
 
-  
-  serv(); 	
+
+  serv();
 }
 
-void request_handler::route(std::string url, Callback func){
+void request_handler::route(std::string url, micro::callback func){
 	callback_urls.emplace(url, func);
 }
 

@@ -12,8 +12,8 @@
 #define __REQUEST_HANDLER_HPP__
 
 #include <string>
-#include <unordered_map> 
-#include <functional> 
+#include <unordered_map>
+#include <functional>
 #include "types.hpp"
 #include "server.hpp"
 #include "response.hpp"
@@ -34,14 +34,14 @@ public:
   /// Handle a request and produce a reply.
   void operator()(server& serv);
 
-  void route(std::string url, Callback func); 
+  void route(std::string url, micro::callback func);
 
 private:
   /// The directory containing the files to be served.
   std::string doc_root_;
 
-  /// The map of urls to Callback functions 
-  std::unordered_map<std::string, Callback > callback_urls;
+  /// The map of urls to Callback functions
+  std::unordered_map<std::string, micro::callback > callback_urls;
 
   /// Perform URL-decoding on a string. Returns false if the encoding was
   /// invalid.
