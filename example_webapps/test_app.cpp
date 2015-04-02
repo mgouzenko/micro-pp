@@ -2,14 +2,15 @@
 #include "app.hpp"
 #include "request.hpp" 
 #include "response.hpp"
+#include "cookie.hpp"
+#include <ctime>
 
 
 void hello(const http::server4::request& req, http::server4::response& res){
-  std::string my_key = "third";
-  std::string my_val = "3";
+  time_t now = time(0) + 100; 
   res.render_string("hello world"); 
-  res.set_cookie(my_key, my_val);
-  //res.set_cookie("second", "2");
+  http::server4::Cookie c = http::server4::Cookie("fourth", "4", now);
+  res.set_cookie(c);
 }
 
 
