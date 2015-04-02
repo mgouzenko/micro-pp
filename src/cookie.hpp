@@ -12,8 +12,7 @@
 #include <string>
 #include <iostream>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     class Cookie {
 
@@ -48,7 +47,6 @@ namespace server4 {
 
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_COOKIE_HPP

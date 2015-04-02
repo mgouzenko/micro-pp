@@ -6,8 +6,7 @@
 #include <unordered_map>
 #include "header.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     /// A request received from a client.
     struct request
@@ -34,7 +33,6 @@ namespace server4 {
       std::unordered_map<std::string, std::string> label_values;
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_REQUEST_HPP

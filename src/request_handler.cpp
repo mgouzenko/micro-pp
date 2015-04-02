@@ -12,8 +12,7 @@
 #include "types.hpp"
 #include "server.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
 request_handler::request_handler(const std::string& doc_root)
   : doc_root_(doc_root)
@@ -146,5 +145,4 @@ bool request_handler::url_decode(const std::string& in, std::string& out)
   return true;
 }
 
-} // namespace server4
-} // namespace http
+} // namespace micro

@@ -53,7 +53,7 @@ namespace micro {
 
     // Should return true if it matches the request and populates the request with the relevant
     // returns false if the URL doesn't match the request
-    bool url_route::match(http::server4::request& request)
+    bool url_route::match(micro::request& request)
     {
 
         bool allowable = false;
@@ -86,7 +86,7 @@ namespace micro {
     // Should call the callback registered to this URL with the given request and the response to populate
     // TODO: potentially refactor to operator()?
     // TODO: also potentially refactor so callback can't directly be called (maybe only call in match())
-    void url_route::callback(const http::server4::request& request, http::server4::response& response)
+    void url_route::callback(const micro::request& request, micro::response& response)
     {
         callback_(request, response);
     }

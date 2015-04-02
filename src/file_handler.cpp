@@ -8,8 +8,7 @@
 #include "reply.hpp"
 #include "request.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     file_handler::file_handler(const std::string& doc_root)
       : doc_root_(doc_root)
@@ -98,5 +97,4 @@ namespace server4 {
       return true;
     }
 
-} // namespace server4
-} // namespace http
+} // namespace micro

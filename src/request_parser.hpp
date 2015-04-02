@@ -7,8 +7,7 @@
 //#include "coroutine.hpp"
 #include <boost/asio/coroutine.hpp>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     struct request;
 
@@ -62,7 +61,6 @@ namespace server4 {
       bool headers_equal(const std::string& a, const std::string& b);
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_REQUEST_PARSER_HPP

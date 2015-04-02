@@ -6,8 +6,7 @@
 #include "mime_types.hpp"
 #include "response.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     namespace status_strings {
 
@@ -266,5 +265,4 @@ namespace server4 {
 
   }
 
-} // namespace server4
-} // namespace http
+} // namespace micro

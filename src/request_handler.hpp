@@ -8,8 +8,7 @@
 #include "server.hpp"
 #include "response.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     struct reply;
     struct request;
@@ -41,7 +40,6 @@ namespace server4 {
 
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_FILE_HANDLER_HPP

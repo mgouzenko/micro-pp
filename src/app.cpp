@@ -24,7 +24,7 @@ namespace micro {
 
         //for(int i=0; i<workers.size(); i++) workers[i].detach();
 
-        http::server4::server(io_service, "0.0.0.0", "8080", q)();
+        micro::server(io_service, "0.0.0.0", "8080", q)();
         // Wait for signals indicating time to shut down.
         boost::asio::signal_set signals(io_service);
         signals.add(SIGINT);

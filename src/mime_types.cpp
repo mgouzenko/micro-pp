@@ -1,7 +1,6 @@
 #include "mime_types.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 namespace mime_types {
 
     struct mapping {
@@ -29,5 +28,4 @@ namespace mime_types {
     }
 
 } // namespace mime_types
-} // namespace server4
-} // namespace http
+} // namespace micro

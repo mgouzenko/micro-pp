@@ -16,8 +16,7 @@
 #include "header.hpp"
 #include "cookie.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     class response {
     public:
@@ -65,7 +64,6 @@ namespace server4 {
 
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_RESPONSE_HPP

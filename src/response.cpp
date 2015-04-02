@@ -4,8 +4,7 @@
 #include "response.hpp"
 #include "cookie.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     /*
     * Get the message string
@@ -61,5 +60,4 @@ namespace server4 {
         add_header(h);
     }
 
-}
 }

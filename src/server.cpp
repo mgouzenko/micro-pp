@@ -8,8 +8,7 @@
 #include <iostream>
 #include <functional>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     server::server(boost::asio::io_service& io_service,
         const std::string& address,
@@ -122,5 +121,4 @@ namespace server4 {
 
     #include <boost/asio/unyield.hpp> // Disable the pseudo-keywords reenter, yield and fork.
 
-} // namespace server4
-} // namespace http
+} // namespace micro

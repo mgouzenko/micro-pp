@@ -5,7 +5,7 @@
 #include "url_route.hpp"
 
 
-void hello(const http::server4::request& req, http::server4::response& resp){
+void hello(const micro::request& req, micro::response& resp){
   resp.render_string("hello world!");
 }
 
@@ -19,8 +19,8 @@ int main(int argc, char** argv){
 	micro::url_route test4 ("/", {"GET"}, hello);
 	micro::url_route test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
 
-	http::server4::request r;
-    http::server4::response resp;
+	micro::request r;
+    micro::response resp;
     r.method = "GET";
 	r.uri = "/yo/i.s/37/c0ol";
 	assert(test1.match(r));

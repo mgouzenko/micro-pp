@@ -3,15 +3,13 @@
 
 #include <string>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     struct header {
       std::string name;
       std::string value;
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_HEADER_HPP

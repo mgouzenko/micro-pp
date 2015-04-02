@@ -4,8 +4,7 @@
 #include <boost/lexical_cast.hpp>
 #include "request.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     #include <boost/asio/yield.hpp> // Enable the pseudo-keywords reenter, yield and fork.
 
@@ -195,5 +194,4 @@ namespace server4 {
           &request_parser::tolower_compare);
     }
 
-} // namespace server4
-} // namespace http
+} // namespace micro

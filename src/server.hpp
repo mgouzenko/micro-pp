@@ -16,8 +16,7 @@
 #include <memory>
 #include <queue>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     struct request;
     struct reply;
@@ -65,7 +64,6 @@ namespace server4 {
       boost::shared_ptr<reply> reply_;
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_SERVER_HPP

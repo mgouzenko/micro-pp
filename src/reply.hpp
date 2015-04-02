@@ -7,8 +7,7 @@
 #include "header.hpp"
 #include "response.hpp"
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     /// A reply to be sent to a client.
     struct reply
@@ -58,7 +57,6 @@ namespace server4 {
       static reply stock_reply(status_type status);
     };
 
-} // namespace server4
-} // namespace http
+} // namespace micro
 
 #endif // HTTP_SERVER4_REPLY_HPP

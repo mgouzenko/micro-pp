@@ -1,8 +1,7 @@
 #include "cookie.hpp"
 #include <string>
 
-namespace http {
-namespace server4 {
+namespace micro {
 
     Cookie::Cookie(const std::string& key, const std::string& val) : key_{key}, val_{val} { };
 
@@ -27,5 +26,4 @@ namespace server4 {
         return cookie_string;
     }
 
-}
 }

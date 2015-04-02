@@ -9,7 +9,7 @@
 
 namespace micro {
 
-    typedef std::function<void(const http::server4::request& req, http::server4::response& res)>  callback;
+    typedef std::function<void(const micro::request& req, micro::response& res)>  callback;
 
 }
 
