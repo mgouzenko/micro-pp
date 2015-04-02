@@ -36,9 +36,6 @@ struct reply;
 class server : boost::asio::coroutine
 {
 
-private:
-  typedef boost::asio::ip::tcp tcp;
-
 public:
   /// Construct the server to listen on the specified TCP address and port, and
   /// serve up files from the given directory.
@@ -53,7 +50,7 @@ public:
       boost::system::error_code ec = boost::system::error_code(),
       std::size_t length = 0);
 
-  void route(std::string url, Callback);
+  typedef boost::asio::ip::tcp tcp;
 
   /// The work queue
   std::queue<server>& queue; 

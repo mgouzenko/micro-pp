@@ -107,7 +107,8 @@ void server::operator()(boost::system::error_code ec, std::size_t length)
 		  
 		  yield queue.push(*this);
 	  }
-      else
+      
+	  else
       {
         // The request was invalid.
         *reply_ = reply::stock_reply(reply::bad_request);
