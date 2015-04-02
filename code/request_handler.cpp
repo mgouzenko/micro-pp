@@ -17,7 +17,7 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
-#include <functional> 
+#include <functional>
 #include <unordered_map>
 #include "types.hpp"
 
@@ -47,11 +47,17 @@ void request_handler::operator()(const request& req, reply& rep)
     return;
   }
 
+  // TODO: Extract query string parameters here
+
+  // TODO: Try matching the URLs here
+
   // If path ends in slash (i.e. is a directory) then add "index.html".
   if (request_path[request_path.size() - 1] == '/')
   {
     request_path += "index.html";
   }
+
+
 
   // Determine the file extension.
   std::size_t last_slash_pos = request_path.find_last_of("/");
@@ -63,9 +69,11 @@ void request_handler::operator()(const request& req, reply& rep)
   }
 
   try{
+
 	  auto routeCallback = callback_urls.at(req.uri); 
 	  routeCallback(req, response_);
     rep.handle_response(response_, extension);
+
 
 	  // //Fill out the reply to be sent to the client.
 	  // rep.status = reply::ok;
@@ -80,12 +88,12 @@ void request_handler::operator()(const request& req, reply& rep)
    } catch(std::exception& e){
    		rep = reply::stock_reply(reply::not_found);
    		return;
-   } 
+   }
 
 
 }
 
-void request_handler::route(std::string url, Callback func){ 
+void request_handler::route(std::string url, Callback func){
 	callback_urls.emplace(url, func);
 }
 
@@ -94,7 +102,7 @@ void request_handler::route(std::string url, Callback func){
 * the correc path
 * param in: encoded url from request
 * param out: decoded url
-* return bool: true on success, false on fail 
+* return bool: true on success, false on fail
 */
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {
