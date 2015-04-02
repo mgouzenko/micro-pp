@@ -4,7 +4,6 @@
 namespace http {
 namespace server4 {
 
-
     Cookie::Cookie(const std::string& key, const std::string& val) : key_{key}, val_{val} { };
 
     Cookie::Cookie(const std::string& key, const std::string& val, const std::time_t expires)

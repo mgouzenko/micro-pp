@@ -13,8 +13,8 @@ namespace server4 {
 
     server::server(boost::asio::io_service& io_service,
         const std::string& address,
-    	const std::string& port,
-    	std::queue<server>& q )
+        const std::string& port,
+        std::queue<server>& q )
        : queue{q}
     {
       tcp::resolver resolver(io_service);
@@ -86,32 +86,32 @@ namespace server4 {
             // to process the request and compose a reply.
 
 
-    		  //std::cout << request_->uri << std::endl;
-    		  //std::unique_ptr<WorkItem> ptr{new WorkItem(*request_, *reply_) };
-    		  //work_item item(request_.get(), reply_.get());
+              //std::cout << request_->uri << std::endl;
+              //std::unique_ptr<WorkItem> ptr{new WorkItem(*request_, *reply_) };
+              //work_item item(request_.get(), reply_.get());
 
-    		  reply_->content = "content\n";
+              reply_->content = "content\n";
 
-    		  yield queue.push(*this);
-    	  }
+              yield queue.push(*this);
+          }
 
-    	  else {
+          else {
             // The request was invalid.
             *reply_ = reply::stock_reply(reply::bad_request);
           }
 
-    	  std::cerr << "before cerr\n";
+          std::cerr << "before cerr\n";
           std::cerr << (reply_->content + "\n");
-    	  // Send the reply back to the client.
-    	  std::cerr << "before write\n";
+          // Send the reply back to the client.
+          std::cerr << "before write\n";
 
-    	  yield boost::asio::async_write(*socket_, reply_->to_buffers(), *this);
+          yield boost::asio::async_write(*socket_, reply_->to_buffers(), *this);
 
 
 
-    	  // Initiate graceful connection closure.
+          // Initiate graceful connection closure.
           socket_->shutdown(tcp::socket::shutdown_both, ec);
-    	}
+        }
       }
 
       // If an error occurs then the coroutine is not reentered. Consequently, no

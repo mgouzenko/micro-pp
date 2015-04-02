@@ -30,7 +30,7 @@ void request_handler::operator()(server& serv)
   if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
-	serv();
+    serv();
   }
 
   // Request path must be absolute and not contain "..".
@@ -38,7 +38,7 @@ void request_handler::operator()(server& serv)
       || request_path.find("..") != std::string::npos)
   {
     rep = reply::stock_reply(reply::bad_request);
-	serv();
+    serv();
   }
 
   // TODO: Extract query string parameters here
@@ -69,26 +69,26 @@ void request_handler::operator()(server& serv)
 
   try{
 
-	  auto routeCallback = callback_urls.at(req.uri);
-	  routeCallback(req, response_);
+      auto routeCallback = callback_urls.at(req.uri);
+      routeCallback(req, response_);
 
 
       rep.handle_response(response_, extension);
 
 
-	  // //Fill out the reply to be sent to the client.
-	  // rep.status = reply::ok;
+      // //Fill out the reply to be sent to the client.
+      // rep.status = reply::ok;
 
       //  // Make sure to set size of header vector
-	  // rep.headers.resize(2);
-	  // rep.headers[0].name = "Content-Length";
-	  // rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
-	  // rep.headers[1].name = "Content-Type";
-	  // rep.headers[1].value = mime_types::extension_to_type(extension);
+      // rep.headers.resize(2);
+      // rep.headers[0].name = "Content-Length";
+      // rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+      // rep.headers[1].name = "Content-Type";
+      // rep.headers[1].value = mime_types::extension_to_type(extension);
     // Need to get headers set by user
    } catch(std::exception& e){
-   		rep = reply::stock_reply(reply::not_found);
-		serv();
+        rep = reply::stock_reply(reply::not_found);
+        serv();
    }
 
 
@@ -96,7 +96,7 @@ void request_handler::operator()(server& serv)
 }
 
 void request_handler::route(std::string url, micro::callback func){
-	callback_urls.emplace(url, func);
+    callback_urls.emplace(url, func);
 }
 
 /*

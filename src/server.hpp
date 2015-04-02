@@ -28,10 +28,10 @@ namespace server4 {
       /// Construct the server to listen on the specified TCP address and port, and
       /// serve up files from the given directory.
       explicit server(boost::asio::io_service& io_service,
-          			  const std::string& address,
-    				  const std::string& port,
-    				  std::queue<server>& q
-    	  			);
+                      const std::string& address,
+                      const std::string& port,
+                      std::queue<server>& q
+                    );
 
       /// Perform work associated with the server.
       void operator()(
