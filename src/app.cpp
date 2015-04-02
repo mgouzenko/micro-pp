@@ -1,13 +1,3 @@
-//
-// main.cpp
-// ~~~~~~~~
-//
-// Copyright (c) 2003-2011 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -19,28 +9,20 @@
 #include "request_handler.hpp"
 #include <chrono>
 
-namespace micro{
+namespace micro {
 
-	app::app()
-	: handler(".")
-	{
-
-	}
+	app::app() : handler(".") { }
 
 	void app::run()
 	{
-	  try
-	  {
+	  try {
 
-		for(int i=0; i<1; i++){
+		for(int i=0; i<1; i++) {
 			std::cout << "added worker\n";
 			thread_pool.push_back(std::thread(&app::handle_requests, this));
 		}
 
 		//for(int i=0; i<workers.size(); i++) workers[i].detach();
-
-
-
 
 		http::server4::server(io_service, "0.0.0.0", "8080", q)();
 		// Wait for signals indicating time to shut down.
@@ -51,10 +33,8 @@ namespace micro{
 		signals.add(SIGQUIT);
 		#endif // defined(SIGQUIT)
 
-
 		signals.async_wait(boost::bind(
 			  &app::shut_down, this));
-
 
 		//signals.async_wait(boost::bind(
 		//	  &boost::asio::io_service::stop, &io_service));
@@ -62,32 +42,33 @@ namespace micro{
 		// Run the server.
 		io_service.run();
 	  }
-	  catch (std::exception& e)
-	  {
+	  catch (std::exception& e) {
 		std::cerr << "exception: " << e.what() << "\n";
 	  }
 
 	}
 
-	void app::route(std::string url, micro::callback func){
+	void app::route(std::string url, micro::callback func)
+	{
 		handler.route(url, func);
 	}
 
-	void app::handle_requests(){
+	void app::handle_requests()
+	{
 		while(!shutting_down){
-			if(!q.empty() ){
+			if(!q.empty()) {
 				auto serv = q.front();
 				q.pop();
 				handler(serv);
-			} else
+			}
+			else
 				std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 	}
 
-	void app::shut_down(){
+	void app::shut_down() {
 		shutting_down = true;
 		for(int i = 0; i < thread_pool.size(); i++) thread_pool[i].join();
 		io_service.stop();
-
 	}
 }

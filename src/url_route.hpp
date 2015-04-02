@@ -1,12 +1,12 @@
 #include <regex>
 #include "types.hpp"
 
-namespace micro{
+namespace micro {
 
     /**
      * A representation of a URL path that can be registered with a Micro++ app.
      */
-    class url_route{
+    class url_route {
 
     public:
 

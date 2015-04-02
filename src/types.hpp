@@ -12,4 +12,5 @@ namespace micro {
     typedef std::function<void(const http::server4::request& req, http::server4::response& res)>  callback;
 
 }
+
 #endif

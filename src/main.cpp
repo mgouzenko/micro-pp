@@ -1,13 +1,3 @@
-//
-// main.cpp
-// ~~~~~~~~
-//
-// Copyright (c) 2003-2011 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -18,11 +8,9 @@
 
 int main(int argc, char* argv[])
 {
-  try
-  {
+  try {
     // Check command line arguments.
-    if (argc != 4)
-    {
+    if (argc != 4) {
       std::cerr << "Usage: http_server <address> <port> <doc_root>\n";
       std::cerr << "  For IPv4, try:\n";
       std::cerr << "    receiver 0.0.0.0 80 .\n";
@@ -36,11 +24,10 @@ int main(int argc, char* argv[])
     // Launch the initial server coroutine.
     //http::server4::server(io_service, argv[1], argv[2], http::server4::file_handler(argv[3]))();
 
-
-	//std::unordered_map<std::string, Callback > urls; 	
-	http::server4::request_handler handler("."); 
+	//std::unordered_map<std::string, Callback > urls;
+	http::server4::request_handler handler(".");
 	http::server4::server(io_service, "0.0.0.0", "8080", handler)();
-    
+
 	// Wait for signals indicating time to shut down.
     boost::asio::signal_set signals(io_service);
     signals.add(SIGINT);
@@ -54,8 +41,7 @@ int main(int argc, char* argv[])
     // Run the server.
     io_service.run();
   }
-  catch (std::exception& e)
-  {
+  catch (std::exception& e) {
     std::cerr << "exception: " << e.what() << "\n";
   }
 

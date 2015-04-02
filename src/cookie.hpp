@@ -2,7 +2,7 @@
 ***************
 * cookie.hpp
 ***************
-* 
+*
 * A cookie object models an HTTP cookie. It is placed in the header
 * of a HTTP response.
 */
@@ -15,39 +15,38 @@
 namespace http {
 namespace server4 {
 
-class Cookie
-{
+    class Cookie {
 
-private:
+    private:
 
-    std::string key_;
+        std::string key_;
 
-    std::string val_;
+        std::string val_;
 
-    std::time_t expires_;
+        std::time_t expires_;
 
-public:
-    /*
-    * Constructor for Cookie
-    * param key: key of cookie
-    * param val: val of cookie
-    */
-    Cookie(const std::string& key, const std::string& val);
+    public:
+        /*
+        * Constructor for Cookie
+        * param key: key of cookie
+        * param val: val of cookie
+        */
+        Cookie(const std::string& key, const std::string& val);
 
-    /*
-    * Constructor
-    * param key: key for cookie
-    * param val: value of cookie
-    * param expires: date that cookie expires
-    */
-    Cookie(const std::string& key, const std::string& val, const std::time_t expires);
+        /*
+        * Constructor
+        * param key: key for cookie
+        * param val: value of cookie
+        * param expires: date that cookie expires
+        */
+        Cookie(const std::string& key, const std::string& val, const std::time_t expires);
 
-    /*
-    * Converts Cookie to http formatted string
-    */ 
-    std::string to_string() const;
+        /*
+        * Converts Cookie to http formatted string
+        */
+        std::string to_string() const;
 
-};
+    };
 
 } // namespace server4
 } // namespace http

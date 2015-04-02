@@ -21,35 +21,35 @@
 namespace http {
 namespace server4 {
 
-struct reply;
-struct request;
+    struct reply;
+    struct request;
 
-/// The common handler for all incoming requests.
-class request_handler
-{
-public:
-  /// Construct with a directory containing files to be served.
-  explicit request_handler(const std::string& doc_root);
+    /// The common handler for all incoming requests.
+    class request_handler
+    {
+    public:
+      /// Construct with a directory containing files to be served.
+      explicit request_handler(const std::string& doc_root);
 
-  /// Handle a request and produce a reply.
-  void operator()(server& serv);
+      /// Handle a request and produce a reply.
+      void operator()(server& serv);
 
-  void route(std::string url, micro::callback func);
+      void route(std::string url, micro::callback func);
 
-private:
-  /// The directory containing the files to be served.
-  std::string doc_root_;
+    private:
+      /// The directory containing the files to be served.
+      std::string doc_root_;
 
-  /// The map of urls to Callback functions
-  std::unordered_map<std::string, micro::callback > callback_urls;
+      /// The map of urls to Callback functions
+      std::unordered_map<std::string, micro::callback > callback_urls;
 
-  /// Perform URL-decoding on a string. Returns false if the encoding was
-  /// invalid.
-  static bool url_decode(const std::string& in, std::string& out);
+      /// Perform URL-decoding on a string. Returns false if the encoding was
+      /// invalid.
+      static bool url_decode(const std::string& in, std::string& out);
 
-  response response_;
+      response response_;
 
-};
+    };
 
 } // namespace server4
 } // namespace http

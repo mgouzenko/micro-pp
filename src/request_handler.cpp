@@ -1,13 +1,3 @@
-//
-// request_handler.cpp
-// ~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2011 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #include "request_handler.hpp"
 #include <fstream>
 #include <sstream>
@@ -53,13 +43,17 @@ void request_handler::operator()(server& serv)
 
   // TODO: Extract query string parameters here
 
-  // TODO: Try matching the URLs here
+  // TODO: Extract POST parameters
 
+
+
+  // TODO: Move to static file handler
+  /*
   // If path ends in slash (i.e. is a directory) then add "index.html".
   if (request_path[request_path.size() - 1] == '/')
   {
     request_path += "index.html";
-  }
+}*/
 
 
   // Determine the file extension.
@@ -69,21 +63,23 @@ void request_handler::operator()(server& serv)
   if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
   {
     extension = request_path.substr(last_dot_pos + 1);
-  }
+}
 
-
+  // TODO: Try matching the URLs here
 
   try{
 
 	  auto routeCallback = callback_urls.at(req.uri);
 	  routeCallback(req, response_);
-    rep.handle_response(response_, extension);
+
+
+      rep.handle_response(response_, extension);
 
 
 	  // //Fill out the reply to be sent to the client.
 	  // rep.status = reply::ok;
 
-   //  // Make sure to set size of header vector
+      //  // Make sure to set size of header vector
 	  // rep.headers.resize(2);
 	  // rep.headers[0].name = "Content-Length";
 	  // rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());

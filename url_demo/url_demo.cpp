@@ -11,6 +11,8 @@ void hello(const http::server4::request& req, http::server4::response& resp){
 
 int main(int argc, char** argv){
 
+
+
 	micro::url_route test1 ("/<this>/i.s/<int:id>/c0ol", {"GET"}, hello);
 	micro::url_route test2 ("/hello", {"GET"}, hello);
 	micro::url_route test3 ("/user/<int:id>/photo", {"GET"}, hello);
@@ -24,9 +26,6 @@ int main(int argc, char** argv){
 	assert(test1.match(r));
     assert(r.label_values["id"] == "37");
 	r.uri = "/hello";
-
-
-    test3.callback(r, resp);
 
 	assert(test2.match(r));
 	r.uri = "/user/61347/photo";

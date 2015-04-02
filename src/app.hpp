@@ -4,9 +4,9 @@
 #include <queue>
 #include <thread>
 
-namespace micro{
+namespace micro {
 
-	class app{
+	class app {
 		private:
 			bool shutting_down = false;
 
@@ -27,7 +27,7 @@ namespace micro{
 
 			void run();
 
-			void route(std::string url, micro::callback func); 
+			void route(std::string url, micro::callback func);
 	};
 
 
