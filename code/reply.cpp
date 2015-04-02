@@ -11,6 +11,10 @@
 #include "reply.hpp"
 #include <string>
 #include <boost/lexical_cast.hpp>
+#include <boost/lexical_cast.hpp>
+#include <iostream>
+#include "mime_types.hpp"
+#include "response.hpp"
 
 namespace http {
 namespace server4 {
@@ -249,16 +253,29 @@ reply reply::stock_reply(reply::status_type status)
   rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
   rep.headers[1].name = "Content-Type";
   rep.headers[1].value = "text/html";
+  std::cout << "Seding Stock Reply\n";
   return rep;
 }
 
-void reply::render_string(std::string message) {
-    content.append(message);
-}
+void reply::handle_response(const response& res, const std::string& extension) {
+  std::vector<header> res_headers = res.get_headers();
+  std::string res_content = res.get_message();
 
-void reply::set_cookie(std::string key, std::string val) {
-  std::string str = key + "=" + val;
-  cookies.push_back(str);
+  content.append(res_content);
+
+  status = reply::ok;
+
+  // Make sure to set size of header vector
+  headers.resize(2);
+  headers[0].name = "Content-Length";
+  headers[0].value = boost::lexical_cast<std::string>(content.size());
+  headers[1].name = "Content-Type";
+  headers[1].value = mime_types::extension_to_type(extension);
+
+  for (int i = 0; i < res_headers.size(); i++) {
+    headers.push_back(res_headers[i]);
+  }
+
 }
 
 } // namespace server4

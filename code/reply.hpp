@@ -5,6 +5,7 @@
 #include <vector>
 #include <boost/asio.hpp>
 #include "header.hpp"
+#include "response.hpp"
 
 namespace http {
 namespace server4 {
@@ -43,17 +44,10 @@ struct reply
   std::vector<std::string> cookies;
 
   /*
-  * Sets the message content of a HTTP response
-  * param my_content: Content string you want to send in response 
+  * Handles a response object and safely sets HTTP message content and headers
+  * param response: Response object to be handled
   */
-  void render_string(std::string message);
-
-  /*
-  * Set the key and value of cookie to send back to client
-  * param key: key of cookie
-  * param value: value of cookie
-  */
-  void set_cookie(std::string key, std::string val);
+  void handle_response(const response& res, const std::string& extension);
 
   /// Convert the reply into a vector of buffers. The buffers do not own the
   /// underlying memory blocks, therefore the reply object must remain valid and
