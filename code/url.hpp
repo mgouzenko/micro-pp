@@ -63,7 +63,7 @@ namespace micro{
          * @param request the HTTP request to execute the callback with
          * @param reply the HTTP response that will be populated by the callback
          */
-        void callback(const http::server4::request& request, http::server4::reply& reply);
+        void callback(const http::server4::request& request, http::server4::response& response);
 
     private:
         std::regex internal_regex_;

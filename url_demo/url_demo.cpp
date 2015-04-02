@@ -5,8 +5,8 @@
 #include "url.hpp"
 
 
-void hello(const http::server4::request& req, http::server4::reply& rep){
-  rep.render_string("hello world!");
+void hello(const http::server4::request& req, http::server4::response& resp){
+  resp.render_string("hello world!");
 }
 
 int main(int argc, char** argv){
