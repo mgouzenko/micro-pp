@@ -88,6 +88,7 @@ namespace micro {
 
     // Should call the callback registered to this URL with the given request and the response to populate
     // TODO: potentially refactor to operator()?
+    // TODO: also potentially refactor so callback can't directly be called (maybe only call in match())
     void url::callback(const http::server4::request& request, http::server4::reply& reply)
     {
         callback_(request, reply);
