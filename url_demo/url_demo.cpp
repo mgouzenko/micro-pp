@@ -2,7 +2,7 @@
 #include "app.hpp"
 #include "request.hpp"
 #include "reply.hpp"
-#include "url.hpp"
+#include "url_route.hpp"
 
 
 void hello(const http::server4::request& req, http::server4::response& resp){
@@ -11,11 +11,11 @@ void hello(const http::server4::request& req, http::server4::response& resp){
 
 int main(int argc, char** argv){
 
-	micro::url test1 ("/<this>/i.s/<int:id>/c0ol", {"GET"}, hello);
-	micro::url test2 ("/hello", {"GET"}, hello);
-	micro::url test3 ("/user/<int:id>/photo", {"GET"}, hello);
-	micro::url test4 ("/", {"GET"}, hello);
-	micro::url test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
+	micro::url_route test1 ("/<this>/i.s/<int:id>/c0ol", {"GET"}, hello);
+	micro::url_route test2 ("/hello", {"GET"}, hello);
+	micro::url_route test3 ("/user/<int:id>/photo", {"GET"}, hello);
+	micro::url_route test4 ("/", {"GET"}, hello);
+	micro::url_route test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
 
 	http::server4::request r;
     r.method = "GET";
