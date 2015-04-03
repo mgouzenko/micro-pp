@@ -59,14 +59,15 @@ void request_handler::operator()(server& serv)
       bool matched = false;
       micro::response resp;
       auto callback_it = callback_routes_.begin();
-      while(!(matched = callback_it->match(req, resp)))
+      while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
           ++callback_it;
 
       if(!matched) {
           //TODO: Serve static file here I guess
+          rep = reply::stock_reply(reply::not_found);
+          serv();
       }
 
-;
       rep.handle_response(resp, extension);
 
 

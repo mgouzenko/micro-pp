@@ -23,7 +23,7 @@ int main(int argc, char** argv){
 
 	micro::app application;
 	application.add_route("/hello", {"GET"}, hello);
-    //application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
+    application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
 	application.run();
 
 }
