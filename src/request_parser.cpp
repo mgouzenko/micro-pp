@@ -13,6 +13,8 @@ namespace micro {
 
     boost::tribool request_parser::consume(request& req, char c)
     {
+        // TODO: Extract query string parameters here
+        // TODO: Extract POST parameters
       reenter (this) {
         req.method.clear();
         req.uri.clear();

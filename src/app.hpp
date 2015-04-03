@@ -31,7 +31,11 @@ namespace micro {
 
             void run();
 
-            void route(std::string url, micro::callback func);
+            void add_route(micro::url_route);
+
+            void add_route(std::string route_specifier, std::vector<std::string> methods, micro::callback func);
+
+            void set_static_root(std::string static_root);
     };
 
 

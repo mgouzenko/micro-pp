@@ -54,14 +54,13 @@ namespace micro {
 
     // Should return true if it matches the request and populates the request with the relevant
     // returns false if the URL doesn't match the request
-    bool url_route::match(micro::request& request)
+    bool url_route::match(micro::request& req, micro::response& resp)
     {
-
         bool allowable = false;
 
         // Check to see if the method of the request is a valid one for this URL
         for (auto method : methods_) {
-            if(request.method == method) {
+            if(req.method == method) {
                 allowable = true;
                 break;
             }
@@ -70,26 +69,21 @@ namespace micro {
         // Check if the URL of the request matches this URL, and if it does,
         // populate the request with any relevant data
         std::smatch m;
-        if(allowable && std::regex_match(request.uri, m, internal_regex_)) {
+        if(allowable && std::regex_match(req.uri, m, internal_regex_)) {
 
             // Extract the values and associate them with labels
             auto val_it = ++m.begin();
             auto label_it = labels_.begin();
             while (label_it != labels_.end()) {
-                request.label_values.emplace(*label_it++, *val_it++);
+                req.label_values.emplace(*label_it++, *val_it++);
             }
+
+            // Execute the callback that populates the response
+            callback_(req, resp);
 
             return true;
         }
         return false;
-    }
-
-    // Should call the callback registered to this URL with the given request and the response to populate
-    // TODO: potentially refactor to operator()?
-    // TODO: also potentially refactor so callback can't directly be called (maybe only call in match())
-    void url_route::callback(const micro::request& request, micro::response& response)
-    {
-        callback_(request, response);
     }
 
 }

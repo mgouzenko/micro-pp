@@ -12,10 +12,11 @@
 
 namespace micro {
 
-    app::app() : handler_(".") { }
+    app::app() : handler_() { }
 
     void app::run()
     {
+
       try {
 
         for(int i=0; i<1; i++) {
@@ -49,9 +50,19 @@ namespace micro {
 
     }
 
-    void app::route(std::string url, micro::callback func)
+    void app::add_route(micro::url_route route)
     {
-        handler_.route(url, func);
+        handler_.add_route(route);
+    }
+
+    void app::add_route(std::string route_specifier, std::vector<std::string> methods, micro::callback func)
+    {
+        add_route(micro::url_route(route_specifier, methods, func));
+    }
+
+    void app::set_static_root(std::string static_root)
+    {
+        handler_.set_static_root(static_root);
     }
 
     void app::handle_requests()

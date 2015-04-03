@@ -1,4 +1,3 @@
-
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -13,17 +12,13 @@
 #include "request.hpp"
 #include "types.hpp"
 #include "server.hpp"
+#include "url_route.hpp"
 
 namespace micro {
 
-request_handler::request_handler(const std::string& doc_root)
-  : doc_root_(doc_root)
-{
-}
-
 void request_handler::operator()(server& serv)
 {
-  const request& req = *(serv.request_);
+  request& req = *(serv.request_);
   reply& rep = *(serv.reply_);
 
   // Decode url to path.
@@ -42,12 +37,6 @@ void request_handler::operator()(server& serv)
     serv();
   }
 
-  // TODO: Extract query string parameters here
-
-  // TODO: Extract POST parameters
-
-
-
   // TODO: Move to static file handler
   /*
   // If path ends in slash (i.e. is a directory) then add "index.html".
@@ -61,20 +50,25 @@ void request_handler::operator()(server& serv)
   std::size_t last_slash_pos = request_path.find_last_of("/");
   std::size_t last_dot_pos = request_path.find_last_of(".");
   std::string extension;
-  if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
-  {
-    extension = request_path.substr(last_dot_pos + 1);
-}
-
-  // TODO: Try matching the URLs here
+  if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos) {
+      extension = request_path.substr(last_dot_pos + 1);
+  }
 
   try{
 
-      auto routeCallback = callback_urls_.at(req.uri);
-      routeCallback(req, response_);
+      bool matched = false;
+      micro::response resp;
+      auto callback_it = callback_routes_.begin();
+      while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
+          ++callback_it;
 
+      if(!matched) {
+          //TODO: Serve static file here I guess
+          rep = reply::stock_reply(reply::not_found);
+          serv();
+      }
 
-      rep.handle_response(response_, extension);
+      rep.handle_response(resp, extension);
 
 
       // //Fill out the reply to be sent to the client.
@@ -96,8 +90,19 @@ void request_handler::operator()(server& serv)
   serv();
 }
 
-void request_handler::route(std::string url, micro::callback func){
-    callback_urls_.emplace(url, func);
+void request_handler::add_route(micro::url_route route)
+{
+    callback_routes_.push_back(route);
+}
+
+void request_handler::set_static_root(std::string root)
+{
+    static_root_ = root;
+}
+
+void request_handler::serve_static(const micro::request& req, micro::response& resp)
+{
+    return;
 }
 
 /*
