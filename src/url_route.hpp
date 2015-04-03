@@ -53,21 +53,17 @@ namespace micro {
 
         /**
          * Checks if the URI within a request matches this URL instance.
+         * *Warning, this method is intended for internal use*
+         * If the request URI matches the route, then match() will populate
+         * the request object with any lebel-value pairs, execute the
+         * registered callback, and return true. Otherwise match will return false.
          *
          * @param request: a request containing a sanitized (no query string) URI object
+         * @param response: the response object that the callback should populate
          * @return true if the request matches the URL, false otherwise.
                    If match() returns true, the request object will also be populated with any captured label-value pairs
          */
-        bool match(micro::request& request);
-
-        /**
-         * Executes the callback registered with this URL.
-         * *callback() should only be executed if match() returns true for the given request object.*
-         *
-         * @param request: the HTTP request to execute the callback with
-         * @param reply: the HTTP response that will be populated by the callback
-         */
-        void callback(const micro::request& request, micro::response& response);
+        bool match(micro::request& req, micro::response& resp);
 
     private:
         std::regex internal_regex_;

@@ -8,6 +8,7 @@
 #include "types.hpp"
 #include "server.hpp"
 #include "response.hpp"
+#include "url_route.hpp"
 
 namespace micro {
 
@@ -20,35 +21,43 @@ namespace micro {
     class request_handler
     {
     public:
-      /**
-       * Construct with a directory containing files to be served.
-       */
-      explicit request_handler(const std::string& doc_root);
 
       /**
        * Handle a request and produce a reply.
        */
       void operator()(server& serv);
 
-      void route(std::string url, micro::callback func);
+      /**
+       * Add a URL route with a registered callback.
+       */
+      void add_route(micro::url_route);
+
+      /**
+       * Sets the filepath where the handler's serve_static() will look for files
+       */
+      void set_static_root(std::string root);
+
+      /**
+       * Serves a static file.
+       * Intended to be the micro::callback for the catch-all route automatically added by app.run()
+       */
+       void serve_static(const micro::request& req, micro::response& resp);
 
     private:
       /**
        * The directory containing the files to be served.
        */
-      std::string doc_root_;
+      std::string static_root_;
 
       /**
-       * The map of urls to Callback functions
+       * The list of url_routes containing callbacks, in order of priority
        */
-      std::unordered_map<std::string, micro::callback > callback_urls_;
+      std::vector<micro::url_route> callback_routes_;
 
       /**
        * Perform URL-decoding on a string. Returns false if the encoding was invalid.
        */
       static bool url_decode(const std::string& in, std::string& out);
-
-      response response_;
 
     };
 
