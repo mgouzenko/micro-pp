@@ -1,6 +1,8 @@
 #ifndef MICRO_URL_ROUTE_HPP
 #define MICRO_URL_ROUTE_HPP
 
+#include <regex>
+
 #include "types.hpp"
 
 namespace micro {
