@@ -25,23 +25,23 @@ namespace micro {
         std::time_t expires_;
 
     public:
-        /*
-        * Constructor for Cookie
-        * param key: key of cookie
-        * param val: val of cookie
+        /**
+        * Constructor for Cookie.
+        * @param key: key of cookie
+        * @param val: val of cookie
         */
         Cookie(const std::string& key, const std::string& val);
 
-        /*
-        * Constructor
-        * param key: key for cookie
-        * param val: value of cookie
-        * param expires: date that cookie expires
+        /**
+        * Constructor for Cookie with exipiration.
+        * @param key: key for cookie
+        * @param val: value of cookie
+        * @param expires: date that cookie expires
         */
         Cookie(const std::string& key, const std::string& val, const std::time_t expires);
 
-        /*
-        * Converts Cookie to http formatted string
+        /**
+        * Converts the Cookie to an HTTP formatted string.
         */
         std::string to_string() const;
 

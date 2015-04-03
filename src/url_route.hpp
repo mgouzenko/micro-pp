@@ -14,8 +14,8 @@ namespace micro {
          * Catch-all URL constructor.
          * Constructs a URL object that will match any valid URL
          *
-         * @param methods the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
-         * @param callback the callback function that should be registered to this URL path
+         * @param methods: the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
+         * @param callback: the callback function that should be registered to this URL path
                   The callback must be a void function that takes a micro::request, and micro::response& as parameters.
          */
         url_route(std::vector<std::string> methods, micro::callback callback); // Static file URL
@@ -40,9 +40,9 @@ namespace micro {
          * Note that specifiers are strict about trailing slashes.
          * For example. "/this/is/cool/" is not the same as "/this/is/cool"
          *
-         * @param specifier a string that defines what kind of URLs the instance should accept
-         * @param methods the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
-         * @param callback the callback function that should be registered to this URL path
+         * @param specifier: a string that defines what kind of URLs the instance should accept
+         * @param methods: the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
+         * @param callback: the callback function that should be registered to this URL path
                   The callback must be a void function that takes a micro::request, and micro::response& as parameters.
          */
         url_route(std::string specifier, std::vector<std::string> allowable_methods, micro::callback callback);
@@ -50,7 +50,7 @@ namespace micro {
         /**
          * Checks if the URI within a request matches this URL instance.
          *
-         * @param request a request containing a sanitized (no query string) URI object
+         * @param request: a request containing a sanitized (no query string) URI object
          * @return true if the request matches the URL, false otherwise.
                    If match() returns true, the request object will also be populated with any captured label-value pairs
          */
@@ -60,8 +60,8 @@ namespace micro {
          * Executes the callback registered with this URL.
          * *callback() should only be executed if match() returns true for the given request object.*
          *
-         * @param request the HTTP request to execute the callback with
-         * @param reply the HTTP response that will be populated by the callback
+         * @param request: the HTTP request to execute the callback with
+         * @param reply: the HTTP response that will be populated by the callback
          */
         void callback(const micro::request& request, micro::response& response);
 
