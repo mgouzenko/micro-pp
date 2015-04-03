@@ -40,7 +40,7 @@ namespace micro {
       /**
        * The map of urls to Callback functions
        */
-      std::unordered_map<std::string, micro::callback > callback_urls;
+      std::unordered_map<std::string, micro::callback > callback_urls_;
 
       /**
        * Perform URL-decoding on a string. Returns false if the encoding was invalid.

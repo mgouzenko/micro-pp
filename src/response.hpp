@@ -59,12 +59,12 @@ namespace micro {
         /**
          * Body of HTTP response message
          */
-        std::string message;
+        std::string message_;
 
         /**
          * Customizable vector or headers
          */
-        std::vector<header> headers;
+        std::vector<header> headers_;
 
     };
 

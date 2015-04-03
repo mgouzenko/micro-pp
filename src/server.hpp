@@ -49,7 +49,7 @@ namespace micro {
       /**
        * The work queue
        */
-      std::queue<server>& queue;
+      std::queue<server>& queue_;
 
       /**
        * Acceptor used to listen for incoming connections.

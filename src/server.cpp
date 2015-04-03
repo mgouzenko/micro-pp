@@ -14,7 +14,7 @@ namespace micro {
         const std::string& address,
         const std::string& port,
         std::queue<server>& q )
-       : queue{q}
+       : queue_{q}
     {
       tcp::resolver resolver(io_service);
       tcp::resolver::query query(address, port);
@@ -91,7 +91,7 @@ namespace micro {
 
               reply_->content = "content\n";
 
-              yield queue.push(*this);
+              yield queue_.push(*this);
           }
 
           else {

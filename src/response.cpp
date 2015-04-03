@@ -11,7 +11,7 @@ namespace micro {
     */
     const std::string& response::get_message() const
     {
-        return message;
+        return message_;
     }
 
     /*
@@ -19,7 +19,7 @@ namespace micro {
     */
     void response::append_message(const std::string& my_message)
     {
-        message.append(my_message);
+        message_.append(my_message);
     }
 
     /*
@@ -27,7 +27,7 @@ namespace micro {
     */
     const std::vector<header>& response::get_headers() const
     {
-        return headers;
+        return headers_;
     }
 
     /*
@@ -35,7 +35,7 @@ namespace micro {
     */
     void response::add_header(const header& new_header)
     {
-        headers.push_back(new_header);
+        headers_.push_back(new_header);
     }
 
     /*

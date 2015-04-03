@@ -68,7 +68,7 @@ void request_handler::operator()(server& serv)
 
   try{
 
-      auto routeCallback = callback_urls.at(req.uri);
+      auto routeCallback = callback_urls_.at(req.uri);
       routeCallback(req, response_);
 
 
@@ -95,7 +95,7 @@ void request_handler::operator()(server& serv)
 }
 
 void request_handler::route(std::string url, micro::callback func){
-    callback_urls.emplace(url, func);
+    callback_urls_.emplace(url, func);
 }
 
 /*
