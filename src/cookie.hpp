@@ -6,8 +6,8 @@
 * A cookie object models an HTTP cookie. It is placed in the header
 * of a HTTP response.
 */
-#ifndef HTTP_COOKIE_HPP
-#define HTTP_COOKIE_HPP
+#ifndef MICRO_COOKIE_HPP
+#define MICRO_COOKIE_HPP
 
 #include <string>
 #include <iostream>
@@ -49,4 +49,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_COOKIE_HPP
+#endif // MICRO_COOKIE_HPP

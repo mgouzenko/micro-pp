@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_FILE_HANDLER_HPP
-#define HTTP_SERVER4_FILE_HANDLER_HPP
+#ifndef MICRO_FILE_HANDLER_HPP
+#define MICRO_FILE_HANDLER_HPP
 
 #include <string>
 
@@ -37,4 +37,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_FILE_HANDLER_HPP
+#endif // MICRO_FILE_HANDLER_HPP

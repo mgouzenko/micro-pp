@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_SERVER_HPP
-#define HTTP_SERVER4_SERVER_HPP
+#ifndef MICRO_SERVER_HPP
+#define MICRO_SERVER_HPP
 
 #include <boost/asio.hpp>
 #include <string>
@@ -89,4 +89,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_SERVER_HPP
+#endif // MICRO_SERVER_HPP

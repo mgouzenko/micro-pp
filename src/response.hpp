@@ -8,8 +8,8 @@
 * message content in the HTTP response. Response object safely populates
 * the data in a reply which is handled in the request_handler
 */
-#ifndef HTTP_SERVER4_RESPONSE_HPP
-#define HTTP_SERVER4_RESPONSE_HPP
+#ifndef MICRO_RESPONSE_HPP
+#define MICRO_RESPONSE_HPP
 
 #include <string>
 #include <vector>
@@ -70,4 +70,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_RESPONSE_HPP
+#endif // MICRO_RESPONSE_HPP

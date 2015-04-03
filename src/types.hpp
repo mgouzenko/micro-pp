@@ -1,6 +1,6 @@
 
-#ifndef __TYPES_HPP__
-#define __TYPES_HPP__
+#ifndef MICRO_TYPES_HPP
+#define MICRO_TYPES_HPP
 #include "request.hpp"
 #include "reply.hpp"
 #include "response.hpp"

@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_MIME_TYPES_HPP
-#define HTTP_SERVER4_MIME_TYPES_HPP
+#ifndef MICRO_MIME_TYPES_HPP
+#define MICRO_MIME_TYPES_HPP
 
 #include <string>
 
@@ -16,4 +16,4 @@ namespace mime_types {
 } // namespace mime_types
 } // namespace micro
 
-#endif // HTTP_SERVER4_MIME_TYPES_HPP
+#endif // MICRO_MIME_TYPES_HPP

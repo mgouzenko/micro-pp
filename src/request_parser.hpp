@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_REQUEST_PARSER_HPP
-#define HTTP_SERVER4_REQUEST_PARSER_HPP
+#ifndef MICRO_REQUEST_PARSER_HPP
+#define MICRO_REQUEST_PARSER_HPP
 
 #include <string>
 #include <boost/logic/tribool.hpp>
@@ -86,4 +86,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_REQUEST_PARSER_HPP
+#endif // MICRO_REQUEST_PARSER_HPP

@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_REPLY_HPP
-#define HTTP_SERVER4_REPLY_HPP
+#ifndef MICRO_REPLY_HPP
+#define MICRO_REPLY_HPP
 
 #include <string>
 #include <vector>
@@ -74,4 +74,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_REPLY_HPP
+#endif // MICRO_REPLY_HPP

@@ -1,5 +1,5 @@
-#ifndef __REQUEST_HANDLER_HPP__
-#define __REQUEST_HANDLER_HPP__
+#ifndef MICRO_REQUEST_HANDLER_HPP
+#define MICRO_REQUEST_HANDLER_HPP
 
 #include <string>
 #include <unordered_map>
@@ -53,4 +53,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_FILE_HANDLER_HPP
+#endif // MICRO_REQUEST_HANDLER_HPP

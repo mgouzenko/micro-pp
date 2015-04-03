@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_HEADER_HPP
-#define HTTP_SERVER4_HEADER_HPP
+#ifndef MICRO_HEADER_HPP
+#define MICRO_HEADER_HPP
 
 #include <string>
 
@@ -12,4 +12,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_HEADER_HPP
+#endif // MICRO_HEADER_HPP

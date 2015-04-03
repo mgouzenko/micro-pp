@@ -1,5 +1,5 @@
-#ifndef HTTP_SERVER4_REQUEST_HPP
-#define HTTP_SERVER4_REQUEST_HPP
+#ifndef MICRO_REQUEST_HPP
+#define MICRO_REQUEST_HPP
 
 #include <string>
 #include <vector>
@@ -51,4 +51,4 @@ namespace micro {
 
 } // namespace micro
 
-#endif // HTTP_SERVER4_REQUEST_HPP
+#endif // MICRO_REQUEST_HPP
