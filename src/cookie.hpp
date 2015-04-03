@@ -1,11 +1,3 @@
-/*
-***************
-* cookie.hpp
-***************
-*
-* A cookie object models an HTTP cookie. It is placed in the header
-* of a HTTP response.
-*/
 #ifndef MICRO_COOKIE_HPP
 #define MICRO_COOKIE_HPP
 
@@ -14,6 +6,11 @@
 
 namespace micro {
 
+    /**
+     * A model of an HTTP cookie.
+     * A cookie object models an HTTP cookie. It is placed in the header
+     * of a HTTP response.
+     */
     class Cookie {
 
     private:

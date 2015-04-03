@@ -1,14 +1,16 @@
-#include "request_handler.hpp"
+
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <functional>
+#include <unordered_map>
 #include <boost/lexical_cast.hpp>
+
+#include "request_handler.hpp"
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
-#include <functional>
-#include <unordered_map>
 #include "types.hpp"
 #include "server.hpp"
 

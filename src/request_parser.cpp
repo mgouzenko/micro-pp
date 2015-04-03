@@ -1,7 +1,8 @@
-#include "request_parser.hpp"
 #include <algorithm>
 #include <cctype>
 #include <boost/lexical_cast.hpp>
+
+#include "request_parser.hpp"
 #include "request.hpp"
 
 namespace micro {

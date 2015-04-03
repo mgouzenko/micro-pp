@@ -8,13 +8,15 @@
 #include <boost/shared_ptr.hpp>
 #include <unordered_map>
 #include <boost/asio/coroutine.hpp>
-#include "request_parser.hpp"
-#include <functional>
-#include "types.hpp"
 #include <boost/lockfree/queue.hpp>
 #include <utility>
 #include <memory>
 #include <queue>
+#include <functional>
+
+#include "request_parser.hpp"
+#include "types.hpp"
+
 
 namespace micro {
 

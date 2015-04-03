@@ -1,11 +1,12 @@
 #ifndef MICRO_APP_HPP
 #define MICRO_APP_HPP
 
-#include "request_handler.hpp"
-#include "types.hpp"
 #include <boost/lockfree/queue.hpp>
 #include <queue>
 #include <thread>
+
+#include "request_handler.hpp"
+#include "types.hpp"
 
 namespace micro {
 

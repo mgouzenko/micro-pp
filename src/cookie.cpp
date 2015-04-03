@@ -1,5 +1,6 @@
-#include "cookie.hpp"
 #include <string>
+
+#include "cookie.hpp"
 
 namespace micro {
 

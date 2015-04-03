@@ -2,12 +2,13 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <signal.h>
+#include <thread>
+#include <chrono>
+
+#include "app.hpp"
 #include "server.hpp"
 #include "file_handler.hpp"
-#include "app.hpp"
-#include <thread>
 #include "request_handler.hpp"
-#include <chrono>
 
 namespace micro {
 

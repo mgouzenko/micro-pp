@@ -1,8 +1,9 @@
-#include "reply.hpp"
 #include <string>
 #include <boost/lexical_cast.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iostream>
+
+#include "reply.hpp"
 #include "mime_types.hpp"
 #include "response.hpp"
 

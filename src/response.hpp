@@ -1,23 +1,21 @@
-/*
-***************
-* response.hpp
-***************
-*
-* A response object is passed into a url route callback and is handled
-* by the user. A user has the ability to safely set response headers and
-* message content in the HTTP response. Response object safely populates
-* the data in a reply which is handled in the request_handler
-*/
 #ifndef MICRO_RESPONSE_HPP
 #define MICRO_RESPONSE_HPP
 
 #include <string>
 #include <vector>
+
 #include "header.hpp"
 #include "cookie.hpp"
 
 namespace micro {
 
+    /**
+     * A response object.
+     * A response object is passed into a url route callback and is handled
+     * by the user. A user has the ability to safely set response headers and
+     * message content in the HTTP response. Response object safely populates
+     * the data in a reply which is handled in the request_handler
+     */
     class response {
     public:
 

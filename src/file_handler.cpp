@@ -1,9 +1,10 @@
-#include "file_handler.hpp"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+
+#include "file_handler.hpp"
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
