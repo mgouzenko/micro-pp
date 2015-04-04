@@ -8,12 +8,9 @@
 #include <boost/shared_ptr.hpp>
 #include <unordered_map>
 #include <boost/asio/coroutine.hpp>
-#include <boost/lockfree/queue.hpp>
 #include <utility>
 #include <memory>
-#include <queue>
 #include <functional>
-
 #include "request_parser.hpp"
 #include "types.hpp"
 
@@ -22,7 +19,7 @@ namespace micro {
 
     struct request;
     struct reply;
-
+    struct work_queue;
     /**
      * The top-level coroutine of the HTTP server.
      */
@@ -36,7 +33,7 @@ namespace micro {
       explicit server(boost::asio::io_service& io_service,
                       const std::string& address,
                       const std::string& port,
-                      std::queue<server>& q
+                      micro::work_queue& q
                     );
 
       /**
@@ -51,7 +48,7 @@ namespace micro {
       /**
        * The work queue
        */
-      std::queue<server>& queue_;
+      micro::work_queue& queue_;
 
       /**
        * Acceptor used to listen for incoming connections.

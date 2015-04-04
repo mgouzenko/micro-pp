@@ -4,7 +4,7 @@
 #include <boost/lockfree/queue.hpp>
 #include <queue>
 #include <thread>
-
+#include "work_queue.hpp"
 #include "request_handler.hpp"
 #include "types.hpp"
 
@@ -16,7 +16,7 @@ namespace micro {
 
             micro::request_handler handler_;    //The request handler in charge of routing requests to callbacks.
 
-            std::queue<micro::server> q_;
+            micro::work_queue q_;
 
             std::vector<std::thread> thread_pool_;
 

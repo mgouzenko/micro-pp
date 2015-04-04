@@ -9,13 +9,13 @@ libmicro.a: mime_types.o server.o request_parser.o reply.o response.o cookie.o u
 
 mime_types.o: mime_types.hpp
 request_handler.o: request_handler.hpp
-server.o: server.hpp
+server.o: server.hpp work_queue.hpp
 request_parser.o: request_parser.hpp
 reply.o: reply.hpp
 response.o: response.hpp
 cookie.o: cookie.hpp
 url_route.o: url_route.hpp
-app.o: app.hpp server.hpp
+app.o: app.hpp server.hpp work_queue.hpp
 
 .PHONY: clean
 clean:

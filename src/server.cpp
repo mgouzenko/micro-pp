@@ -1,7 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <memory>
-
+#include "work_queue.hpp" 
 #include "server.hpp"
 #include "request.hpp"
 #include "reply.hpp"
@@ -14,7 +14,7 @@ namespace micro {
     server::server(boost::asio::io_service& io_service,
         const std::string& address,
         const std::string& port,
-        std::queue<server>& q )
+        micro::work_queue& q )
        : queue_{q}
     {
       tcp::resolver resolver(io_service);

@@ -68,13 +68,9 @@ namespace micro {
     void app::handle_requests()
     {
         while(!shutting_down_){
-            if(!q_.empty()) {
-                auto serv = q_.front();
-                q_.pop();
-                handler_(serv);
-            }
-            else
-                std::this_thread::sleep_for(std::chrono::seconds(1));
+            auto serv = q_.pop();
+            q_.pop();
+            handler_(serv);
         }
     }
 
