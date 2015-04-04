@@ -22,6 +22,9 @@ void serve_number(const micro::request& req, micro::response& res)
 int main(int argc, char** argv){
 
 	micro::app application;
-	application.add_route("/hello", {"GET"}, hello);
+	application.set_pool_size(4);
+    application.add_route("/hello", {"GET"}, hello);
+    application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
 	application.run();
+
 }

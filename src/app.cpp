@@ -19,9 +19,10 @@ namespace micro {
 
       try {
 
-        for(int i=0; i<1; i++) {
+        for(int i=0; i<thread_pool_size_; i++) {
             std::cout << "added worker\n";
-            thread_pool_.push_back(std::thread(&app::handle_requests, this));
+            thread_statuses_.push_back(RUNNING); 
+            thread_pool_.push_back(std::thread([this, i](){this->handle_requests(i); }  ));
         }
 
         //for(int i=0; i<workers.size(); i++) workers[i].detach();
@@ -37,9 +38,6 @@ namespace micro {
 
         signals.async_wait(boost::bind(
               &app::shut_down, this));
-
-        //signals.async_wait(boost::bind(
-        //    &boost::asio::io_service::stop, &io_service));
 
         // Run the server.
         io_service_.run();
@@ -65,18 +63,33 @@ namespace micro {
         handler_.set_static_root(static_root);
     }
 
-    void app::handle_requests()
+    void app::handle_requests(int i)
     {
         while(!shutting_down_){
-            auto serv = q_.pop();
-            q_.pop();
-            handler_(serv);
+            q_.do_work(handler_);
         }
+        std::cout << "ended\n";
+        thread_statuses_[i] = TERMINATED; 
     }
 
     void app::shut_down() {
-        shutting_down_ = true;
-        for(int i = 0; i < thread_pool_.size(); i++) thread_pool_[i].join();
-        io_service_.stop();
+        shutting_down_ = true; 
+        q_.prepare_for_shutdown(); 
+
+        int num_threads = thread_pool_.size();
+        int joined_threads = 0; 
+        for(;;){
+            for(int i = 0; i < num_threads - joined_threads; i++) q_.poke(); 
+            for(int i = 0; i < num_threads; i++){
+                if(thread_statuses_[i] == TERMINATED){
+                    thread_pool_[i].join();
+                    thread_statuses_[i] = JOINED;
+                    if(++joined_threads == num_threads) {
+                        io_service_.stop();
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

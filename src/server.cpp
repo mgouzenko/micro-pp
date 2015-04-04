@@ -84,15 +84,7 @@ namespace micro {
           if (valid_request_) {
             // A valid request was received. Call the user-supplied function object
             // to process the request and compose a reply.
-
-
-              //std::cout << request_->uri << std::endl;
-              //std::unique_ptr<WorkItem> ptr{new WorkItem(*request_, *reply_) };
-              //work_item item(request_.get(), reply_.get());
-
-              reply_->content = "content\n";
-
-              yield queue_.push(*this);
+            yield queue_.push(*this);
           }
 
           else {
