@@ -27,6 +27,7 @@ void request_handler::operator()(server& serv)
   {
     rep = reply::stock_reply(reply::bad_request);
     serv();
+    return; 
   }
 
   // Request path must be absolute and not contain "..".
@@ -35,6 +36,7 @@ void request_handler::operator()(server& serv)
   {
     rep = reply::stock_reply(reply::bad_request);
     serv();
+    return;
   }
 
   // TODO: Move to static file handler
@@ -62,10 +64,12 @@ void request_handler::operator()(server& serv)
       while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
           ++callback_it;
 
+      std::cout << "matched";
       if(!matched) {
           //TODO: Serve static file here I guess
           rep = reply::stock_reply(reply::not_found);
           serv();
+          return; 
       }
 
       rep.handle_response(resp, extension);
@@ -84,6 +88,7 @@ void request_handler::operator()(server& serv)
    } catch(std::exception& e){
         rep = reply::stock_reply(reply::not_found);
         serv();
+        return;
    }
 
 
