@@ -51,6 +51,16 @@ namespace micro {
          */
         void set_cookie(const Cookie& c);
 
+        /**
+        * Redirects browser to differnt url endpoint with 301 Found response
+        */
+        void redirect(const std::string& path);
+
+        /**
+        * Return true to signify that 301 redirect should happen
+        */
+        bool should_redirect() const;
+
 
     private:
 
@@ -63,6 +73,11 @@ namespace micro {
          * Customizable vector or headers
          */
         std::vector<header> headers_;
+
+        /**
+        * Boolean to determine if redirect should be issued
+        */
+        bool issue_redirect_ = false;
 
     };
 

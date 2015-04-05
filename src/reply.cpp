@@ -251,7 +251,12 @@ namespace micro {
 
       content.append(res_content);
 
-      status = reply::ok;
+      if(res.should_redirect()) {
+          status = reply::moved_temporarily;
+      }
+      else {
+          status = reply::ok;
+      }
 
       // Make sure to set size of header vector
       headers.resize(2);

@@ -49,6 +49,7 @@ void request_handler::operator()(server& serv)
 
 
   // Determine the file extension.
+  // TODO: Extenstion should be set in the handle_response function
   std::size_t last_slash_pos = request_path.find_last_of("/");
   std::size_t last_dot_pos = request_path.find_last_of(".");
   std::string extension;
