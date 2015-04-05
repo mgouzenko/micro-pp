@@ -20,6 +20,11 @@ namespace micro {
     public:
 
         /**
+        * Constructor for response
+        */
+        response();
+
+        /**
          * Get the message string
          */
         const std::string& get_message() const;
@@ -61,6 +66,22 @@ namespace micro {
         */
         bool should_redirect() const;
 
+        /**
+        * Renders a default HTTP response based of status code
+        * @param status_code: HTTP status code
+        */
+        void render_status(int status_code); 
+
+        /**
+        * Return true if should send a predifed HTTP response
+        */
+        bool should_send_default() const;
+
+        /**
+        * Get the status code
+        */
+        int get_status_code() const;
+
 
     private:
 
@@ -77,7 +98,17 @@ namespace micro {
         /**
         * Boolean to determine if redirect should be issued
         */
-        bool issue_redirect_ = false;
+        bool issue_redirect_;
+
+        /**
+        * Boolean to determine if should send a default reply
+        */
+        bool send_default_;
+
+        /**
+        * Status code to be sent to for default response
+        */
+        int status_code_;
 
     };
 

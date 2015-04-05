@@ -4,8 +4,14 @@
 
 #include "response.hpp"
 #include "cookie.hpp"
+#include "reply.hpp"
 
 namespace micro {
+
+    response::response() {
+        issue_redirect_ = false;
+        send_default_ = false;
+    }
 
     const std::string& response::get_message() const
     {
@@ -32,17 +38,11 @@ namespace micro {
         append_message(message);
     }
 
-
     bool response::should_redirect() const 
     {
         return issue_redirect_;
     }
 
-    /*
-    * Set the key and value of cookie to send back to client
-    * param key: key of cookie
-    * param value: value of cookie
-    */
     void response::set_cookie(const Cookie& c)
     {
         header h = header();
@@ -58,6 +58,22 @@ namespace micro {
         h.name = "Location";
         h.value = path;
         add_header(h);
+    }
+
+    void response::render_status(int status_code)
+    {
+        send_default_ = true;
+        status_code_ = status_code;
+    }
+
+    bool response::should_send_default() const
+    {
+        return send_default_;
+    }
+
+    int response::get_status_code() const 
+    {
+        return status_code_;
     }
 
 }

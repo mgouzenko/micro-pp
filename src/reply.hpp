@@ -71,6 +71,11 @@ namespace micro {
        * Get a stock reply.
        */
       static reply stock_reply(status_type status);
+
+      /**
+      * Translate a numeric status code into a status
+      */
+      static reply::status_type translate_status_code(int code);
     };
 
 } // namespace micro

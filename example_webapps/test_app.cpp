@@ -21,7 +21,12 @@ void test_redirect(const micro::request& req, micro::response& res)
 
 void other(const micro::request& req, micro::response& res) 
 {
-    res.render_string("redirected url");
+    res.render_string("you have been redirected");
+}
+
+void bad_url(const micro::request& req, micro::response& res)
+{
+    res.render_status(501);
 }
 
 void serve_number(const micro::request& req, micro::response& res)
@@ -35,6 +40,7 @@ int main(int argc, char** argv){
     application.add_route("/hello", {"GET"}, hello);
     application.add_route("/test_redirect", {"GET"}, test_redirect);
     application.add_route("/other", {"GET"}, other);
+    application.add_route("/bad_url", {"GET"}, bad_url);
     application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
     application.run();
 }
