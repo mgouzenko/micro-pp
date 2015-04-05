@@ -8,9 +8,9 @@
 
 void hello(const micro::request& req, micro::response& res)
 {
-  time_t now = time(0) + 100;
+  time_t t = time(0) + 100;
   res.render_string("hello world");
-  micro::Cookie c = micro::Cookie("fourth", "4", now);
+  micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
   res.set_cookie(c);
 }
 

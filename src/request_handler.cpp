@@ -74,17 +74,6 @@ void request_handler::operator()(server& serv)
 
       rep.handle_response(resp, extension);
 
-
-      // //Fill out the reply to be sent to the client.
-      // rep.status = reply::ok;
-
-      //  // Make sure to set size of header vector
-      // rep.headers.resize(2);
-      // rep.headers[0].name = "Content-Length";
-      // rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
-      // rep.headers[1].name = "Content-Type";
-      // rep.headers[1].value = mime_types::extension_to_type(extension);
-    // Need to get headers set by user
    } catch(std::exception& e){
         rep = reply::stock_reply(reply::not_found);
         serv();
