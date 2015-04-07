@@ -68,14 +68,23 @@ namespace micro {
       std::vector<boost::asio::const_buffer> to_buffers();
 
       /**
-       * Get a stock reply.
+       * Get a stock reply defined by the reply class
+       * @param status: HTTP status type
        */
       static reply stock_reply(status_type status);
 
       /**
       * Translate a numeric status code into a status
+      * @param code: HTTP status code
       */
       static reply::status_type translate_status_code(int code);
+
+      /**
+      * Send a custom reply for a given status code
+      * @param status: An HTTP status code
+      * @param cutom_message: A custom message to send for a given HTTP status code
+      */
+      static reply custom_reply(reply::status_type status, const std::string& custom_message);
     };
 
 } // namespace micro

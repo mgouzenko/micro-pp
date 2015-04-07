@@ -244,30 +244,43 @@ namespace micro {
       return rep;
     }
 
+    reply reply::custom_reply(reply::status_type status, const std::string& custom_message)
+    {
+        reply rep;
+        rep.status = status;
+        rep.content = custom_message;
+        rep.headers.resize(2);
+        rep.headers[0].name = "Content-Length";
+        rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+        rep.headers[1].name = "Content-Type";
+        rep.headers[1].value = "text/html";
+        return rep;
+    }
+
     void reply::handle_response(const response& res, const std::string& extension)
     {
-      std::vector<header> res_headers = res.get_headers();
-      std::string res_content = res.get_message();
+        std::vector<header> res_headers = res.get_headers();
+        std::string res_content = res.get_message();
 
-      content.append(res_content);
+        content.append(res_content);
 
-      if(res.should_redirect()) {
-          status = reply::moved_temporarily;
-      }
-      else {
-          status = reply::ok;
-      }
+        if(res.did_set_status()) {
+            status = translate_status_code(res.get_status_code());
+        }
+        else {
+            status = reply::ok;
+        }
 
-      // Make sure to set size of header vector
-      headers.resize(2);
-      headers[0].name = "Content-Length";
-      headers[0].value = boost::lexical_cast<std::string>(content.size());
-      headers[1].name = "Content-Type";
-      headers[1].value = mime_types::extension_to_type(extension);
+        // Make sure to set size of header vector
+        headers.resize(2);
+        headers[0].name = "Content-Length";
+        headers[0].value = boost::lexical_cast<std::string>(content.size());
+        headers[1].name = "Content-Type";
+        headers[1].value = mime_types::extension_to_type(extension);
 
-      for (int i = 0; i < res_headers.size(); i++) {
-        headers.push_back(res_headers[i]);
-      }
+        for (int i = 0; i < res_headers.size(); i++) {
+          headers.push_back(res_headers[i]);
+        }
     }
 
 

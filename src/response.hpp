@@ -62,15 +62,17 @@ namespace micro {
         void redirect(const std::string& path);
 
         /**
-        * Return true to signify that 301 redirect should happen
-        */
-        bool should_redirect() const;
-
-        /**
         * Renders a default HTTP response based of status code
         * @param status_code: HTTP status code
         */
         void render_status(int status_code); 
+
+        /**
+        * Renders a default HTTP response based of status code
+        * @param status_code: HTTP status code
+        * @param message: Custom message to in HTTP response
+        */
+        void render_status(int status_code, const std::string& message);
 
         /**
         * Return true if should send a predifed HTTP response
@@ -81,6 +83,16 @@ namespace micro {
         * Get the status code
         */
         int get_status_code() const;
+
+        /**
+        * Set the status code
+        */
+        void set_status_code(int status_code);
+
+        /**
+        * Return true if status code has been set in response
+        */
+        bool did_set_status() const;
 
 
     private:
@@ -96,11 +108,6 @@ namespace micro {
         std::vector<header> headers_;
 
         /**
-        * Boolean to determine if redirect should be issued
-        */
-        bool issue_redirect_;
-
-        /**
         * Boolean to determine if should send a default reply
         */
         bool send_default_;
@@ -109,6 +116,11 @@ namespace micro {
         * Status code to be sent to for default response
         */
         int status_code_;
+
+        /**
+        * Indicates whether status has been set in response
+        */
+        bool did_set_status_;
 
     };
 

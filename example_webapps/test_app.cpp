@@ -29,6 +29,11 @@ void bad_url(const micro::request& req, micro::response& res)
     res.render_status(501);
 }
 
+void bad_url_custom(const micro::request& req, micro::response& res)
+{
+    res.render_status(501, "Sorry Bro, its Broken");
+}
+
 void serve_number(const micro::request& req, micro::response& res)
 {
     res.render_string("User ID requested: " + req.label_values.at("id"));
@@ -41,6 +46,7 @@ int main(int argc, char** argv){
     application.add_route("/test_redirect", {"GET"}, test_redirect);
     application.add_route("/other", {"GET"}, other);
     application.add_route("/bad_url", {"GET"}, bad_url);
+    application.add_route("/bad_url_custom", {"GET"}, bad_url_custom);
     application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
     application.run();
 }

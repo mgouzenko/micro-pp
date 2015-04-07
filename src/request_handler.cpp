@@ -73,6 +73,7 @@ void request_handler::operator()(server& serv)
           return; 
       }
 
+      //TODO: Should be refactored so logic takes place in handle_response
       if (resp.should_send_default()) {
           auto default_reply = reply::translate_status_code(resp.get_status_code());
           rep = reply::stock_reply(default_reply);

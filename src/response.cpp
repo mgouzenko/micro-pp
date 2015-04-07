@@ -8,9 +8,10 @@
 
 namespace micro {
 
-    response::response() {
-        issue_redirect_ = false;
+    response::response() 
+    {
         send_default_ = false;
+        did_set_status_ = false;
     }
 
     const std::string& response::get_message() const
@@ -38,11 +39,6 @@ namespace micro {
         append_message(message);
     }
 
-    bool response::should_redirect() const 
-    {
-        return issue_redirect_;
-    }
-
     void response::set_cookie(const Cookie& c)
     {
         header h = header();
@@ -53,7 +49,7 @@ namespace micro {
 
     void response::redirect(const std::string& path) 
     {
-        issue_redirect_ = true;
+        set_status_code(301);
         header h = header();
         h.name = "Location";
         h.value = path;
@@ -66,6 +62,12 @@ namespace micro {
         status_code_ = status_code;
     }
 
+    void response::render_status(int status_code, const std::string& message)
+    {
+        status_code = status_code;
+        append_message(message);
+    }
+
     bool response::should_send_default() const
     {
         return send_default_;
@@ -74,6 +76,18 @@ namespace micro {
     int response::get_status_code() const 
     {
         return status_code_;
+    }
+
+    void response::set_status_code(int status_code)
+    {
+        //TODO::Assert that status code exists
+        did_set_status_ = true;
+        status_code_ = status_code;
+    }
+
+    bool response::did_set_status() const 
+    {
+        return did_set_status_;
     }
 
 }
