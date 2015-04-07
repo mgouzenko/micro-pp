@@ -5,13 +5,16 @@
 #include "response.hpp"
 #include "cookie.hpp"
 #include "reply.hpp"
+#include "header.hpp"
 
 namespace micro {
 
     response::response() 
     {
-        send_default_ = false;
         did_set_status_ = false;
+        did_set_message_ = false;
+        message_ = std::string();
+        headers_ = std::vector<header>();
     }
 
     const std::string& response::get_message() const
@@ -21,6 +24,7 @@ namespace micro {
 
     void response::append_message(const std::string& my_message)
     {
+        did_set_message_ = true;
         message_.append(my_message);
     }
 
@@ -56,21 +60,12 @@ namespace micro {
         add_header(h);
     }
 
-    void response::render_status(int status_code)
-    {
-        send_default_ = true;
-        status_code_ = status_code;
-    }
-
     void response::render_status(int status_code, const std::string& message)
     {
-        status_code = status_code;
-        append_message(message);
-    }
-
-    bool response::should_send_default() const
-    {
-        return send_default_;
+        set_status_code(status_code);
+        if (!message.empty()) {
+            append_message(message);
+        }
     }
 
     int response::get_status_code() const 
@@ -88,6 +83,11 @@ namespace micro {
     bool response::did_set_status() const 
     {
         return did_set_status_;
+    }
+
+    bool response::did_set_message() const
+    {
+        return did_set_message_;
     }
 
 }

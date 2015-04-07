@@ -244,31 +244,26 @@ namespace micro {
       return rep;
     }
 
-    reply reply::custom_reply(reply::status_type status, const std::string& custom_message)
-    {
-        reply rep;
-        rep.status = status;
-        rep.content = custom_message;
-        rep.headers.resize(2);
-        rep.headers[0].name = "Content-Length";
-        rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
-        rep.headers[1].name = "Content-Type";
-        rep.headers[1].value = "text/html";
-        return rep;
-    }
-
     void reply::handle_response(const response& res, const std::string& extension)
     {
         std::vector<header> res_headers = res.get_headers();
-        std::string res_content = res.get_message();
 
-        content.append(res_content);
-
-        if(res.did_set_status()) {
+        if(res.did_set_status() && res.did_set_message()) {
             status = translate_status_code(res.get_status_code());
+            content.append(res.get_message());
+        }
+        else if(res.did_set_status() && !res.did_set_message()) {
+            status = translate_status_code(res.get_status_code());
+            std::cout << "STATUS: " << status << "\n";
+            content.append(stock_replies::to_string(status)); 
+        }
+        else if(!res.did_set_status() && res.did_set_message()) {
+            status = reply::ok;
+            content.append(res.get_message());
         }
         else {
-            status = reply::ok;
+            status = reply::no_content;
+            content.append(stock_replies::to_string(status));
         }
 
         // Make sure to set size of header vector
@@ -279,7 +274,7 @@ namespace micro {
         headers[1].value = mime_types::extension_to_type(extension);
 
         for (int i = 0; i < res_headers.size(); i++) {
-          headers.push_back(res_headers[i]);
+            headers.push_back(res_headers[i]);
         }
     }
 

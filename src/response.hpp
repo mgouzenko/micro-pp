@@ -64,20 +64,9 @@ namespace micro {
         /**
         * Renders a default HTTP response based of status code
         * @param status_code: HTTP status code
-        */
-        void render_status(int status_code); 
-
-        /**
-        * Renders a default HTTP response based of status code
-        * @param status_code: HTTP status code
         * @param message: Custom message to in HTTP response
         */
-        void render_status(int status_code, const std::string& message);
-
-        /**
-        * Return true if should send a predifed HTTP response
-        */
-        bool should_send_default() const;
+        void render_status(int status_code, const std::string& message="");
 
         /**
         * Get the status code
@@ -94,6 +83,11 @@ namespace micro {
         */
         bool did_set_status() const;
 
+        /**
+        * Return true if message has been set in response
+        */
+        bool did_set_message() const;
+
 
     private:
 
@@ -108,11 +102,6 @@ namespace micro {
         std::vector<header> headers_;
 
         /**
-        * Boolean to determine if should send a default reply
-        */
-        bool send_default_;
-
-        /**
         * Status code to be sent to for default response
         */
         int status_code_;
@@ -121,6 +110,11 @@ namespace micro {
         * Indicates whether status has been set in response
         */
         bool did_set_status_;
+
+        /*
+        * Indicates whether message has been set in response
+        */
+        bool did_set_message_;
 
     };
 

@@ -79,12 +79,6 @@ namespace micro {
       */
       static reply::status_type translate_status_code(int code);
 
-      /**
-      * Send a custom reply for a given status code
-      * @param status: An HTTP status code
-      * @param cutom_message: A custom message to send for a given HTTP status code
-      */
-      static reply custom_reply(reply::status_type status, const std::string& custom_message);
     };
 
 } // namespace micro
