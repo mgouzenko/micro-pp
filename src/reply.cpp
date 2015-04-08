@@ -254,7 +254,6 @@ namespace micro {
         }
         else if(res.did_set_status() && !res.did_set_message()) {
             status = translate_status_code(res.get_status_code());
-            std::cout << "STATUS: " << status << "\n";
             content.append(stock_replies::to_string(status)); 
         }
         else if(!res.did_set_status() && res.did_set_message()) {
@@ -267,6 +266,7 @@ namespace micro {
         }
 
         // Make sure to set size of header vector
+        // TODO: Fix Mime types
         headers.resize(2);
         headers[0].name = "Content-Length";
         headers[0].value = boost::lexical_cast<std::string>(content.size());

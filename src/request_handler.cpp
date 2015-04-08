@@ -72,7 +72,7 @@ void request_handler::operator()(server& serv)
           serv();
           return; 
       }
-
+        //TODO: May want create a response handler to be consitent with request handler
         rep.handle_response(resp, extension);
 
    } catch(std::exception& e){
