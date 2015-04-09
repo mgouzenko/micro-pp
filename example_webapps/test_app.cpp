@@ -8,10 +8,36 @@
 
 void hello(const micro::request& req, micro::response& res)
 {
-  time_t now = time(0) + 100;
-  res.render_string("hello world");
-  micro::Cookie c = micro::Cookie("fourth", "4", now);
-  res.set_cookie(c);
+    time_t t = time(0) + 100;
+    res.render_string("hello world");
+    micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
+    res.set_cookie(c);
+}
+
+void test_redirect(const micro::request& req, micro::response& res)
+{
+    res.redirect("/other");
+}
+
+void other(const micro::request& req, micro::response& res) 
+{
+    res.render_string("you have been redirected");
+}
+
+void bad_url(const micro::request& req, micro::response& res)
+{
+    res.render_status(503);
+}
+
+void bad_url_custom(const micro::request& req, micro::response& res)
+{
+    res.render_status(501, "Sorry Bro, its Broken");
+}
+
+void nothing(const micro::request& req, micro::response& res)
+{
+    //User returns nothing
+    //Browser will stay on same page
 }
 
 void serve_number(const micro::request& req, micro::response& res)
@@ -20,11 +46,14 @@ void serve_number(const micro::request& req, micro::response& res)
 }
 
 int main(int argc, char** argv){
-
-	micro::app application;
-	application.set_pool_size(4);
+    micro::app application;
+    application.set_pool_size(4);
     application.add_route("/hello", {"GET"}, hello);
+    application.add_route("/test_redirect", {"GET"}, test_redirect);
+    application.add_route("/other", {"GET"}, other);
+    application.add_route("/bad_url", {"GET"}, bad_url);
+    application.add_route("/nothing", {"GET"}, nothing);
+    application.add_route("/bad_url_custom", {"GET"}, bad_url_custom);
     application.add_route("/user/<int:id>/profile", {"GET"}, serve_number);
-	application.run();
-
+    application.run();
 }

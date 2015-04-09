@@ -246,24 +246,79 @@ namespace micro {
 
     void reply::handle_response(const response& res, const std::string& extension)
     {
-      std::vector<header> res_headers = res.get_headers();
-      std::string res_content = res.get_message();
+        std::vector<header> res_headers = res.get_headers();
 
-      content.append(res_content);
+        if(res.did_set_status() && res.did_set_message()) {
+            status = translate_status_code(res.get_status_code());
+            content.append(res.get_message());
+        }
+        else if(res.did_set_status() && !res.did_set_message()) {
+            status = translate_status_code(res.get_status_code());
+            content.append(stock_replies::to_string(status)); 
+        }
+        else if(!res.did_set_status() && res.did_set_message()) {
+            status = reply::ok;
+            content.append(res.get_message());
+        }
+        else {
+            status = reply::no_content;
+            content.append(stock_replies::to_string(status));
+        }
 
-      status = reply::ok;
+        // Make sure to set size of header vector
+        // TODO: Fix Mime types
+        headers.resize(2);
+        headers[0].name = "Content-Length";
+        headers[0].value = boost::lexical_cast<std::string>(content.size());
+        headers[1].name = "Content-Type";
+        headers[1].value = mime_types::extension_to_type(extension);
 
-      // Make sure to set size of header vector
-      headers.resize(2);
-      headers[0].name = "Content-Length";
-      headers[0].value = boost::lexical_cast<std::string>(content.size());
-      headers[1].name = "Content-Type";
-      headers[1].value = mime_types::extension_to_type(extension);
+        for (int i = 0; i < res_headers.size(); i++) {
+            headers.push_back(res_headers[i]);
+        }
+    }
 
-      for (int i = 0; i < res_headers.size(); i++) {
-        headers.push_back(res_headers[i]);
-      }
 
-  }
+    reply::status_type reply::translate_status_code(int code)
+    {
+        switch (code) {
+        case 200:
+            return ok;
+        case 201:
+            return created;
+        case 202:
+            return accepted;
+        case 204:
+            return no_content;
+        case 300:
+            return multiple_choices;
+        case 301:
+            return moved_permanently;
+        case 302:
+            return moved_temporarily;
+        case 304:
+            return not_modified;
+        case 400:
+            return bad_request;
+        case 401:
+            return unauthorized;
+        case 403:
+            return forbidden;
+        case 404:
+            return not_found;
+        case 500:
+            return internal_server_error;
+        case 501:
+            return not_implemented;
+        case 502:
+            return bad_gateway;
+        case 503:
+            return service_unavailable;
+        default:
+            return internal_server_error;
+        }
+    }
+
+
 
 } // namespace micro
