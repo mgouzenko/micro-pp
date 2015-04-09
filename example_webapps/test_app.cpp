@@ -4,6 +4,7 @@
 #include "response.hpp"
 #include "cookie.hpp"
 #include <ctime>
+#include <fstream>
 
 
 void hello(const micro::request& req, micro::response& res)
@@ -40,14 +41,25 @@ void nothing(const micro::request& req, micro::response& res)
     //Browser will stay on same page
 }
 
+void image(const micro::request& req, micro::response& res)
+{
+    res.render_file("/Users/adamchelminski/Desktop/Woodbridge_200.jpg");
+}
+
 void serve_number(const micro::request& req, micro::response& res)
 {
     res.render_string("User ID requested: " + req.label_values.at("id"));
 }
 
 int main(int argc, char** argv){
+    if(argc != 2) {
+        std::cout << "Usage: test_app <static_file_root>\n";
+        exit(1);
+    }
+
     micro::app application;
     application.set_pool_size(4);
+    application.set_static_root(argv[1]);
     application.add_route("/hello", hello);
     application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);
@@ -55,5 +67,6 @@ int main(int argc, char** argv){
     application.add_route("/nothing", nothing);
     application.add_route("/bad_url_custom", bad_url_custom);
     application.add_route("/user/<int:id>/profile", serve_number);
+    application.add_route("/image", image);
     application.run();
 }

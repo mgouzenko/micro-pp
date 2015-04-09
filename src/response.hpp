@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "header.hpp"
 #include "cookie.hpp"
@@ -49,6 +51,19 @@ namespace micro {
          * @param message: Content string you want to send in response
         */
         void render_string(std::string message);
+
+        /**
+         * Read the contents of an open filestream and render it in the response.
+         * This will close the filestream.
+         * @param f: an open filestream
+         */
+        void render_filestream(std::ifstream& f);
+
+        /**
+         * Attempt to find the file at path, and render it in the response, or render a 404.
+         * WARNING: This can render any file in the system, so make sure you sanitize any input to this function.
+         */
+        void render_file(std::string file_path);
 
         /**
          * Set the key and value of cookie to send back to client
