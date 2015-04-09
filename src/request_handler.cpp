@@ -73,7 +73,7 @@ void request_handler::operator()(server& serv)
           return; 
       }
         //TODO: May want create a response handler to be consitent with request handler
-        rep.handle_response(resp, extension);
+        rep.handle_response(resp);
 
    } catch(std::exception& e){
         rep = reply::stock_reply(reply::not_found);

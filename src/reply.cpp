@@ -244,7 +244,7 @@ namespace micro {
       return rep;
     }
 
-    void reply::handle_response(const response& res, const std::string& extension)
+    void reply::handle_response(const response& res)
     {
         std::vector<header> res_headers = res.get_headers();
 
@@ -266,12 +266,11 @@ namespace micro {
         }
 
         // Make sure to set size of header vector
-        // TODO: Fix Mime types
         headers.resize(2);
         headers[0].name = "Content-Length";
         headers[0].value = boost::lexical_cast<std::string>(content.size());
         headers[1].name = "Content-Type";
-        headers[1].value = mime_types::extension_to_type(extension);
+        headers[1].value = std::string(res.get_mime_type());
 
         for (int i = 0; i < res_headers.size(); i++) {
             headers.push_back(res_headers[i]);

@@ -38,9 +38,10 @@ namespace micro {
         headers_.push_back(new_header);
     }
 
-    void response::render_string(std::string message)
-    {
-        append_message(message);
+    void response::render_string(const std::string& message, const std::string& mime_type)
+    {   
+        set_mime_type(mime_type);
+        set_message(message);
     }
 
     void response::set_cookie(const Cookie& c)
@@ -62,9 +63,10 @@ namespace micro {
 
     void response::render_status(int status_code, const std::string& message)
     {
+        set_mime_type("text/html");
         set_status_code(status_code);
         if (!message.empty()) {
-            append_message(message);
+            set_message(message);
         }
     }
 
@@ -88,6 +90,22 @@ namespace micro {
     bool response::did_set_message() const
     {
         return did_set_message_;
+    }
+
+    void response::set_message(const std::string& msg)
+    {
+        did_set_message_ = true;
+        message_ = std::string(msg);
+    }
+
+    void response::set_mime_type(const std::string& mime)
+    {
+        mime_type_ = std::string(mime);
+    }
+
+    const std::string& response::get_mime_type() const
+    {
+        return mime_type_;
     }
 
 }
