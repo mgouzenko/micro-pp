@@ -4,61 +4,90 @@
 
 #include "response.hpp"
 #include "cookie.hpp"
+#include "reply.hpp"
+#include "header.hpp"
 
 namespace micro {
 
-    /*
-    * Get the message string
-    */
+    response::response() 
+    {
+        did_set_status_ = false;
+        did_set_message_ = false;
+        message_ = std::string();
+        headers_ = std::vector<header>();
+    }
+
     const std::string& response::get_message() const
     {
         return message_;
     }
 
-    /*
-    * Append a string to the message content
-    */
     void response::append_message(const std::string& my_message)
     {
+        did_set_message_ = true;
         message_.append(my_message);
     }
 
-    /*
-    * Get reference to vector of headers
-    */
     const std::vector<header>& response::get_headers() const
     {
         return headers_;
     }
 
-    /*
-    * Add a header to the list of headers
-    */
     void response::add_header(const header& new_header)
     {
         headers_.push_back(new_header);
     }
 
-    /*
-    * Sets the message content of a HTTP response
-    * param message: Content string you want to send in response
-    */
     void response::render_string(std::string message)
     {
         append_message(message);
     }
 
-    /*
-    * Set the key and value of cookie to send back to client
-    * param key: key of cookie
-    * param value: value of cookie
-    */
     void response::set_cookie(const Cookie& c)
     {
         header h = header();
         h.name = "Set-Cookie";
         h.value = c.to_string();
         add_header(h);
+    }
+
+    void response::redirect(const std::string& path) 
+    {
+        set_status_code(301);
+        header h = header();
+        h.name = "Location";
+        h.value = path;
+        add_header(h);
+    }
+
+    void response::render_status(int status_code, const std::string& message)
+    {
+        set_status_code(status_code);
+        if (!message.empty()) {
+            append_message(message);
+        }
+    }
+
+    int response::get_status_code() const 
+    {
+        return status_code_;
+    }
+
+    void response::set_status_code(int status_code)
+    {
+        //TODO::Assert that status code exists
+        did_set_status_ = true;
+        status_code_ = status_code;
+    }
+
+    bool response::did_set_status() const 
+    {
+        return did_set_status_;
+    }
+
+    bool response::did_set_message() const
+    {
+        return did_set_message_;
     }
 
 }

@@ -20,6 +20,11 @@ namespace micro {
     public:
 
         /**
+        * Constructor for response
+        */
+        response();
+
+        /**
          * Get the message string
          */
         const std::string& get_message() const;
@@ -51,6 +56,38 @@ namespace micro {
          */
         void set_cookie(const Cookie& c);
 
+        /**
+        * Redirects browser to differnt url endpoint with 301 Found response
+        */
+        void redirect(const std::string& path);
+
+        /**
+        * Renders a default HTTP response based of status code
+        * @param status_code: HTTP status code
+        * @param message: Custom message to in HTTP response
+        */
+        void render_status(int status_code, const std::string& message="");
+
+        /**
+        * Get the status code
+        */
+        int get_status_code() const;
+
+        /**
+        * Set the status code
+        */
+        void set_status_code(int status_code);
+
+        /**
+        * Return true if status code has been set in response
+        */
+        bool did_set_status() const;
+
+        /**
+        * Return true if message has been set in response
+        */
+        bool did_set_message() const;
+
 
     private:
 
@@ -63,6 +100,21 @@ namespace micro {
          * Customizable vector or headers
          */
         std::vector<header> headers_;
+
+        /**
+        * Status code to be sent to for default response
+        */
+        int status_code_;
+
+        /**
+        * Indicates whether status has been set in response
+        */
+        bool did_set_status_;
+
+        /*
+        * Indicates whether message has been set in response
+        */
+        bool did_set_message_;
 
     };
 
