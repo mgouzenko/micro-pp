@@ -53,7 +53,7 @@ namespace micro {
         handler_.add_route(route);
     }
 
-    void app::add_route(std::string route_specifier, micro::callback func, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"})
+    void app::add_route(std::string route_specifier, micro::callback func, std::vector<std::string> methods)
     {
         add_route(micro::url_route(route_specifier, func, methods));
     }
