@@ -9,11 +9,11 @@ void hello(const micro::request& req, micro::response& resp){
 
 int main(int argc, char** argv){
 
-	micro::url_route test1 ("/<this>/i.s/<int:id>/c0ol", {"GET"}, hello);
-	micro::url_route test2 ("/hello", {"GET"}, hello);
-	micro::url_route test3 ("/user/<int:id>/photo", {"GET"}, hello);
-	micro::url_route test4 ("/", {"GET"}, hello);
-	micro::url_route test5 ("/user/<name>/pro-fi_le", {"POST"}, hello);
+	micro::url_route test1 ("/<this>/i.s/<int:id>/c0ol", hello);
+	micro::url_route test2 ("/hello", hello);
+	micro::url_route test3 ("/user/<int:id>/photo", hello);
+	micro::url_route test4 ("/", hello);
+	micro::url_route test5 ("/user/<name>/pro-fi_le", hello, {"POST"});
 
 	micro::request r;
     micro::response resp;

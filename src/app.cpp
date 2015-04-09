@@ -21,7 +21,7 @@ namespace micro {
 
         for(int i=0; i<thread_pool_size_; i++) {
             std::cout << "added worker\n";
-            thread_statuses_.push_back(RUNNING); 
+            thread_statuses_.push_back(RUNNING);
             thread_pool_.push_back(std::thread([this, i](){this->handle_requests(i); }  ));
         }
 
@@ -53,9 +53,9 @@ namespace micro {
         handler_.add_route(route);
     }
 
-    void app::add_route(std::string route_specifier, std::vector<std::string> methods, micro::callback func)
+    void app::add_route(std::string route_specifier, micro::callback func, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"})
     {
-        add_route(micro::url_route(route_specifier, methods, func));
+        add_route(micro::url_route(route_specifier, func, methods));
     }
 
     void app::set_static_root(std::string static_root)
@@ -69,17 +69,17 @@ namespace micro {
             q_.do_work(handler_);
         }
         std::cout << "ended\n";
-        thread_statuses_[i] = TERMINATED; 
+        thread_statuses_[i] = TERMINATED;
     }
 
     void app::shut_down() {
-        shutting_down_ = true; 
-        q_.prepare_for_shutdown(); 
+        shutting_down_ = true;
+        q_.prepare_for_shutdown();
 
         int num_threads = thread_pool_.size();
-        int joined_threads = 0; 
+        int joined_threads = 0;
         for(;;){
-            for(int i = 0; i < num_threads - joined_threads; i++) q_.poke(); 
+            for(int i = 0; i < num_threads - joined_threads; i++) q_.poke();
             for(int i = 0; i < num_threads; i++){
                 if(thread_statuses_[i] == TERMINATED){
                     thread_pool_[i].join();

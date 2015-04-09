@@ -22,7 +22,7 @@ namespace micro {
          * @param callback: the callback function that should be registered to this URL path
                   The callback must be a void function that takes a micro::request, and micro::response& as parameters.
          */
-        url_route(std::vector<std::string> methods, micro::callback callback); // Static file URL
+        url_route(micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"}); // Static file URL
 
         /**
          * Specific URL constructor.
@@ -49,7 +49,7 @@ namespace micro {
          * @param callback: the callback function that should be registered to this URL path
                   The callback must be a void function that takes a micro::request, and micro::response& as parameters.
          */
-        url_route(std::string specifier, std::vector<std::string> allowable_methods, micro::callback callback);
+        url_route(std::string specifier, micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"});
 
         /**
          * Checks if the URI within a request matches this URL instance.

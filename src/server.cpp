@@ -1,7 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <memory>
-#include "work_queue.hpp" 
+#include "work_queue.hpp"
 #include "server.hpp"
 #include "request.hpp"
 #include "reply.hpp"
@@ -73,6 +73,8 @@ namespace micro {
             boost::tie(valid_request_, boost::tuples::ignore)
               = request_parser_.parse(*request_,
                   buffer_->data(), buffer_->data() + length);
+
+            // TODO: Format the request using a member function of the request_parser
 
             // An indeterminate result means we need more data, so keep looping.
           }
