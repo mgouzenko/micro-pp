@@ -95,7 +95,7 @@ namespace micro {
           }
 
           std::cerr << "before cerr\n";
-          std::cerr << (reply_->content + "\n");
+          //std::cerr << (reply_->content + "\n");
           // Send the reply back to the client.
           std::cerr << "before write\n";
 

@@ -4,6 +4,7 @@
 #include "response.hpp"
 #include "cookie.hpp"
 #include <ctime>
+#include <fstream>
 
 
 void hello(const micro::request& req, micro::response& res)
@@ -46,8 +47,14 @@ void serve_number(const micro::request& req, micro::response& res)
 }
 
 int main(int argc, char** argv){
+    if(argc != 2) {
+        std::cout << "Usage: test_app <static_file_root>\n";
+        exit(1);
+    }
+
     micro::app application;
-    application.set_pool_size(4);
+    application.set_pool_size(8);
+    application.set_static_root(argv[1]);
     application.add_route("/hello", hello);
     application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);

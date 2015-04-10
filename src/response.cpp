@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 #include "response.hpp"
 #include "cookie.hpp"
@@ -9,7 +10,7 @@
 
 namespace micro {
 
-    response::response() 
+    response::response()
     {
         did_set_status_ = false;
         did_set_message_ = false;
@@ -39,9 +40,34 @@ namespace micro {
     }
 
     void response::render_string(const std::string& message, const std::string& mime_type)
-    {   
+    {
         set_mime_type(mime_type);
         set_message(message);
+    }
+
+    void response::render_filestream(std::ifstream& f)
+    {
+        // TODO: Async buffer usage so we don't use a ton of memory for large files (1.2)
+
+        char buf[512];
+        while (f.read(buf, sizeof(buf)).gcount() > 0) {
+          message_.append(buf, f.gcount());
+        }
+
+        did_set_message_ = true;
+
+        f.close();
+    }
+
+    void response::render_file(std::string file_path)
+    {
+        // TODO: Add support for extracting MIME type (1.0)
+        std::ifstream f;
+        f.open(file_path);
+        if(f.is_open())
+            render_filestream(f);
+        else
+            set_status_code(404);
     }
 
     void response::set_cookie(const Cookie& c)
@@ -52,7 +78,7 @@ namespace micro {
         add_header(h);
     }
 
-    void response::redirect(const std::string& path) 
+    void response::redirect(const std::string& path)
     {
         set_status_code(301);
         header h = header();
@@ -70,7 +96,7 @@ namespace micro {
         }
     }
 
-    int response::get_status_code() const 
+    int response::get_status_code() const
     {
         return status_code_;
     }
@@ -82,7 +108,7 @@ namespace micro {
         status_code_ = status_code;
     }
 
-    bool response::did_set_status() const 
+    bool response::did_set_status() const
     {
         return did_set_status_;
     }

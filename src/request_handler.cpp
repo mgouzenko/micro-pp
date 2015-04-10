@@ -27,7 +27,7 @@ void request_handler::operator()(server& serv)
   {
     rep = reply::stock_reply(reply::bad_request);
     serv();
-    return; 
+    return;
   }
 
   // Request path must be absolute and not contain "..".
@@ -42,10 +42,7 @@ void request_handler::operator()(server& serv)
   // TODO: Move to static file handler
   /*
   // If path ends in slash (i.e. is a directory) then add "index.html".
-  if (request_path[request_path.size() - 1] == '/')
-  {
-    request_path += "index.html";
-}*/
+  */
 
 
   // Determine the file extension.
@@ -65,12 +62,18 @@ void request_handler::operator()(server& serv)
       while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
           ++callback_it;
 
-      std::cout << "matched";
+      std::cout << "matched\n";
       if(!matched) {
-          //TODO: Serve static file here I guess
-          rep = reply::stock_reply(reply::not_found);
-          serv();
-          return; 
+          // Attempt to find a static file matching this name
+          if (request_path[request_path.size() - 1] == '/')
+          {
+              request_path += "index.html";
+          }
+
+          std::cout << static_root_ + request_path.substr(1) + "\n";
+
+          resp.render_file(static_root_ + request_path.substr(1));
+
       }
         //TODO: May want create a response handler to be consitent with request handler
         rep.handle_response(resp);
@@ -93,11 +96,6 @@ void request_handler::add_route(micro::url_route route)
 void request_handler::set_static_root(std::string root)
 {
     static_root_ = root;
-}
-
-void request_handler::serve_static(const micro::request& req, micro::response& resp)
-{
-    return;
 }
 
 /*
