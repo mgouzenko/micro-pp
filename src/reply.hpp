@@ -57,7 +57,7 @@ namespace micro {
        * Handles a response object and safely sets HTTP message content and headers
        * param response: Response object to be handled
        */
-      void handle_response(const response& res, const std::string& extension);
+      void handle_response(const response& res);
 
       /**
        * Convert the reply into a vector of buffers.
