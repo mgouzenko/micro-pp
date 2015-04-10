@@ -58,25 +58,33 @@ void request_handler::operator()(server& serv)
 
       bool matched = false;
       micro::response resp;
-      auto callback_it = callback_routes_.begin();
-      while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
-          ++callback_it;
 
-      std::cout << "matched\n";
-      if(!matched) {
-          // Attempt to find a static file matching this name
-          if (request_path[request_path.size() - 1] == '/')
-          {
-              request_path += "index.html";
-          }
-
-          std::cout << static_root_ + request_path.substr(1) + "\n";
-
-          resp.render_file(static_root_ + request_path.substr(1));
-
+      // Attempt to find a static file matching this name
+      if (request_path[request_path.size() - 1] == '/')
+      {
+          matched = resp.render_file(static_root_ + request_path.substr(1) + "index.html");
       }
-        //TODO: May want create a response handler to be consitent with request handler
-        rep.handle_response(resp);
+      else
+      {
+          matched = resp.render_file(static_root_ + request_path.substr(1));
+      }
+
+      resp.set_status_code(200);
+
+      // Attempt to match the URL to a callback
+      if(!matched) {
+          auto callback_it = callback_routes_.begin();
+          while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
+              ++callback_it;
+      }
+
+      if(!matched)
+        resp.set_status_code(404);
+
+      // At this point, the response will contain a file, the contents as set by a callback, or a 401 as set by render_file
+
+      //TODO: May want create a response handler to be consitent with request handler
+      rep.handle_response(resp);
 
    } catch(std::exception& e){
         rep = reply::stock_reply(reply::not_found);

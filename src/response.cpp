@@ -59,15 +59,17 @@ namespace micro {
         f.close();
     }
 
-    void response::render_file(std::string file_path)
+    bool response::render_file(std::string file_path)
     {
         // TODO: Add support for extracting MIME type (1.0)
         std::ifstream f;
         f.open(file_path);
-        if(f.is_open())
+        if(f.is_open()) {
             render_filestream(f);
-        else
-            set_status_code(404);
+            return true;
+        }
+        set_status_code(404);
+        return false;
     }
 
     void response::set_cookie(const Cookie& c)

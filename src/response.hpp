@@ -63,8 +63,11 @@ namespace micro {
         /**
          * Attempt to find the file at path, and render it in the response, or render a 404.
          * WARNING: This can render any file in the system, so make sure you sanitize any input to this function.
+         *
+         * @param file_path: the path to the file you'd like to send to the client
+         * @return true if a file was found, false if 404 status was set
          */
-        void render_file(std::string file_path);
+        bool render_file(std::string file_path);
 
         /**
          * Set the key and value of cookie to send back to client
