@@ -41,11 +41,6 @@ void nothing(const micro::request& req, micro::response& res)
     //Browser will stay on same page
 }
 
-void image(const micro::request& req, micro::response& res)
-{
-    res.render_file("/Users/adamchelminski/Desktop/Woodbridge_200.jpg");
-}
-
 void serve_number(const micro::request& req, micro::response& res)
 {
     res.render_string("User ID requested: " + req.label_values.at("id"));
@@ -58,7 +53,7 @@ int main(int argc, char** argv){
     }
 
     micro::app application;
-    application.set_pool_size(4);
+    application.set_pool_size(8);
     application.set_static_root(argv[1]);
     application.add_route("/hello", hello);
     application.add_route("/test_redirect", test_redirect);
@@ -67,6 +62,5 @@ int main(int argc, char** argv){
     application.add_route("/nothing", nothing);
     application.add_route("/bad_url_custom", bad_url_custom);
     application.add_route("/user/<int:id>/profile", serve_number);
-    application.add_route("/image", image);
     application.run();
 }

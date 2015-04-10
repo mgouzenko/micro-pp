@@ -40,13 +40,15 @@ namespace micro {
     }
 
     void response::render_string(const std::string& message, const std::string& mime_type)
-    {   
+    {
         set_mime_type(mime_type);
         set_message(message);
     }
 
     void response::render_filestream(std::ifstream& f)
     {
+        // TODO: Async buffer usage so we don't use a ton of memory for large files (1.2)
+
         char buf[512];
         while (f.read(buf, sizeof(buf)).gcount() > 0) {
           message_.append(buf, f.gcount());
@@ -59,7 +61,7 @@ namespace micro {
 
     void response::render_file(std::string file_path)
     {
-        // TODO: Add support for extracting MIME type
+        // TODO: Add support for extracting MIME type (1.0)
         std::ifstream f;
         f.open(file_path);
         if(f.is_open())
