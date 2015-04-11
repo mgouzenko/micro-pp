@@ -1,4 +1,5 @@
 test_app
+exception_test
 *.a
 *.o
 *.swp

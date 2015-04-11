@@ -23,8 +23,9 @@ void hello(const micro::request& req, micro::response& res)
 int main(){
 
     micro::app application;
+    //application.toggle_debug_mode(); 
     application.set_pool_size(8);
-    application.set_static_root(".");
+    //application.set_static_root(".");
     application.add_route("/hello", hello);
     application.add_route("/excep", excep);  
     application.run(); 

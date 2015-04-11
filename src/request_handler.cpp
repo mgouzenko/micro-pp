@@ -13,20 +13,39 @@
 #include "types.hpp"
 #include "server.hpp"
 #include "url_route.hpp"
+#include <boost/log/trivial.hpp>
 
 namespace micro {
 
+void invoke_server(server& serv){
+    BOOST_LOG_TRIVIAL(info) 
+        << "[" << serv.request_->client_ip << "] "
+        << "\"" 
+            << serv.request_->method 
+            << " " 
+            << serv.request_->uri
+            << " HTTP/"
+            << serv.request_->http_version_major
+            << "."
+            << serv.request_->http_version_minor
+        << "\" "
+        << serv.reply_->status; 
+    serv(); 
+} 
+
 void request_handler::operator()(server& serv)
 {
-  request& req = *(serv.request_);
-  reply& rep = *(serv.reply_);
+    
+    request& req = *(serv.request_);
+    reply& rep = *(serv.reply_);
+    
 
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
-    serv();
+    invoke_server(serv);
     return;
   }
 
@@ -35,7 +54,7 @@ void request_handler::operator()(server& serv)
       || request_path.find("..") != std::string::npos)
   {
     rep = reply::stock_reply(reply::bad_request);
-    serv();
+    invoke_server(serv);
     return;
   }
 
@@ -54,10 +73,11 @@ void request_handler::operator()(server& serv)
       extension = request_path.substr(last_dot_pos + 1);
   }
 
+    micro::response resp;
   try{
 
       bool matched = false;
-      micro::response resp;
+      
 
       // Attempt to find a static file matching this name
       if (request_path[request_path.size() - 1] == '/')
@@ -84,17 +104,28 @@ void request_handler::operator()(server& serv)
       // At this point, the response will contain a file, the contents as set by a callback, or a 401 as set by render_file
 
       //TODO: May want create a response handler to be consitent with request handler
-      rep.handle_response(resp);
+      
 
    } catch(std::exception& e){
-        rep = reply::stock_reply(reply::not_found);
-        serv();
-        return;
+        BOOST_LOG_TRIVIAL(warning) << e.what(); 
+        if(debug_mode_){
+            resp.render_string(e.what() ); 
+            resp.set_status_code(500);
+        } 
+        else{
+            rep = reply::stock_reply(reply::internal_server_error); 
+            invoke_server(serv);
+            return;
+        }
    }
 
-
-  serv();
+    rep.handle_response(resp);
+    invoke_server(serv);
 }
+
+void request_handler::set_debug_mode(){
+    debug_mode_ = !debug_mode_;
+} 
 
 void request_handler::add_route(micro::url_route route)
 {

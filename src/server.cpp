@@ -64,6 +64,8 @@ namespace micro {
 
           // Loop until a complete request (or an invalid one) has been received.
           do {
+            request_->client_ip = socket_->remote_endpoint().address().to_string();
+              
             // Receive some more data. When control resumes at the following line,
             // the ec and length parameters reflect the result of the asynchronous
             // operation.
@@ -94,14 +96,8 @@ namespace micro {
             *reply_ = reply::stock_reply(reply::bad_request);
           }
 
-          std::cerr << "before cerr\n";
-          //std::cerr << (reply_->content + "\n");
           // Send the reply back to the client.
-          std::cerr << "before write\n";
-
           yield boost::asio::async_write(*socket_, reply_->to_buffers(), *this);
-
-
 
           // Initiate graceful connection closure.
           socket_->shutdown(tcp::socket::shutdown_both, ec);

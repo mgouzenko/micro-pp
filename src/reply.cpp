@@ -240,7 +240,6 @@ namespace micro {
       rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
       rep.headers[1].name = "Content-Type";
       rep.headers[1].value = "text/html";
-      std::cout << "Seding Stock Reply\n";
       return rep;
     }
 
