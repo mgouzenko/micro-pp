@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "header.hpp"
 #include "cookie.hpp"
@@ -47,8 +49,25 @@ namespace micro {
         /**
          * Sets the message content of a HTTP response
          * @param message: Content string you want to send in response
+         * @param mime_type: Mime type for response. Defaults to text/html
         */
-        void render_string(std::string message);
+        void render_string(const std::string& message, const std::string& mime_type="text/html");
+
+        /**
+         * Read the contents of an open filestream and render it in the response.
+         * This will close the filestream.
+         * @param f: an open filestream
+         */
+        void render_filestream(std::ifstream& f);
+
+        /**
+         * Attempt to find the file at path, and render it in the response, or render a 404.
+         * WARNING: This can render any file in the system, so make sure you sanitize any input to this function.
+         *
+         * @param file_path: the path to the file you'd like to send to the client
+         * @return true if a file was found, false if 404 status was set
+         */
+        bool render_file(std::string file_path);
 
         /**
          * Set the key and value of cookie to send back to client
@@ -88,6 +107,22 @@ namespace micro {
         */
         bool did_set_message() const;
 
+        /**
+        * Set the message for the HTTP response
+        */
+        void set_message(const std::string& msg);
+
+        /**
+        * Set the mime type for a HTTP response
+        * @param mime_type: Mime type for HTTP response
+        */
+        void set_mime_type(const std::string& mime_type);
+
+        /**
+        * Get the mime type set in the request
+        */
+        const std::string& get_mime_type() const;
+
 
     private:
 
@@ -115,6 +150,11 @@ namespace micro {
         * Indicates whether message has been set in response
         */
         bool did_set_message_;
+
+        /**
+        * Mime type of HTTP response
+        */
+        std::string mime_type_;
 
     };
 

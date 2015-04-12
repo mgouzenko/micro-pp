@@ -20,12 +20,9 @@ namespace micro {
       try {
 
         for(int i=0; i<thread_pool_size_; i++) {
-            std::cout << "added worker\n";
             thread_statuses_.push_back(RUNNING);
             thread_pool_.push_back(std::thread([this, i](){this->handle_requests(i); }  ));
         }
-
-        //for(int i=0; i<workers.size(); i++) workers[i].detach();
 
         micro::server(io_service_, "0.0.0.0", "8080", q_)();
         // Wait for signals indicating time to shut down.
@@ -68,7 +65,6 @@ namespace micro {
         while(!shutting_down_){
             q_.do_work(handler_);
         }
-        std::cout << "ended\n";
         thread_statuses_[i] = TERMINATED;
     }
 

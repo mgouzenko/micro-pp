@@ -23,6 +23,11 @@ namespace micro {
        * The requested URI, such as a path to a file.
        */
       std::string uri;
+    
+      /**
+       * The ip address of the client. 
+       */
+      std::string client_ip; 
 
       /**
        * Major version number, usually 1.

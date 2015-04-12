@@ -1,12 +1,11 @@
 CXX = clang++
 CC = clang++
 LDLIBS = -lboost_system
-CXXFLAGS = -std=gnu++11
-
+CXXFLAGS = -std=gnu++11 -DBOOST_LOG_DYN_LINK
+ARFLAGS = rcs
 
 libmicro.a: mime_types.o server.o request_parser.o reply.o response.o cookie.o url_route.o request_handler.o app.o request.o
-	ar rcs libmicro.a mime_types.o server.o request_parser.o reply.o response.o cookie.o url_route.o request_handler.o app.o request.o
-
+	$(AR) $(ARFLAGS) $@ $?
 mime_types.o: mime_types.hpp
 request_handler.o: request_handler.hpp
 server.o: server.hpp work_queue.hpp

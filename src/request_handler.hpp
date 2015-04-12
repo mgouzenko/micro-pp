@@ -43,11 +43,13 @@ namespace micro {
        */
        void serve_static(const micro::request& req, micro::response& resp);
 
+       void set_debug_mode();
+
     private:
       /**
        * The directory containing the files to be served.
        */
-      std::string static_root_;
+      std::string static_root_ = "./static/";
 
       /**
        * The list of url_routes containing callbacks, in order of priority
@@ -59,6 +61,7 @@ namespace micro {
        */
       static bool url_decode(const std::string& in, std::string& out);
 
+      bool debug_mode_ = false; 
     };
 
 } // namespace micro

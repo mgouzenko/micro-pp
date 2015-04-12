@@ -13,21 +13,40 @@
 #include "types.hpp"
 #include "server.hpp"
 #include "url_route.hpp"
+#include <boost/log/trivial.hpp>
 
 namespace micro {
 
+void invoke_server(server& serv){
+    BOOST_LOG_TRIVIAL(info) 
+        << "[" << serv.request_->client_ip << "] "
+        << "\"" 
+            << serv.request_->method 
+            << " " 
+            << serv.request_->uri
+            << " HTTP/"
+            << serv.request_->http_version_major
+            << "."
+            << serv.request_->http_version_minor
+        << "\" "
+        << serv.reply_->status; 
+    serv(); 
+} 
+
 void request_handler::operator()(server& serv)
 {
-  request& req = *(serv.request_);
-  reply& rep = *(serv.reply_);
+    
+    request& req = *(serv.request_);
+    reply& rep = *(serv.reply_);
+    
 
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
-    serv();
-    return; 
+    invoke_server(serv);
+    return;
   }
 
   // Request path must be absolute and not contain "..".
@@ -35,17 +54,14 @@ void request_handler::operator()(server& serv)
       || request_path.find("..") != std::string::npos)
   {
     rep = reply::stock_reply(reply::bad_request);
-    serv();
+    invoke_server(serv);
     return;
   }
 
   // TODO: Move to static file handler
   /*
   // If path ends in slash (i.e. is a directory) then add "index.html".
-  if (request_path[request_path.size() - 1] == '/')
-  {
-    request_path += "index.html";
-}*/
+  */
 
 
   // Determine the file extension.
@@ -57,33 +73,59 @@ void request_handler::operator()(server& serv)
       extension = request_path.substr(last_dot_pos + 1);
   }
 
+    micro::response resp;
   try{
 
       bool matched = false;
-      micro::response resp;
-      auto callback_it = callback_routes_.begin();
-      while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
-          ++callback_it;
+      
 
-      std::cout << "matched";
-      if(!matched) {
-          //TODO: Serve static file here I guess
-          rep = reply::stock_reply(reply::not_found);
-          serv();
-          return; 
+      // Attempt to find a static file matching this name
+      if (request_path[request_path.size() - 1] == '/')
+      {
+          matched = resp.render_file(static_root_ + request_path.substr(1) + "index.html");
       }
-        //TODO: May want create a response handler to be consitent with request handler
-        rep.handle_response(resp, extension);
+      else
+      {
+          matched = resp.render_file(static_root_ + request_path.substr(1));
+      }
+
+      resp.set_status_code(200);
+
+      // Attempt to match the URL to a callback
+      if(!matched) {
+          auto callback_it = callback_routes_.begin();
+          while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
+              ++callback_it;
+      }
+
+      if(!matched)
+        resp.set_status_code(404);
+
+      // At this point, the response will contain a file, the contents as set by a callback, or a 401 as set by render_file
+
+      //TODO: May want create a response handler to be consitent with request handler
+      
 
    } catch(std::exception& e){
-        rep = reply::stock_reply(reply::not_found);
-        serv();
-        return;
+        BOOST_LOG_TRIVIAL(warning) << e.what(); 
+        if(debug_mode_){
+            resp.render_string(e.what() ); 
+            resp.set_status_code(500);
+        } 
+        else{
+            rep = reply::stock_reply(reply::internal_server_error); 
+            invoke_server(serv);
+            return;
+        }
    }
 
-
-  serv();
+    rep.handle_response(resp);
+    invoke_server(serv);
 }
+
+void request_handler::set_debug_mode(){
+    debug_mode_ = !debug_mode_;
+} 
 
 void request_handler::add_route(micro::url_route route)
 {
@@ -93,11 +135,6 @@ void request_handler::add_route(micro::url_route route)
 void request_handler::set_static_root(std::string root)
 {
     static_root_ = root;
-}
-
-void request_handler::serve_static(const micro::request& req, micro::response& resp)
-{
-    return;
 }
 
 /*
