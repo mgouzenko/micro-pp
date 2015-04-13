@@ -20,4 +20,11 @@ namespace micro {
         return hostname;
     }
 
+    const std::string& request::get_uri() const
+    {
+        return uri;
+    }
+
+    
+
 }

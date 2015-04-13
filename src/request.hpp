@@ -75,6 +75,11 @@ namespace micro {
       */
       const std::string& get_hostname() const;
 
+      /**
+      * Get the uri of the request
+      */
+      const std::string& get_uri() const;
+
     };
 
 } // namespace micro
