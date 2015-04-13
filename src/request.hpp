@@ -53,6 +53,28 @@ namespace micro {
        * Fields populated after the URL is matched:
        */
       std::unordered_map<std::string, std::string> label_values;
+
+      /**
+      * Map of cookies as key value pairs
+      */
+      std::unordered_map<std::string, std::string> cookies;
+
+      /**
+      * Hostname from HTTP Host header
+      */
+      std::string hostname;
+
+      /**
+      * Get the value of a cookie. Returns empty string if not found
+      * @param key: key value of the cookie
+      */
+      std::string get_cookie(const std::string& key);
+
+      /**
+      * Get the hostname from the HTTP Host header
+      */
+      const std::string& get_hostname() const;
+
     };
 
 } // namespace micro

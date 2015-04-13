@@ -19,5 +19,6 @@
 
 ###Considerations
 - Difficult to parse the content
+- Version 1.2 should sign cookies to keep them safe
 
 ##Notes

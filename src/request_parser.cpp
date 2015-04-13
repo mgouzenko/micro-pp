@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <cctype>
+#include <iostream>
+#include <regex>
 #include <boost/lexical_cast.hpp>
 
 #include "request_parser.hpp"
@@ -195,6 +197,21 @@ namespace micro {
 
       return std::equal(a.begin(), a.end(), b.begin(),
           &request_parser::tolower_compare);
+    }
+
+    void request_parser::format_request(request& req)
+    {
+      for (auto h : req.headers) {
+        if(h.name == "Cookie") {
+          int equal_idx = h.value.find("=");
+          std::string key = h.value.substr(0, equal_idx);
+          std::string val = h.value.substr(equal_idx+1);
+          req.cookies[key] = val;
+        }
+        if (h.name == "Host") {
+          req.hostname = h.value;
+        }
+      }
     }
 
 } // namespace micro
