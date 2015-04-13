@@ -80,6 +80,16 @@ namespace micro {
       */
       const std::string& get_uri() const;
 
+      /**
+      * Get the ip address from the request
+      */
+      const std::string& get_ip() const;
+
+      /**
+      * Get the method of the request
+      */
+      const std::string& get_method() const;
+
     };
 
 } // namespace micro

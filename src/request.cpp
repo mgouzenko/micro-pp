@@ -25,6 +25,14 @@ namespace micro {
         return uri;
     }
 
-    
+    const std::string& request::get_ip() const
+    {
+        return client_ip;
+    }
+
+    const std::string& request::get_method() const
+    {
+        return method;
+    }
 
 }
