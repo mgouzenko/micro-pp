@@ -7,17 +7,27 @@ namespace micro {
 
     std::string request::get_cookie(const std::string& key)
     {
-        if(cookies.find(key) == cookies.end()) {
-          return "";
+        if (cookies_.find(key) == cookies_.end()) {
+            return "";
         }
         else {
-          return std::string(cookies[key]);
+            return std::string(cookies_[key]);
+        }
+    }
+
+    std::string request::get_post_param(const std::string& key)
+    {
+        if (post_params_.find(key) == post_params_.end()) {
+            return "";
+        }
+        else {
+            return std::string(post_params_[key]);
         }
     }
 
     const std::string& request::get_hostname() const
     {
-        return hostname;
+        return hostname_;
     }
 
     const std::string& request::get_uri() const
@@ -34,5 +44,7 @@ namespace micro {
     {
         return method;
     }
+
+
 
 }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <boost/lexical_cast.hpp>
-
+#include "request_handler.hpp"
 #include "request_parser.hpp"
 #include "request.hpp"
 
@@ -201,16 +201,44 @@ namespace micro {
 
     void request_parser::format_request(request& req)
     {
+      bool has_post_params = false;
       for (auto h : req.headers) {
+        std::cout << h << "\n";
+
+        //Fill the map of cookies
         if(h.name == "Cookie") {
-          int equal_idx = h.value.find("=");
-          std::string key = h.value.substr(0, equal_idx);
-          std::string val = h.value.substr(equal_idx+1);
-          req.cookies[key] = val;
+            int equal_idx = h.value.find("=");
+            std::string key = h.value.substr(0, equal_idx);
+            std::string val = h.value.substr(equal_idx+1);
+            req.cookies_[key] = val;
         }
+
+        //Fill the hostname
         if (h.name == "Host") {
-          req.hostname = h.value;
+            req.hostname_ = h.value;
         }
+
+        //TODO 1.2: Should be able to parse more compliecated multipart/formdata
+        if (h.name == "Content-Type" && h.value == "application/x-www-form-urlencoded"){
+            has_post_params = true;
+        }
+      }
+
+      if (has_post_params) {
+          //Decode any special symbols
+          std::string decoded_content;
+          request_handler::url_decode(req.content, decoded_content);
+
+          std::regex pattern("([\\w+%]+)=([^&]*)");
+          auto words_begin = std::sregex_iterator(decoded_content.begin(), decoded_content.end(), pattern);
+          auto words_end = std::sregex_iterator();
+
+          for (std::sregex_iterator i = words_begin; i != words_end; i++)
+          {
+              std::string key = (*i)[1].str();
+              std::string value = (*i)[2].str();
+              req.post_params_[key] = value;
+          }
       }
     }
 

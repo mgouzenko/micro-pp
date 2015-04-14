@@ -57,18 +57,29 @@ namespace micro {
       /**
       * Map of cookies as key value pairs
       */
-      std::unordered_map<std::string, std::string> cookies;
+      std::unordered_map<std::string, std::string> cookies_;
+
+      /**
+      * Map of post params 
+      */
+      std::unordered_map<std::string, std::string> post_params_;
 
       /**
       * Hostname from HTTP Host header
       */
-      std::string hostname;
+      std::string hostname_;
 
       /**
       * Get the value of a cookie. Returns empty string if not found
       * @param key: key value of the cookie
       */
       std::string get_cookie(const std::string& key);
+
+      /**
+      * Get the value of a post param. Returns empty string if not found
+      * @param key: key value of the cookie
+      */
+      std::string get_post_param(const std::string& key);
 
       /**
       * Get the hostname from the HTTP Host header
