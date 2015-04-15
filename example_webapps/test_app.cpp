@@ -35,7 +35,7 @@ void get_stuff(const micro::request& req, micro::response& res)
     auto param1 = req.get_get_param("param1");
     auto param2 = req.get_get_param("param2");
     auto param3 = req.get_get_param("param3");
-    res.render_string("<html><body>param1 : " + param1 + "<br/>param2 : " + param2 + "<br/>param3 :" + param3);
+    res.render_string("<html><body>param1 : " + param1 + "<br/>param2 : " + param2 + "<br/>param3 : " + param3);
 }
 
 void bad_url_custom(const micro::request& req, micro::response& res)

@@ -39,10 +39,12 @@ namespace micro {
 
       /*
       * Format a request so it can be interfaced by user. Cookies,
-      * content body need to be accessible
+      * content body, GET params, and POST params need to be accessible
       * @param request: request that needs to be formated
+      * @param req_path: the decoded path to use when extracting GET params
+      * @return: the new request path with GET params omitted
       */
-      void format_request(request& req);
+      static std::string format_request(request& req, std::string req_path);
 
     private:
       /**

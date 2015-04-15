@@ -61,10 +61,6 @@ void new_regex_tests()
 
 int main(int argc, char** argv){
 
-    new_regex_tests();
-
-    return 0;
-
 	micro::url_route test1 ("/<this>/i.s/<int:id>/c0ol", hello);
 	micro::url_route test2 ("/hello", hello);
 	micro::url_route test3 ("/user/<int:id>/photo", hello);
@@ -108,4 +104,7 @@ int main(int argc, char** argv){
 
     std::cout << "ALL ASSERTIONS PASSED!!\n";
 
+    new_regex_tests();
+
+    return 0;
 }
