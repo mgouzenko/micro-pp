@@ -37,6 +37,13 @@ namespace micro {
         return boost::make_tuple(result, begin);
       }
 
+      /*
+      * Format a request so it can be interfaced by user. Cookies,
+      * content body need to be accessible
+      * @param request: request that needs to be formated
+      */
+      void format_request(request& req);
+
     private:
       /**
        * The name of the content length header.
@@ -82,6 +89,7 @@ namespace micro {
        * Check whether the two request header names match.
        */
       bool headers_equal(const std::string& a, const std::string& b);
+
     };
 
 } // namespace micro

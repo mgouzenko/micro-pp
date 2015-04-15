@@ -34,6 +34,10 @@ namespace micro {
 
             app();
 
+            void toggle_debug_mode(){
+                handler_.set_debug_mode(); 
+            }
+
             void run();
 
             void add_route(micro::url_route);

@@ -23,6 +23,11 @@ namespace micro {
        * The requested URI, such as a path to a file.
        */
       std::string uri;
+    
+      /**
+       * The ip address of the client. 
+       */
+      std::string client_ip; 
 
       /**
        * Major version number, usually 1.
@@ -48,6 +53,54 @@ namespace micro {
        * Fields populated after the URL is matched:
        */
       std::unordered_map<std::string, std::string> label_values;
+
+      /**
+      * Map of cookies as key value pairs
+      */
+      std::unordered_map<std::string, std::string> cookies_;
+
+      /**
+      * Map of post params 
+      */
+      std::unordered_map<std::string, std::string> post_params_;
+
+      /**
+      * Hostname from HTTP Host header
+      */
+      std::string hostname_;
+
+      /**
+      * Get the value of a cookie. Returns empty string if not found
+      * @param key: key value of the cookie
+      */
+      std::string get_cookie(const std::string& key) const;
+
+      /**
+      * Get the value of a post param. Returns empty string if not found
+      * @param key: key value of the cookie
+      */
+      std::string get_post_param(const std::string& key) const;
+
+      /**
+      * Get the hostname from the HTTP Host header
+      */
+      const std::string& get_hostname() const;
+
+      /**
+      * Get the uri of the request
+      */
+      const std::string& get_uri() const;
+
+      /**
+      * Get the ip address from the request
+      */
+      const std::string& get_ip() const;
+
+      /**
+      * Get the method of the request
+      */
+      const std::string& get_method() const;
+
     };
 
 } // namespace micro

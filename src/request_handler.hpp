@@ -43,22 +43,26 @@ namespace micro {
        */
        void serve_static(const micro::request& req, micro::response& resp);
 
+       void set_debug_mode();
+
+       
+      /**
+       * Perform URL-decoding on a string. Returns false if the encoding was invalid.
+       */
+      static bool url_decode(const std::string& in, std::string& out);
+
     private:
       /**
        * The directory containing the files to be served.
        */
-      std::string static_root_;
+      std::string static_root_ = "./static/";
 
       /**
        * The list of url_routes containing callbacks, in order of priority
        */
       std::vector<micro::url_route> callback_routes_;
 
-      /**
-       * Perform URL-decoding on a string. Returns false if the encoding was invalid.
-       */
-      static bool url_decode(const std::string& in, std::string& out);
-
+      bool debug_mode_ = false; 
     };
 
 } // namespace micro
