@@ -18,11 +18,20 @@ namespace micro {
 
     std::string request::get_post_param(const std::string& key) const
     {
-        auto search = post_params_.find(key);
-        if (search != post_params_.end()) {
-            return std::string(search->second);
+        try {
+            return post_params_.at(key);
         }
-        else {
+        catch (const std::out_of_range &oor) {
+            return "";
+        }
+    }
+
+    std::string request::get_get_param(const std::string& key) const
+    {
+        try {
+            return get_params_.at(key);
+        }
+        catch (const std::out_of_range &oor) {
             return "";
         }
     }

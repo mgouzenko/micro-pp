@@ -223,6 +223,39 @@ namespace micro {
         }
       }
 
+      // Extract GET params
+      /*int query_loc = req.uri.rfind('?');
+
+      std::cout << "URI: " << req.uri << "\nQuery_loc: " << query_loc << "\n";
+
+      if(query_loc != -1) {
+          req.uri = req.uri.substr(0, query_loc);
+          auto query = req.uri.substr(query_loc + 1);
+
+          auto char_it = query.begin();
+          while(char_it != query.end()) {
+              std::string key("");
+              std::string value("");
+
+              while (char_it != query.end() && *char_it != '=') {
+                  key += *char_it++;
+              }
+
+              if (char_it == query.end())
+                  break;
+              ++char_it;
+              while (char_it != query.end() && *char_it != '&') {
+                  value += *char_it++;
+              }
+              req.get_params_.emplace(key, value);
+              if(char_it != query.end())
+                  ++char_it;
+          }
+      }
+
+      std::cout << "Did not segfault there" << "\n";*/
+
+      // Extract POST params
       if (has_post_params) {
           //Decode any special symbols
           std::string decoded_content;
