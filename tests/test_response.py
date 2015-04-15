@@ -55,10 +55,22 @@ class Test_Server(unittest.TestCase):
         # Should recieve 200 response from new url
         self.assertEqual(r.status_code, 200)
 
+    # Server should send back a custom HTTP code. For route route1 a 503
+    # code should be sent. route2 should send a 503 code with a custom response 
+    def test_custom_http_code(self):
+        route1 = "test_bad_url"
+        route2 = "test_bad_url_custom"
+
+        # Should send 501 response
+        r = requests.get(url+route1)
+        self.assertEqual(r.status_code, 503)
+
+        # Should send 501 response with custom response message
+        r = requests.get(url+route2)
+        self.assertEqual(r.status_code, 503)
+        self.assertEqual(r.text, 'Custom 503 response')
 
 
-
-        
 
 if __name__ == '__main__':
     unittest.main()
