@@ -72,11 +72,22 @@ class Test_Server(unittest.TestCase):
 
     # Server should send back a 404 code if route does not exist
     def test_nonexisting_route(self):
-      route = "kdfk?djf.jkf"
+        route = "kdfk?djf.jkf"
 
-      # Should return 404 code
-      r = requests.get(url+route)
-      self.assertEqual(r.status_code, 404)
+        # Should return 404 code
+        r = requests.get(url+route)
+        self.assertEqual(r.status_code, 404)
+
+
+    # Server should send only one message
+    def test_one_message(self):
+        route = 'two_messages'
+
+        #Should only get get message 'Should send'
+        r = requests.get(url+route)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.text, 'Should send')
+
 
 
 if __name__ == '__main__':

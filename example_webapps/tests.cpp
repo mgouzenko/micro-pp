@@ -48,24 +48,45 @@ void test_two_cookies(const micro::request& req, micro::response& res)
     res.set_cookie(c2);
 }
 
+/*
+* Server should send 301 redirect with url path to /other
+*/
 void test_redirect(const micro::request& req, micro::response& res)
 {
     res.redirect("/other");
 }
 
+/**
+* Test route for redirection. Responds with message 'You have been redirected'
+*/
 void other(const micro::request& req, micro::response& res)
 {
     res.render_string("You have been redirected");
 }
 
+/**
+* Sends back 503 http code to client with default message
+*/
 void test_bad_url(const micro::request& req, micro::response& res)
 {
     res.render_status(503);
 }
 
+/**
+* Sends back 503 http code to client with custom message 'Custom 503 response'
+*/
 void test_bad_url_custom(const micro::request& req, micro::response& res)
 {
     res.render_status(503, "Custom 503 response");
+}
+
+/**
+* Should send only one message to user if user accidently renders twice
+*/
+void two_messages(const micro::request& req, micro::response& res)
+{
+    res.render_string("Should not send");
+    res.render_string("Should send");
 }
 
 
@@ -85,5 +106,6 @@ int main(int argc, char** argv){
     application.add_route("/other", other);
     application.add_route("/test_bad_url", test_bad_url);   
     application.add_route("/test_bad_url_custom", test_bad_url_custom);
+    application.add_route("/two_messages", two_messages);
     application.run();
 }
