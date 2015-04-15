@@ -203,7 +203,6 @@ namespace micro {
     {
       bool has_post_params = false;
       for (auto h : req.headers) {
-        std::cout << h << "\n";
 
         //Fill the map of cookies
         if(h.name == "Cookie") {

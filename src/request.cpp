@@ -5,23 +5,25 @@
 
 namespace micro {
 
-    std::string request::get_cookie(const std::string& key)
+    std::string request::get_cookie(const std::string& key) const
     {
-        if (cookies_.find(key) == cookies_.end()) {
-            return "";
+        auto search = cookies_.find(key);
+        if (search != cookies_.end()) {
+            return std::string(search->second);
         }
         else {
-            return std::string(cookies_[key]);
+            return "";
         }
     }
 
-    std::string request::get_post_param(const std::string& key)
+    std::string request::get_post_param(const std::string& key) const
     {
-        if (post_params_.find(key) == post_params_.end()) {
-            return "";
+        auto search = post_params_.find(key);
+        if (search != post_params_.end()) {
+            return std::string(search->second);
         }
         else {
-            return std::string(post_params_[key]);
+            return "";
         }
     }
 
