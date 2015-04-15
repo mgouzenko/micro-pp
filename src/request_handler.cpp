@@ -87,7 +87,7 @@ void request_handler::operator()(server& serv)
       rep.handle_response(resp);
 
    } catch(std::exception& e){
-        rep = reply::stock_reply(reply::not_found);
+        rep = reply::stock_reply(reply::internal_server_error);
         serv();
         return;
    }
