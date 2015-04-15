@@ -2,6 +2,7 @@
 #define MICRO_HEADER_HPP
 
 #include <string>
+#include <ostream>
 
 namespace micro {
 
@@ -9,6 +10,12 @@ namespace micro {
       std::string name;
       std::string value;
     };
+
+    inline std::ostream& operator<<(std::ostream& os, const header& h)
+    {
+        os << "Name: " << h.name << ", Val: " << h.value;
+        return os;
+    }
 
 } // namespace micro
 

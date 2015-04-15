@@ -13,3 +13,12 @@
 - Should be able to safely render a template
 - Should be able to put set cookies and sessions in headers
 - Should be able to send response codes (eg. 404 error)
+- Languages like python and js have ability to change dictionaries into json which is very useful
+
+##Request Object
+
+###Considerations
+- Difficult to parse the content
+- Version 1.2 should sign cookies to keep them safe
+
+##Notes

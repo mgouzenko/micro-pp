@@ -76,11 +76,11 @@ namespace micro {
               = request_parser_.parse(*request_,
                   buffer_->data(), buffer_->data() + length);
 
-            // TODO: Format the request using a member function of the request_parser
-
             // An indeterminate result means we need more data, so keep looping.
           }
           while (boost::indeterminate(valid_request_));
+
+          request_parser_.format_request(*request_);
 
           // Create the reply object that will be sent back to the client.
           reply_.reset(new reply);
