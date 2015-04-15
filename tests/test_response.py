@@ -40,6 +40,23 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.cookies['cookie_key1'], 'cookie_value1')
         self.assertEqual(r.cookies['cookie_key2'], 'cookie_value2')
 
+    # Server should properly redirect
+    def test_redirect(self):
+        route = "test_redirect"
+
+        # Should send 301 response
+        r = requests.get(url+route, allow_redirects=False)
+        self.assertEqual(r.status_code, 301)
+
+        # Should send to url path /other
+        r = requests.get(url+route)
+        self.assertEqual(r.url, url+'other')
+
+        # Should recieve 200 response from new url
+        self.assertEqual(r.status_code, 200)
+
+
+
 
         
 

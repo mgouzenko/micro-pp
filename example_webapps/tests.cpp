@@ -55,7 +55,7 @@ void test_redirect(const micro::request& req, micro::response& res)
 
 void other(const micro::request& req, micro::response& res)
 {
-    res.render_string("you have been redirected");
+    res.render_string("You have been redirected");
 }
 
 void bad_url(const micro::request& req, micro::response& res)
@@ -91,6 +91,7 @@ int main(int argc, char** argv){
     application.add_route("/test_methods", test_methods);
     application.add_route("/test_one_cookie", test_one_cookie);
     application.add_route("/test_two_cookies", test_two_cookies);
+    application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);
     application.add_route("/bad_url", bad_url);
     application.add_route("/nothing", nothing);
