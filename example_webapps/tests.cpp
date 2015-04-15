@@ -10,9 +10,8 @@
 * Recieves GET, POST, PUT, or DELETE request from client and returns
 * the string of the designated request
 */
-void test_1(const micro::request& req, micro::response& res)
+void test_methods(const micro::request& req, micro::response& res)
 {
-    //time_t t = time(0) + 100;
     if (req.get_method() == "GET") {
         res.render_string("GET");
     }
@@ -25,8 +24,28 @@ void test_1(const micro::request& req, micro::response& res)
     if (req.get_method() == "DELETE") {
         res.render_string("DELETE");
     }
-    //micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
-    //res.set_cookie(c);
+}
+
+/**
+* Server should send a cookie to client
+*/
+void test_one_cookie(const micro::request& req, micro::response& res)
+{
+    time_t t = time(0) + 100;
+    micro::Cookie c = micro::Cookie("cookie_key", "cookie_value", t, "/hello");
+    res.set_cookie(c);
+}
+
+/**
+* Server should send two cookies to client
+*/
+void test_two_cookies(const micro::request& req, micro::response& res)
+{
+    time_t t = time(0) + 100;
+    micro::Cookie c1 = micro::Cookie("cookie_key1", "cookie_value1", t, "/hello");
+    micro::Cookie c2 = micro::Cookie("cookie_key2", "cookie_value2", t, "/hello");
+    res.set_cookie(c1);
+    res.set_cookie(c2);
 }
 
 void test_redirect(const micro::request& req, micro::response& res)
@@ -69,8 +88,9 @@ int main(int argc, char** argv){
     micro::app application;
     application.set_pool_size(8);
     application.set_static_root(argv[1]);
-    application.add_route("/test_1", test_1);
-    application.add_route("/test_redirect", test_redirect);
+    application.add_route("/test_methods", test_methods);
+    application.add_route("/test_one_cookie", test_one_cookie);
+    application.add_route("/test_two_cookies", test_two_cookies);
     application.add_route("/other", other);
     application.add_route("/bad_url", bad_url);
     application.add_route("/nothing", nothing);
