@@ -9,9 +9,11 @@ test_app:
 
 exception_test:
 
+tests:
+
 .PHONY: all 
-all: clean exception_test test_app
+all: clean exception_test test_app tests
 
 .PHONY: clean
 clean:
-	rm -f *.o  exception_test test_app > /dev/null
+	rm -f *.o  exception_test test_app tests > /dev/null
