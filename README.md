@@ -14,7 +14,13 @@ Micro++ is thus distributed under the Boost Software License, Version 1.0. (See 
 * Header files should contain include guards in the format "NAMESPACE_FILENAME_HPP"
 * Stroustrup indent style: http://en.wikipedia.org/wiki/Indent_style#Variant:_Stroustrup
 * See Indentation, Whitespace, and Comments http://www.stroustrup.com/Programming/PPP-style-rev3.pdf
-* Doxygen comments (see below section for guidelines)
+* Use Javadoc style comments when commenting on public methods and fields. The Doxygen is currently set up to parse Javadoc comments.
 
 ## Doxygen
-TODO, but we'll probably follow the Javadoc (/** blocks) style with JAVADOC_AUTO_BRIEF SET: http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html
+Use Javadoc style comments when coding.
+
+If you have doxygen installed on your system, generating the docs for this project is as simple as running
+```
+  doxygen
+```
+in this directory.
