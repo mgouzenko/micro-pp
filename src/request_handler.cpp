@@ -7,6 +7,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "request_handler.hpp"
+#include "request_parser.hpp"
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
@@ -76,8 +77,9 @@ void request_handler::operator()(server& serv)
     micro::response resp;
   try{
 
-      bool matched = false;
+      request_path = request_parser::format_request(req, request_path);
 
+      bool matched = false;
 
       // Attempt to find a static file matching this name
       if (request_path[request_path.size() - 1] == '/')

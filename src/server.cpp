@@ -65,7 +65,7 @@ namespace micro {
           // Loop until a complete request (or an invalid one) has been received.
           do {
             request_->client_ip = socket_->remote_endpoint().address().to_string();
-              
+
             // Receive some more data. When control resumes at the following line,
             // the ec and length parameters reflect the result of the asynchronous
             // operation.
@@ -79,8 +79,6 @@ namespace micro {
             // An indeterminate result means we need more data, so keep looping.
           }
           while (boost::indeterminate(valid_request_));
-
-          request_parser_.format_request(*request_);
 
           // Create the reply object that will be sent back to the client.
           reply_.reset(new reply);

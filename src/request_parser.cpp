@@ -199,7 +199,7 @@ namespace micro {
           &request_parser::tolower_compare);
     }
 
-    void request_parser::format_request(request& req)
+    std::string request_parser::format_request(request& req, std::string req_path)
     {
       bool has_post_params = false;
       for (auto h : req.headers) {
@@ -223,6 +223,37 @@ namespace micro {
         }
       }
 
+      // Extract GET params
+
+      int query_loc = req_path.rfind('?');
+
+      if(query_loc != std::string::npos) {
+          std::string query = req_path.substr(query_loc + 1);
+          req_path = req_path.substr(0, query_loc);
+
+          auto char_it = query.begin();
+          while(char_it != query.end()) {
+              std::string key("");
+              std::string value("");
+
+              while (char_it != query.end() && *char_it != '=') {
+                  key += *char_it++;
+              }
+
+              if (char_it == query.end())
+                  break;
+              ++char_it;
+              while (char_it != query.end() && *char_it != '&') {
+                  value += *char_it++;
+              }
+
+              req.get_params_.emplace(key, value);
+              if(char_it != query.end())
+                  ++char_it;
+          }
+      }
+
+      // Extract POST params
       if (has_post_params) {
           //Decode any special symbols
           std::string decoded_content;
@@ -239,6 +270,9 @@ namespace micro {
               req.post_params_[key] = value;
           }
       }
+
+      req.uri = req_path;
+      return req_path;
     }
 
 } // namespace micro
