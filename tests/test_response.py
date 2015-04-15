@@ -70,6 +70,13 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.status_code, 503)
         self.assertEqual(r.text, 'Custom 503 response')
 
+    # Server should send back a 404 code if route does not exist
+    def test_nonexisting_route(self):
+      route = "kdfk?djf.jkf"
+
+      # Should return 404 code
+      r = requests.get(url+route)
+      self.assertEqual(r.status_code, 404)
 
 
 if __name__ == '__main__':

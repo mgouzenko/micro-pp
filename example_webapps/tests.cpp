@@ -58,26 +58,16 @@ void other(const micro::request& req, micro::response& res)
     res.render_string("You have been redirected");
 }
 
-void bad_url(const micro::request& req, micro::response& res)
+void test_bad_url(const micro::request& req, micro::response& res)
 {
     res.render_status(503);
 }
 
-void bad_url_custom(const micro::request& req, micro::response& res)
+void test_bad_url_custom(const micro::request& req, micro::response& res)
 {
-    res.render_status(501, "Sorry Bro, its Broken");
+    res.render_status(503, "Custom 503 response");
 }
 
-void nothing(const micro::request& req, micro::response& res)
-{
-    //User returns nothing
-    //Browser will stay on same page
-}
-
-void serve_number(const micro::request& req, micro::response& res)
-{
-    res.render_string("User ID requested: " + req.label_values.at("id"));
-}
 
 int main(int argc, char** argv){
     if(argc != 2) {
@@ -93,9 +83,7 @@ int main(int argc, char** argv){
     application.add_route("/test_two_cookies", test_two_cookies);
     application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);
-    application.add_route("/bad_url", bad_url);
-    application.add_route("/nothing", nothing);
-    application.add_route("/bad_url_custom", bad_url_custom);
-    application.add_route("/user/<int:id>/profile", serve_number);
+    application.add_route("/test_bad_url", test_bad_url);   
+    application.add_route("/test_bad_url_custom", test_bad_url_custom);
     application.run();
 }
