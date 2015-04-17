@@ -86,7 +86,7 @@ namespace micro {
           if (valid_request_) {
             // A valid request was received. Call the user-supplied function object
             // to process the request and compose a reply.
-            yield queue_.push(*this);
+            yield queue_.push( std::shared_ptr<server>( new server(*this) ) );
           }
 
           else {
