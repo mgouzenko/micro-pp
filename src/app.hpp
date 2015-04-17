@@ -38,7 +38,13 @@ namespace micro {
             std::string address_;
 
             bool shutting_down_ = false;
-        
+       
+            void monitor_thread_pool(); 
+            
+            void replace_thread(int i);
+
+            std::thread overseer_; 
+
         public:
             
             friend class micro_thread; 

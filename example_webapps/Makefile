@@ -9,6 +9,8 @@ test_app:
 
 exception_test:
 
+timeout_test:
+
 tests:
 
 .PHONY: all 

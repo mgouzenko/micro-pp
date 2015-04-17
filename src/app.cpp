@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <thread>
 #include <chrono>
+#include <boost/log/trivial.hpp>
 
 #include "app.hpp"
 #include "server.hpp"
@@ -20,14 +21,16 @@ namespace micro {
     void app::run()
     {
         try {
-            for(int i=0; i<thread_pool_size_; i++) {
+            for(int i=0; i<thread_pool_size_; i++){
                 thread_pool_.push_back(micro_thread(this) );
             }
-            
-            for(int i=0; i<thread_pool_size_; i++) {
+
+            for(int i=0; i<thread_pool_size_; i++){
                 thread_pool_[i].run();
             }
-
+            
+            overseer_ = std::thread{ [this](){ this->monitor_thread_pool(); } }; 
+        
 
             micro::server(io_service_, address_, port_, q_)();
             // Wait for signals indicating time to shut down.
@@ -62,13 +65,35 @@ namespace micro {
     {
         handler_.set_static_root(static_root);
     }
+    
+    void app::monitor_thread_pool(){
+        int num_threads = thread_pool_.size(); 
+        while(!shutting_down_){ 
+            std::this_thread::sleep_for(std::chrono::seconds(1)); 
+            for(int i = 0; i < num_threads; i++){
+                int seconds = thread_pool_[i].watch.get_time(); 
+                if(seconds > 3){
+                    BOOST_LOG_TRIVIAL(warning) << "Thread Timeout!"; 
+                    replace_thread(i); 
+                }
+            }
+        }
+    
+    }
 
+    void app::replace_thread(int i){
+        pthread_t id = thread_pool_[i].thread_.native_handle(); 
+        BOOST_LOG_TRIVIAL(warning) << "Canceling thread: " << id;
+        thread_pool_[i].replace_thread(); 
+    } 
+    
     void app::shut_down() {
         shutting_down_ = true;
         q_.prepare_for_shutdown();
 
         int num_threads = thread_pool_.size();
         int joined_threads = 0;
+        overseer_.join();
         for(;;){
             for(int i = 0; i < num_threads - joined_threads; i++) q_.poke();
             for(int i = 0; i < num_threads; i++){

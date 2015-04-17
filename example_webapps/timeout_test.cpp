@@ -18,6 +18,9 @@ void hello(const micro::request& req, micro::response& res)
     res.render_string("hello world");
     micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
     res.set_cookie(c);
+    while(1){
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
 }
 
 int main(){
