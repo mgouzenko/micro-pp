@@ -11,6 +11,8 @@ exception_test:
 
 timeout_test:
 
+module_test:
+
 tests:
 
 .PHONY: all 

@@ -8,22 +8,20 @@
 #include "request_handler.hpp" 
 #include "url_route.hpp"    
 #include "micro_thread.hpp" 
+#include "module.hpp" 
 
 namespace micro {
 
     class app {
-
+        
         private:
            
             friend class micro_thread; 
             
             /***************************** Private Member Variables ************************/
             std::string port_;
-
             std::string address_;
-
             bool shutting_down_ = false;
-
             request_handler handler_;
 
             /**
@@ -35,18 +33,17 @@ namespace micro {
              * A thread to oversee the rest of the threads & make sure that they do not run longer than timeout_. 
              */
             std::thread overseer_; 
-
             int timeout_ = 3; 
-
             std::vector<micro_thread> thread_pool_;
-
             int thread_pool_size_ = 8;
 
             /**
              * IO service that communicates asynchronously wih clients.
              */
             boost::asio::io_service io_service_;
-           
+          
+
+
             /***************************** Private Member Functions ************************/
             
             /**
@@ -124,6 +121,8 @@ namespace micro {
             void add_route(std::string route_specifier, callback func, 
                     std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"});
 
+            void add_module(module& mod, std::string prefix = "" ); 
+            
             /**
              * Sets the static root directory - the directory in which all static files will be looked for. When processing
              * a client's request, micro++ will check the static root directory first, to see if the any static files match 

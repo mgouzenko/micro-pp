@@ -10,6 +10,7 @@
 #include "url_route.hpp"
 #include "server.hpp" 
 #include "micro_thread.hpp"
+#include "module.hpp"
 
 namespace micro {
 
@@ -64,6 +65,16 @@ namespace micro {
     void app::add_route(std::string route_specifier, callback func, std::vector<std::string> methods)
     {
         add_route(micro::url_route(route_specifier, func, methods));
+    }
+
+    void app::add_module(module& m, std::string prefix){
+        auto b_itr = m.begin(); 
+        auto e_itr = m.end(); 
+
+        while(b_itr != e_itr){
+            add_route( prefix + (*b_itr).route_, (*b_itr).callback_, (*b_itr).methods_ );
+            ++b_itr;
+        }
     }
 
     void app::set_static_root(std::string static_root)

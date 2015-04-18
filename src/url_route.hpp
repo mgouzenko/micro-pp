@@ -12,18 +12,10 @@ namespace micro {
      */
     class url_route {
 
-    public:
+        friend class app; 
+        friend class request_handler; 
 
-        /**
-         * Catch-all URL constructor.
-         * Constructs a URL object that will match any valid URL
-         *
-         * @param methods: the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
-         * @param callback: the callback function that should be registered to this URL path
-                  The callback must be a void function that takes a micro::request, and micro::response& as parameters.
-         */
-        url_route(micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"}); // Static file URL
-
+        public: 
         /**
          * Specific URL constructor.
          * Constructs a URL object that will match URLs that fit the specifier parameter
@@ -51,6 +43,18 @@ namespace micro {
          */
         url_route(std::string specifier, micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"});
 
+
+        private:
+        /**
+         * Catch-all URL constructor.
+         * Constructs a URL object that will match any valid URL
+         *
+         * @param methods: the HTTP methods that this URL path allows (e.g. {"GET", "POST"})
+         * @param callback: the callback function that should be registered to this URL path
+                  The callback must be a void function that takes a micro::request, and micro::response& as parameters.
+         */
+        url_route(micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"}); // Static file URL
+
         /**
          * Checks if the URI within a request matches this URL instance.
          * *Warning, this method is intended for internal use*
@@ -65,7 +69,6 @@ namespace micro {
          */
         bool match(micro::request& req, micro::response& resp);
 
-    private:
         std::regex internal_regex_;
         std::vector<std::string> methods_;
         std::vector<std::string> labels_;
