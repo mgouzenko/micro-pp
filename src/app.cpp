@@ -20,19 +20,24 @@ namespace micro {
     void app::run()
     {
         try {
+
+            /* Create a thread pool */
             for(int i=0; i<thread_pool_size_; i++){
                 thread_pool_.push_back(micro_thread(this) );
             }
 
+            /* Start the threads. */
             for(int i=0; i<thread_pool_size_; i++){
                 thread_pool_[i].run();
             }
-            
+           
+            /* Start the overseer_ thread, which will enforce timeout_ on other threads.*/
             overseer_ = std::thread{ [this](){ this->monitor_thread_pool(); } }; 
         
-
+            /* Create an server on the specified port and address, and bind it to the io_service. */
             server(io_service_, address_, port_, q_)();
-            // Wait for signals indicating time to shut down.
+
+            /* Wait for signals indicating time to shut down. */
             boost::asio::signal_set signals(io_service_);
             signals.add(SIGINT);
             signals.add(SIGTERM);
@@ -43,6 +48,7 @@ namespace micro {
 
             signals.async_wait(boost::bind(&app::shut_down, this));
 
+            /* Run the io_service to start the webapp. */
             io_service_.run();
         }
         catch (std::exception& e) {
@@ -67,46 +73,56 @@ namespace micro {
     
     void app::monitor_thread_pool(){
         int num_threads = thread_pool_.size(); 
+        // Loop until shutdown
         while(!shutting_down_){ 
+            // Sleep so as to only check for timeouts periodically. 
             std::this_thread::sleep_for(std::chrono::seconds(1)); 
+            
+            // Iterate over all threads 
             for(int i = 0; i < num_threads; i++){
-                int seconds = thread_pool_[i].watch.get_time(); 
+                // Get the time elapsed since the callback began
+                int seconds = thread_pool_[i].watch.get_time();
+                
+                //If the thread has been running too long, replace it.
                 if(seconds > timeout_){
-                    BOOST_LOG_TRIVIAL(warning) << "Thread Timeout!"; 
-                    replace_thread(i); 
+                    pthread_t id = thread_pool_[i].thread_.native_handle(); 
+                    BOOST_LOG_TRIVIAL(warning) << "Timeout! Canceling thread: " << id;
+                    thread_pool_[i].replace_thread(); 
                 }
             }
         }
     
     }
-
-    void app::replace_thread(int i){
-        pthread_t id = thread_pool_[i].thread_.native_handle(); 
-        BOOST_LOG_TRIVIAL(warning) << "Canceling thread: " << id;
-        thread_pool_[i].replace_thread(); 
-    } 
-    
+ 
     void app::shut_down() {
         try{
             shutting_down_ = true;
+            // Prepare the queue for shutdown, making sure threads will no longer wait for jobs. 
             q_.prepare_for_shutdown();
 
             int num_threads = thread_pool_.size();
             int joined_threads = 0;
-            overseer_.join();
+            
             for(;;){
+                // Continue to poke the queue to make sure threads aren't sleeping. 
                 for(int i = 0; i < num_threads - joined_threads; i++) q_.poke();
+
+                // Iterate over all threads.
                 for(int i = 0; i < num_threads; i++){
+                    //If the thread has been terminated, join it and set its status to JOINED. 
                     if(thread_pool_[i].status == MICRO_THREAD_TERMINATED){
                         thread_pool_[i].join();
                         thread_pool_[i].status = MICRO_THREAD_JOINED;
+                        //If we've joined ALL of the threads, stop the io_service, terminate the overseer_, and exit. 
                         if(++joined_threads == num_threads) {
                             io_service_.stop();
+                            overseer_.join();
                             return;
                         }
                     }
                 }
-            }
+            } 
         } catch(std::exception& e) { std::cout << e.what(); }
     }
+
 }
