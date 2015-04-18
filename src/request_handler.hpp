@@ -4,16 +4,16 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include <vector> 
 
 #include "types.hpp"
-#include "server.hpp"
-#include "response.hpp"
-#include "url_route.hpp"
 
 namespace micro {
-
+    struct url_route;    
+    struct response; 
     struct reply;
     struct request;
+    struct server;
 
     /**
      * The common handler for all incoming requests.
@@ -35,7 +35,7 @@ namespace micro {
         * in the static folder will always be matched to the URL first. 
         * @param route: the url_route object representing the route to be added.  
         */
-        void add_route(micro::url_route);
+        void add_route(url_route);
 
         /**
         * Set the static directory, the root directory from which static 
@@ -48,7 +48,7 @@ namespace micro {
         * Serves a static file.
         * Intended to be the micro::callback for the catch-all route automatically added by app.run()
         */
-        void serve_static(const micro::request& req, micro::response& resp);
+        void serve_static(const request& req, response& resp);
 
 
         /**
@@ -81,7 +81,7 @@ namespace micro {
         /**
         * The list of url_routes containing callbacks, in order of priority
         */
-        std::vector<micro::url_route> callback_routes_;
+        std::vector<url_route> callback_routes_;
 
         /**
          * The flag indicating whether or not debug mode is on. By default, it's off. 

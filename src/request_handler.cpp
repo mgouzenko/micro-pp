@@ -5,16 +5,14 @@
 #include <functional>
 #include <unordered_map>
 #include <boost/lexical_cast.hpp>
+#include <boost/log/trivial.hpp>
 
 #include "request_handler.hpp"
-#include "request_parser.hpp"
-#include "mime_types.hpp"
-#include "reply.hpp"
-#include "request.hpp"
-#include "types.hpp"
 #include "server.hpp"
 #include "url_route.hpp"
-#include <boost/log/trivial.hpp>
+#include "request.hpp"
+#include "reply.hpp"
+#include "response.hpp" 
 
 namespace micro {
 
@@ -73,7 +71,7 @@ namespace micro {
             extension = request_path.substr(last_dot_pos + 1);
         }
 
-        micro::response resp;
+        response resp;
         try{
 
             request_path = request_parser::format_request(req, request_path);
@@ -121,7 +119,7 @@ namespace micro {
         invoke_server(serv);
     }
 
-    void request_handler::add_route(micro::url_route route)
+    void request_handler::add_route(url_route route)
     {
         callback_routes_.push_back(route);
     }

@@ -3,8 +3,9 @@
 #include <iostream>
 #include <regex>
 #include <boost/lexical_cast.hpp>
-#include "request_handler.hpp"
+
 #include "request_parser.hpp"
+#include "request_handler.hpp"
 #include "request.hpp"
 
 namespace micro {

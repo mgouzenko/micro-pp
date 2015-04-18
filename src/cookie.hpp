@@ -2,7 +2,7 @@
 #define MICRO_COOKIE_HPP
 
 #include <string>
-#include <iostream>
+#include <ctime>
 
 namespace micro {
 

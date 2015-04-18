@@ -1,5 +1,5 @@
 #include <string>
-
+#include <iostream>
 #include "cookie.hpp"
 
 namespace micro {

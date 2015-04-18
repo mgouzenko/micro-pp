@@ -1,13 +1,11 @@
 #include <iostream>
 #include <functional>
 #include <memory>
-#include "work_queue.hpp"
+
 #include "server.hpp"
+#include "work_queue.hpp"
 #include "request.hpp"
-#include "reply.hpp"
-#include "types.hpp"
-#include "request.hpp"
-#include "reply.hpp"
+#include "reply.hpp" 
 
 namespace micro {
 

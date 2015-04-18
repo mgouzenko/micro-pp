@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 #include "header.hpp"
-
 namespace micro {
 
     /**

@@ -5,7 +5,6 @@
 
 #include "response.hpp"
 #include "cookie.hpp"
-#include "reply.hpp"
 #include "header.hpp"
 
 namespace micro {

@@ -1,25 +1,23 @@
 #ifndef MICRO_APP_HPP
 #define MICRO_APP_HPP
-
-#include <boost/lockfree/queue.hpp>
-#include <queue>
 #include <thread>
+
+#include <boost/asio.hpp> 
 #include "work_queue.hpp"
-#include "request_handler.hpp"
-#include "types.hpp"
-#include "micro_thread.hpp"
+#include "types.hpp" 
+#include "request_handler.hpp" 
+#include "url_route.hpp"    
+#include "micro_thread.hpp" 
 
 namespace micro {
 
-    struct micro_thread;
     class app {
 
         private:
             
+            request_handler handler_;
 
-            micro::request_handler handler_;
-
-            micro::work_queue q_;
+            work_queue q_;
 
             std::vector<micro_thread> thread_pool_;
 
@@ -45,11 +43,15 @@ namespace micro {
 
             std::thread overseer_; 
 
+            int timeout_ = 3; 
+
         public:
             
             friend class micro_thread; 
 
             app(std::string port = "8080", std::string address = "0.0.0.0");
+
+            void set_timeout(int time){ timeout_ = time; }
 
             void toggle_debug_mode(bool toggle = true){
                 handler_.set_debug_mode(toggle); 
@@ -63,7 +65,7 @@ namespace micro {
 
             void add_route(micro::url_route);
 
-            void add_route(std::string route_specifier, micro::callback func, 
+            void add_route(std::string route_specifier, callback func, 
                     std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"});
 
             void set_static_root(std::string static_root);

@@ -11,9 +11,8 @@
 #include <utility>
 #include <memory>
 #include <functional>
-#include "request_parser.hpp"
-#include "types.hpp"
 
+#include "request_parser.hpp"
 
 namespace micro {
 

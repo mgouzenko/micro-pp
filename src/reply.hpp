@@ -5,14 +5,15 @@
 #include <vector>
 #include <boost/asio.hpp>
 
-#include "header.hpp"
-#include "response.hpp"
 
 namespace micro {
 
+    struct response; 
+    struct header;
     /**
      * A reply to be sent to a client.
      */
+    
     struct reply
     {
       /**

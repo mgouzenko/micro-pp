@@ -6,11 +6,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "header.hpp"
-#include "cookie.hpp"
-
 namespace micro {
 
+    struct Cookie;
+    struct header; 
     /**
      * A response object.
      * A response object is passed into a url route callback and is handled
