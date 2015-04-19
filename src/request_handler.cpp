@@ -12,7 +12,7 @@
 #include "url_route.hpp"
 #include "request.hpp"
 #include "reply.hpp"
-#include "response.hpp" 
+#include "response.hpp"
 
 namespace micro {
 
@@ -56,21 +56,6 @@ namespace micro {
             return;
         }
 
-        // TODO: Move to static file handler
-        /*
-        // If path ends in slash (i.e. is a directory) then add "index.html".
-        */
-
-
-        // Determine the file extension.
-        // TODO: Extenstion should be set in the handle_response function
-        std::size_t last_slash_pos = request_path.find_last_of("/");
-        std::size_t last_dot_pos = request_path.find_last_of(".");
-        std::string extension;
-        if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos) {
-            extension = request_path.substr(last_dot_pos + 1);
-        }
-
         response resp;
         try{
 
@@ -81,7 +66,7 @@ namespace micro {
             // Attempt to find a static file matching this name
             if (request_path[request_path.size() - 1] == '/'){
               matched = resp.render_file(static_root_ + request_path.substr(1) + "index.html");
-            } 
+            }
             else {
               matched = resp.render_file(static_root_ + request_path.substr(1));
             }
@@ -103,7 +88,7 @@ namespace micro {
 
         } catch(std::exception& e){
             BOOST_LOG_TRIVIAL(warning) << e.what();
-            
+
             if(debug_mode_){
                 resp.render_string(e.what() );
                 resp.set_status_code(500);
@@ -129,7 +114,7 @@ namespace micro {
         static_root_ = root;
     }
 
-    
+
     bool request_handler::url_decode(const std::string& in, std::string& out)
     {
       out.clear();

@@ -6,6 +6,7 @@
 #include "response.hpp"
 #include "cookie.hpp"
 #include "header.hpp"
+#include "mime_types.hpp"
 
 namespace micro {
 
@@ -60,11 +61,21 @@ namespace micro {
 
     bool response::render_file(std::string file_path)
     {
-        // TODO: Add support for extracting MIME type (1.0)
         std::ifstream f;
         f.open(file_path);
         if(f.is_open()) {
+            // Add the contents of the file to the message
             render_filestream(f);
+
+            // Determine the file extension.
+            std::size_t last_slash_pos = file_path.find_last_of("/");
+            std::size_t last_dot_pos = file_path.find_last_of(".");
+            std::string extension;
+            if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos) {
+              extension = file_path.substr(last_dot_pos + 1);
+            }
+
+            set_mime_type(micro::mime_types::extension_to_type(extension));
             return true;
         }
         set_status_code(404);
@@ -87,7 +98,7 @@ namespace micro {
         if(relative_to_module_entry){
             h.value = *module_entry_point_ + path;
         }else{
-            h.value = path; 
+            h.value = path;
         }
         add_header(h);
     }

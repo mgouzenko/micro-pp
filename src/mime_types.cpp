@@ -11,8 +11,11 @@ namespace mime_types {
       { "gif", "image/gif" },
       { "htm", "text/html" },
       { "html", "text/html" },
+      { "css", "text/css"},
       { "jpg", "image/jpeg" },
       { "png", "image/png" },
+      { "pdf", "application/pdf"},
+      { "js", "application/javascript"},
       { 0, 0 } // Marks end of list.
     };
 
