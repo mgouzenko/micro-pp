@@ -79,12 +79,16 @@ namespace micro {
         add_header(h);
     }
 
-    void response::redirect(const std::string& path)
+    void response::redirect(const std::string& path, bool relative_to_module_entry)
     {
-        set_status_code(301);
+        set_status_code(307);
         header h = header();
         h.name = "Location";
-        h.value = path;
+        if(relative_to_module_entry){
+            h.value = *module_entry_point_ + path;
+        }else{
+            h.value = path; 
+        }
         add_header(h);
     }
 

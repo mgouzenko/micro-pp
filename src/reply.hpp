@@ -34,7 +34,7 @@ namespace micro {
             no_content = 204,
             multiple_choices = 300,
             moved_permanently = 301,
-            moved_temporarily = 302,
+            moved_temporarily = 307,
             not_modified = 304,
             bad_request = 400,
             unauthorized = 401,

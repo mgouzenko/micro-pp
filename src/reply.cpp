@@ -22,7 +22,7 @@ namespace micro {
         const std::string moved_permanently =
           "HTTP/1.0 301 Moved Permanently\r\n";
         const std::string moved_temporarily =
-          "HTTP/1.0 302 Moved Temporarily\r\n";
+          "HTTP/1.0 307 Moved Temporarily\r\n";
         const std::string not_modified =
           "HTTP/1.0 304 Not Modified\r\n";
         const std::string bad_request =
@@ -290,7 +290,7 @@ namespace micro {
             return multiple_choices;
         case 301:
             return moved_permanently;
-        case 302:
+        case 307:
             return moved_temporarily;
         case 304:
             return not_modified;

@@ -72,7 +72,9 @@ namespace micro {
         auto e_itr = m.end(); 
 
         while(b_itr != e_itr){
-            add_route( prefix + (*b_itr).route_, (*b_itr).callback_, (*b_itr).methods_ );
+            url_route new_route{prefix + (*b_itr).route_, (*b_itr).callback_, (*b_itr).methods_ }; 
+            new_route.module_entry_point_ = prefix; 
+            add_route(new_route);
             ++b_itr;
         }
     }

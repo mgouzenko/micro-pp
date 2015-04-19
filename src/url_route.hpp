@@ -15,7 +15,6 @@ namespace micro {
         friend class app; 
         friend class request_handler; 
 
-        public: 
         /**
          * Specific URL constructor.
          * Constructs a URL object that will match URLs that fit the specifier parameter
@@ -43,8 +42,6 @@ namespace micro {
          */
         url_route(std::string specifier, micro::callback callback, std::vector<std::string> methods = {"GET", "POST", "PUT", "DELETE"});
 
-
-        private:
         /**
          * Catch-all URL constructor.
          * Constructs a URL object that will match any valid URL
@@ -73,6 +70,8 @@ namespace micro {
         std::vector<std::string> methods_;
         std::vector<std::string> labels_;
         micro::callback callback_;
+        
+        std::string module_entry_point_; 
     };
 
 }

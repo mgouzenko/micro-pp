@@ -18,6 +18,8 @@ namespace micro {
      * the data in a reply which is handled in the request_handler
      */
     class response {
+
+        friend class url_route; 
     public:
 
         /**
@@ -77,7 +79,7 @@ namespace micro {
         /**
         * Redirects browser to differnt url endpoint with 301 Found response
         */
-        void redirect(const std::string& path);
+        void redirect(const std::string& path, bool relative_to_module_entry = false);
 
         /**
         * Renders a default HTTP response based of status code
@@ -129,6 +131,11 @@ namespace micro {
          * Body of HTTP response message
          */
         std::string message_;
+
+        /**
+         * Entry point that the module is bound to. 
+         */
+        std::string* module_entry_point_; 
 
         /**
          * Customizable vector or headers

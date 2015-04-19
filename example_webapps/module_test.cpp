@@ -18,7 +18,7 @@ void hello(const micro::request& req, micro::response& res)
 
 void test_redirect(const micro::request& req, micro::response& res)
 {
-    res.redirect("/other");
+    res.redirect("/other", true);
 }
 
 void other(const micro::request& req, micro::response& res)

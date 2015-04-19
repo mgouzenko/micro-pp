@@ -3,6 +3,7 @@
 
 #include "url_route.hpp"
 #include "request.hpp"
+#include "response.hpp" 
 
 namespace micro {
 
@@ -79,6 +80,9 @@ namespace micro {
             while (label_it != labels_.end()) {
                 req.label_values.emplace(*label_it++, *val_it++);
             }
+
+            // Set the module entry point of the response. 
+            resp.module_entry_point_ = &module_entry_point_; 
 
             // Execute the callback that populates the response
             callback_(req, resp);
