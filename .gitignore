@@ -1,6 +1,6 @@
-test_app
-exception_test
-tests
+example_webapps/test_app
+example_webapps/exception_test
+example_webapps/tests
 url_demo
 mak
 docs/html

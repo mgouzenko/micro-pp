@@ -1,23 +1,23 @@
 #ifndef __STOP_WATCH_HPP__
 #define __STOP_WATCH_HPP__
-#include <ctime> 
+#include <ctime>
 
 namespace micro{
 
     class stop_watch{
 
-        private: 
-            std::time_t last_recorded_time_;  
-            
-            bool is_running_; 
+        private:
+            std::time_t last_recorded_time_;
+
+            bool is_running_ = false; 
 
         public:
-            
-            stop_watch(); 
 
-            int get_time(); 
+            stop_watch();
 
-            void start(); 
+            int get_time();
+
+            void start();
 
             void stop();
     };
