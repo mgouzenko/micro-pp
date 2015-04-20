@@ -24,3 +24,20 @@ If you have doxygen installed on your system, generating the docs for this proje
   doxygen
 ```
 in this directory.
+
+## Installing and using the library
+The following four commands will install the library and its headers in /usr/local so you can link to it from any project with -lmicro and access its headers with #include statements like #include <micro/app.hpp>
+
+```
+    autoreconf -i
+    ./configure
+    make
+    make install
+```
+
+When updating library code, run
+```
+    make uninstall && make && make install
+```
+
+If you are packaging the project for end user use, you can run autoreconf -i before packaging so the user will just have to run ./configure
