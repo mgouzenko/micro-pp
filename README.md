@@ -37,9 +37,7 @@ The following four commands will install the library and its headers in /usr/loc
 
 When updating library code, run
 ```
-    make uninstall
+    make uninstall && make && make install
 ```
-
-and then run those first four commands again.
 
 If you are packaging the project for end user use, you can run autoreconf -i before packaging so the user will just have to run ./configure
