@@ -33,6 +33,16 @@ namespace micro {
         }
     }
 
+    std::string request::get_url_param(const std::string& key) const
+    {
+        try {
+            return label_values.at(key);
+        }
+        catch (const std::out_of_range &oor) {
+            return "";
+        }
+    }
+
     const std::string& request::get_hostname() const
     {
         return hostname_;

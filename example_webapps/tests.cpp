@@ -5,6 +5,7 @@
 #include "cookie.hpp"
 #include <ctime>
 #include <fstream>
+#include <unordered_map>
 
 /**
 * Recieves GET, POST, PUT, or DELETE request from client and returns
@@ -90,15 +91,36 @@ void two_messages(const micro::request& req, micro::response& res)
 }
 
 /**
-* Should send the content of the post param
+* Should send the content of the post params
 * Testing with post keys password and username
 */
 void post_params(const micro::request& req, micro::response& res)
 {
     std::string username = req.get_post_param("username");
     std::string password = req.get_post_param("password");
-    std::string response_string = username + "\n" + password;
+    std::string response_string = username + " " + password;
     res.render_string(response_string);
+}
+
+/**
+* Should send the content of the get params
+* Testing with get querystring ?username=zach&password=pass
+*/ 
+void get_params(const micro::request& req, micro::response& res)
+{
+    std::string username = req.get_get_param("username");
+    std::string password = req.get_get_param("password");
+    std::string response_string = username + " " + password;
+    res.render_string(response_string);
+}
+
+/** 
+* Should send back the user passed to url api/<user>
+*/
+void dynamic_url(const micro::request& req, micro::response& res)
+{
+    std::string username = req.get_url_param("username");
+    res.render_string(username);
 }
 
 
@@ -120,5 +142,7 @@ int main(int argc, char** argv){
     application.add_route("/test_bad_url_custom", test_bad_url_custom);
     application.add_route("/two_messages", two_messages);
     application.add_route("/post_params", post_params);
+    application.add_route("/get_params", get_params);
+    application.add_route("/api/<username>", dynamic_url);
     application.run();
 }

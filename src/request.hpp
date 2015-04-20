@@ -82,15 +82,23 @@ namespace micro {
       /**
       * Get the value of a POST param.
       * Returns empty string if not found
-      * @param key: key value of the cookie
+      * @param key: key value of the post param
       */
       std::string get_post_param(const std::string& key) const;
 
       /**
       * Get the value of a GET param
       * Returns empty string if not found
+      * Returns empty string if not found
       */
       std::string get_get_param(const std::string& key) const;
+
+      /**
+      * Get the value of param in url
+      * Returns empty string if not found
+      * @param key: key value of the url param
+      */
+      std::string get_url_param(const std::string& key) const;
 
       /**
       * Get the hostname from the HTTP Host header
