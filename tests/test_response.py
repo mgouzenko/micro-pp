@@ -75,18 +75,32 @@ class Test_Server(unittest.TestCase):
     def test_custom_http_code(self):
         route1 = "test_bad_url"
         route2 = "test_bad_url_custom"
+        route3 = "test_bad_url2"
+        route4 = "test_bad_url_custom2"
         status_code = 503
         content_type = 'text/html'
+        custom_response = 'Custom 503 response'
 
         # Should send 501 response
         r = requests.get(url+route1)
         self.assertEqual(r.status_code, status_code)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
-        # Should send 501 response with custom response message
+        # Should send 503 response with custom response message
         r = requests.get(url+route2)
         self.assertEqual(r.status_code, status_code)
-        self.assertEqual(r.text, 'Custom 503 response')
+        self.assertEqual(r.text, custom_response)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+        # Should send 500 response if user issues nonexistant http code
+        r = requests.get(url+route3)
+        self.assertEqual(r.status_code, 500)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+        # Should send 503 response with custom response message
+        r = requests.get(url+route2)
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.text, custom_response)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
     # Server should send back a 404 code if route does not exist
@@ -147,10 +161,12 @@ class Test_Server(unittest.TestCase):
     def test_dynamic_route(self):
         user1 = 'zach'
         user2 = 'Zach Gleicher'
+        user3 = 'zgleicher321'
         user_id = 123
         route1 = 'api/' + user1
         route2 = 'api/' + user2
         route3 = 'api/' + user1 + '/' + str(user_id)
+        route4 = 'api/' + user3
         status_code = 200
         content_type = 'text/html'
 
@@ -158,6 +174,12 @@ class Test_Server(unittest.TestCase):
         r = requests.get(url+route1)
         self.assertEqual(r.status_code, status_code)
         self.assertEqual(r.text, user1)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+        #Should send name zach as user and respond with name zgleicher123
+        r = requests.get(url+route4)
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.text, user3)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
         #Should send name Zach Gleicher as user and respond with name Zach Gleicher
@@ -171,6 +193,21 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.status_code, status_code)
         self.assertEqual(r.text, (user1 + ' ' + str(user_id)))
         self.assertEqual(r.headers['Content-Type'], content_type)
+
+    #Server should be able to send a static html file
+    def test_static_html(self):
+        route = 'get_static'
+        status_code = 200
+        content_type = 'text/html'
+        html_content = '<!DOCTYPE html>\n<html>\n<body>\n\n<h1>Header</h1>\n\n<p>Paragraph</p>\n\n</body>\n</html>\n'
+
+        # Should get static html page 
+        r = requests.get(url+route)
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.text, html_content)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+
 
 
 

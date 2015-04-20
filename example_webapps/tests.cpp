@@ -74,11 +74,29 @@ void test_bad_url(const micro::request& req, micro::response& res)
 }
 
 /**
+* If user sends back an invalid http code, server responds with 500 status
+*/
+void test_bad_url2(const micro::request& req, micro::response& res)
+{
+    res.render_status(838338);
+}
+
+/**
 * Sends back 503 http code to client with custom message 'Custom 503 response'
 */
 void test_bad_url_custom(const micro::request& req, micro::response& res)
 {
     res.render_status(503, "Custom 503 response");
+}
+
+/**
+* Sends back a 503 response code to client with custom message 'Custom 503 response'
+* Alternative to test_bad_url_custom
+*/
+void test_bad_url_custom2(const micro::request& req, micro::response& res)
+{
+    res.render_status(503);
+    res.render_string("Custom 503 response");
 }
 
 /**
@@ -133,6 +151,13 @@ void dynamic_url2(const micro::request& req, micro::response& res)
     res.render_string(username + " " + id);
 }
 
+/** 
+* Should return static html page test01.html
+*/
+void get_static(const micro::request& req, micro::response& res)
+{
+    res.render_file("./static/test01.html");
+}
 
 int main(int argc, char** argv){
     if(argc != 2) {
@@ -150,10 +175,13 @@ int main(int argc, char** argv){
     application.add_route("/other", other);
     application.add_route("/test_bad_url", test_bad_url);   
     application.add_route("/test_bad_url_custom", test_bad_url_custom);
+    application.add_route("/test_bad_url_custom2", test_bad_url_custom2);
+    application.add_route("/test_bad_url2", test_bad_url2);
     application.add_route("/two_messages", two_messages);
     application.add_route("/post_params", post_params);
     application.add_route("/get_params", get_params);
     application.add_route("/api/<username>", dynamic_url);
     application.add_route("/api/<username>/<int:id>", dynamic_url2);
+    application.add_route("/get_static", get_static);
     application.run();
 }
