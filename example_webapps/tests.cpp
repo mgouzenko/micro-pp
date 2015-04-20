@@ -115,12 +115,22 @@ void get_params(const micro::request& req, micro::response& res)
 }
 
 /** 
-* Should send back the user passed to url api/<user>
+* Should send back the username passed to url api/<user>
 */
 void dynamic_url(const micro::request& req, micro::response& res)
 {
     std::string username = req.get_url_param("username");
     res.render_string(username);
+}
+
+/**
+* Should send back username and user_id passed to url api/<user>/<int:id>
+*/
+void dynamic_url2(const micro::request& req, micro::response& res)
+{
+    std::string username = req.get_url_param("username");
+    std::string id = req.get_url_param("id");
+    res.render_string(username + " " + id);
 }
 
 
@@ -144,5 +154,6 @@ int main(int argc, char** argv){
     application.add_route("/post_params", post_params);
     application.add_route("/get_params", get_params);
     application.add_route("/api/<username>", dynamic_url);
+    application.add_route("/api/<username>/<int:id>", dynamic_url2);
     application.run();
 }
