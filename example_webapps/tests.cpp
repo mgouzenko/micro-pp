@@ -89,6 +89,18 @@ void two_messages(const micro::request& req, micro::response& res)
     res.render_string("Should send");
 }
 
+/**
+* Should send the content of the post param
+* Testing with post keys password and username
+*/
+void post_params(const micro::request& req, micro::response& res)
+{
+    std::string username = req.get_post_param("username");
+    std::string password = req.get_post_param("password");
+    std::string response_string = username + "\n" + password;
+    res.render_string(response_string);
+}
+
 
 int main(int argc, char** argv){
     if(argc != 2) {
@@ -107,5 +119,6 @@ int main(int argc, char** argv){
     application.add_route("/test_bad_url", test_bad_url);   
     application.add_route("/test_bad_url_custom", test_bad_url_custom);
     application.add_route("/two_messages", two_messages);
+    application.add_route("/post_params", post_params);
     application.run();
 }

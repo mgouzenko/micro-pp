@@ -46,7 +46,7 @@ class Test_Server(unittest.TestCase):
 
         # Should send 301 response
         r = requests.get(url+route, allow_redirects=False)
-        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.status_code, 307)
 
         # Should send to url path /other
         r = requests.get(url+route)
@@ -87,6 +87,21 @@ class Test_Server(unittest.TestCase):
         r = requests.get(url+route)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.text, 'Should send')
+
+    # Server should be able to handle a post with a params in body
+    def test_post_with_message(self):
+        route = 'post_params'
+
+        # Should send a username and password and server should respond with
+        # username and password on two lines
+        payload = {'username': 'zach', 'password': "pass"}
+        r = requests.post(url+route, data=payload)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.text, "zach\npass")
+
+
+
+
 
 
 
