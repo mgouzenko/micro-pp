@@ -1,9 +1,9 @@
 
-#include "app.hpp"
-#include "request.hpp"
-#include "response.hpp"
-#include "module.hpp" 
-#include "cookie.hpp"
+#include <micro/app.hpp>
+#include <micro/request.hpp>
+#include <micro/response.hpp>
+#include <micro/module.hpp>
+#include <micro/cookie.hpp>
 #include <ctime>
 #include <fstream>
 
@@ -69,10 +69,10 @@ int main(int argc, char** argv){
                           {"/other", other},
                           {"/bad_url", bad_url},
                           {"/nothing", nothing},
-                          {"/bad_url_custom", bad_url_custom}, 
+                          {"/bad_url_custom", bad_url_custom},
                           {"/user/<int:id>/profile", serve_number},
                           {"/get_stuff", get_stuff}
-                        }; 
-    application.add_module(mod, "/module"); 
+                        };
+    application.add_module(mod, "/module");
     application.run();
 }

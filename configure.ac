@@ -1,0 +1,7 @@
+AC_INIT([micro], [0.0.2])
+AM_INIT_AUTOMAKE
+AC_CONFIG_MACRO_DIR([m4])
+LT_INIT([disable-static])
+AC_PROG_CXX
+AC_CONFIG_FILES([src/Makefile])
+AC_OUTPUT

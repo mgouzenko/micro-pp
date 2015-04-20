@@ -1,8 +1,8 @@
 
-#include "app.hpp"
-#include "request.hpp"
-#include "response.hpp"
-#include "cookie.hpp"
+#include <micro/app.hpp>
+#include <micro/request.hpp>
+#include <micro/response.hpp>
+#include <micro/cookie.hpp>
 #include <ctime>
 #include <fstream>
 
@@ -104,7 +104,7 @@ int main(int argc, char** argv){
     application.add_route("/test_two_cookies", test_two_cookies);
     application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);
-    application.add_route("/test_bad_url", test_bad_url);   
+    application.add_route("/test_bad_url", test_bad_url);
     application.add_route("/test_bad_url_custom", test_bad_url_custom);
     application.add_route("/two_messages", two_messages);
     application.run();
