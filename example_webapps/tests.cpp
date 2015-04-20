@@ -156,7 +156,7 @@ void dynamic_url2(const micro::request& req, micro::response& res)
 */
 void get_static(const micro::request& req, micro::response& res)
 {
-    res.render_file("./static/test01.html");
+    res.redirect("/test01.html");
 }
 
 int main(int argc, char** argv){
