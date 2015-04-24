@@ -1,11 +1,11 @@
 *Requirements*
-•5-15 pages
-•Error handling resource management
-•Feature set
-•Interface design
-•Optimizations
-•Features for the convenience of users
-•Ideas for release 1.2
+- 5-15 pages
+- Error handling resource management
+- Feature set
+- Interface design
+- Optimizations
+- Features for the convenience of users
+- Ideas for release 1.2
 
 #Design Document
 
