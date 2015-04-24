@@ -1,3 +1,12 @@
+*Requirements*
+•5-15 pages
+•Error handling resource management
+•Feature set
+•Interface design
+•Optimizations
+•Features for the convenience of users
+•Ideas for release 1.2
+
 #Design Document
 
 ##Our Project
@@ -86,13 +95,19 @@ Within the callback function `hello`, the application programmer can choose to s
 - May want to compare to Node aync event loop which uses libuv written in C
 
 ###Optimizaions
+- Mitchell talk about optimizations with server with threading and queue
 
 ###Error Handling and Resource Management
+- Mitchell talk about fancy error handling
 
 ##Installation
-- Adam's fancy installation
+- Adam discuss fancy installation
 - Focus on how this is a feature of convience for users
 
-##
+##Addions for 1.2
+- Json handling
+- Templating
+- Interface with industry server like Nginx or Apache
+- Allow iterface for middlewear (eg. parsing complex post request params)
 
 
