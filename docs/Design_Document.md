@@ -43,7 +43,7 @@ The foundation of building a web-application begins with constructing an `micro:
 The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed the most basic HTTP server which essentially wraps an underlying web-server. We will discussing interfacing with the web server later. 
 
 ```
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
     application.run();
@@ -63,7 +63,7 @@ void hello(const micro::request& req, micro::response& res)
 }
 
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
     application.add_route("/hello", hello);
@@ -71,7 +71,7 @@ int main(int argc, char** argv){
 }
 ```
 
-Within the callback function `hello`, the application programmer can choose to send a message back to the user. In this example we wish to send the string "hello world". That is all. Now when the program is run and the user 
+Within the callback function `hello`, the application programmer can choose to send a message back to the user. In this example we wish to send the string "hello world". That is all. Now, when the program run and the client acesses `www.example.com/hello`, "hello world" will appear in the browser.  
 
 ##Routing
 
