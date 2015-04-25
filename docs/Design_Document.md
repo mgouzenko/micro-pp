@@ -42,7 +42,7 @@ The foundation of building a web-application begins with constructing an `micro:
 
 The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed the most basic HTTP server which essentially wraps an underlying web-server. We will discussing interfacing with the web server later. 
 
-```
+```cpp
 int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
@@ -56,7 +56,7 @@ Although this program runs an instance of the server it is limited to only servi
 
 Imagine we want to send a "hello world" message to any user who accesses our web application with the url and route `www.example.com/hello`. To do this we call `application.add_route("./hello" hello_callback)` which will register the callback function `hello_callback` so that when a client sends a request to the server with the route "hello", `hello_callback` will be called.
 
-```
+```cpp
 void hello(const micro::request& req, micro::response& res)
 {
     res.render_string("hello world");
@@ -84,7 +84,7 @@ Url routing requires two steps:
 
 In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to differnt callback function:
 
-```
+```cpp
 application.add_route("/api", api_callback);
 application.add_route("/api/users", users_callback);
 application.add_route("/api/users/admin", admin_callback)
@@ -93,7 +93,7 @@ application.add_route("/api/groups", groups_callback);
 
 In order to add convienece to users we provide a system for generating dynamic routes which gives users maxmium flexibility. It would be ridiculous if you had to define a route for each user. Insted, you define a dynamic route like so:
 
-```
+```cpp
 application.add_route("/api/<username>", api_callback);
 
 application.add_route("/api/user/<int:id>", api_callback);
@@ -114,7 +114,8 @@ void example_callback(const micro::request& req, micro::response& res)
 Every route has an associated callback function with two parameters: a `request` and `response` object. The `request` and `response` can be thought of as wrappers for the strict HTTP request and response protocol. The request object is passed in by const refrence given that a user does not modify a request. The application developer only extracts data stored in the request object and provides logic in the callback to handle the request appropriatly. The reponse object is modifiable with a provided API that allows user to send back customized responses to the client. Notice that the return type of the callback function is void. **WHY??** The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
 ####Express Callback Example
-```
+
+```js
 app.get('/', function(req, res){
     res.send('hello world');
 });
@@ -124,11 +125,11 @@ app.get('/', function(req, res){
 
 The request object is populated with data parsed from the HTTP request and transformed into a more user freindly C++ object.
 
-#####Example of getting data from the request object
+#####Example of Getting data From the Request Object
 
 If a client accessed the url `www.example.com/api/bjarne` the string `user` would in this example would be "bjarne".
 
-```
+```cpp
 void api_callback(const micro::request& req, micro::response& res)
 {
     std::string user = req.get_url_param("username");
@@ -147,11 +148,11 @@ Information on accessing data stored in the request object is provided in the AP
 
 The response object is modified within the callback and will be sent as an appropriatly formatted HTTP response after the callback function.
 
-#####Example of setting data in the request object
+#####Example of Setting Data in the Response Object
 
 If a client accessed the url `www.example.com/api/bjarne`, the client would recieve a message "hello bjarne".
 
-```
+```cpp
 void api_callback(const micro::request& req, micro::response& res)
 {
     std::string user = req.get_url_param("username");
