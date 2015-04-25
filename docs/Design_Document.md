@@ -75,18 +75,96 @@ Within the callback function `hello`, the application programmer can choose to s
 
 ##Routing
 
+Url routing requires two steps:
+
+1. Registering a route 
+2. Defining a calback function for the route 
+
 ###Registering a Route
-- The complex regex
 
-###The Request Object
-- Talk about API 
-- Comparisons to other frameworks
-- Convienence to Users
+In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to differnt callback function:
 
-###The Response Object
-- Talk about API 
-- Comparisons to other frameworks
-- Convienence to Users
+```
+application.add_route("/api", api_callback);
+application.add_route("/api/users", users_callback);
+application.add_route("/api/users/admin", admin_callback)
+application.add_route("/api/groups", groups_callback);
+```
+
+In order to add convienece to users we provide a system for generating dynamic routes which gives users maxmium flexibility. It would be ridiculous if you had to define a route for each user. Insted, you define a dynamic route like so:
+
+```
+application.add_route("/api/<username>", api_callback);
+
+application.add_route("/api/user/<int:id>", api_callback);
+```
+
+A user can either define a route with an string or integer. With the feature the application developer can define a route and extract the variable parameters in the callback object which allows routes `www.example.com/api/user/1` and `www.example.com/api/user/2` to be processed differently within the same callback. This allows for more concice and modular code. This is made possible through a complicated regex expresion that parses routes and makes the variable url parameters available through the `request` object API.
+
+###The Callback Function
+
+```cpp
+void example_callback(const micro::request& req, micro::response& res)
+{
+    // Handle request and response here
+}
+
+```
+
+Every route has an associated callback function with two parameters: a `request` and `response` object. The `request` and `response` can be thought of as wrappers for the strict HTTP request and response protocol. The request object is passed in by const refrence given that a user does not modify a request. The application developer only extracts data stored in the request object and provides logic in the callback to handle the request appropriatly. The reponse object is modifiable with a provided API that allows user to send back customized responses to the client. Notice that the return type of the callback function is void. **WHY??** The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
+
+####Express Callback Example
+```
+app.get('/', function(req, res){
+    res.send('hello world');
+});
+```
+
+####The Request Object
+
+The request object is populated with data parsed from the HTTP request and transformed into a more user freindly C++ object.
+
+#####Example of getting data from the request object
+
+If a client accessed the url `www.example.com/api/bjarne` the string `user` would in this example would be "bjarne".
+
+```
+void api_callback(const micro::request& req, micro::response& res)
+{
+    std::string user = req.get_url_param("username");
+
+    // Logic on for handling the user
+}
+
+application.add_route("/api/<username>", api_callback);
+
+```
+
+Information on accessing data stored in the request object is provided in the API.
+
+
+####The Response Object
+
+The response object is modified within the callback and will be sent as an appropriatly formatted HTTP response after the callback function.
+
+#####Example of setting data in the request object
+
+If a client accessed the url `www.example.com/api/bjarne`, the client would recieve a message "hello bjarne".
+
+```
+void api_callback(const micro::request& req, micro::response& res)
+{
+    std::string user = req.get_url_param("username");
+
+    std::string message = "Hello " + user;
+
+    res.render_string(message) 
+}
+```
+
+Information on setting data in the response object is provided in the API.
+
+###Using Route Modules
 
 ##The Server
 
