@@ -4,17 +4,17 @@
 
 namespace micro {
 
-    Cookie::Cookie(const std::string& key, const std::string& val, const std::string path, const std::string domain)
+    cookie::cookie(const std::string& key, const std::string& val, const std::string path, const std::string domain)
     : key_{key}, val_{val}, path_{path}, domain_{domain} {};
 
-    Cookie::Cookie(const std::string& key, const std::string& val, const std::time_t& expires, 
+    cookie::cookie(const std::string& key, const std::string& val, const std::time_t& expires, 
       const std::string path, const std::string domain)
     : key_{key}, val_{val}, expires_{expires}, path_{path}, domain_{domain} 
     {
         add_expires_ = true;
     };
 
-    std::string Cookie::to_string() const
+    std::string cookie::to_string() const
     {
         std::string cookie_string = key_ + "=" + val_;
 

@@ -16,7 +16,7 @@ void hello(const micro::request& req, micro::response& res)
 {
     time_t t = time(0) + 100;
     res.render_string("hello world");
-    micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
+    micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
     res.set_cookie(c);
 }
 
