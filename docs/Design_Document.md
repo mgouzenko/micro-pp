@@ -61,9 +61,7 @@ void hello(const micro::request& req, micro::response& res)
 {
     res.render_string("hello world");
 }
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
