@@ -41,13 +41,14 @@ The foundation of building a web-application begins with constructing an `micro:
 
 The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed web application which essentially wraps an underlying web-server that serves static files.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+int main(int argc, char** argv) {
+    micro::app application;
+    application.set_static_root("./static");
+    application.run();
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    int main(int argc, char** argv) {
-        micro::app application;
-        application.set_static_root("./static");
-        application.run();
-    }
-    
 
 Although this program runs an instance of the server it is limited to only serving static files from the route designated by the function `set_static_route("./static").
 
