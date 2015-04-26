@@ -1,5 +1,5 @@
-#ifndef MICRO_HEADER_HPP
-#define MICRO_HEADER_HPP
+#ifndef __MICRO_HEADER_HPP__
+#define __MICRO_HEADER_HPP__
 
 #include <string>
 #include <ostream>

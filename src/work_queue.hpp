@@ -1,13 +1,13 @@
-#ifndef __WORK_QUEUE_HPP__
-#define __WORK_QUEUE_HPP__ 
+#ifndef __MICRO_WORK_QUEUE_HPP__
+#define __MICRO_WORK_QUEUE_HPP__
 
 #include <memory>
 #include <queue>
 #include <mutex>
-#include <condition_variable> 
+#include <condition_variable>
 
 namespace micro{
-    struct server; 
+    struct server;
     class work_queue{
 		
     friend class app; 

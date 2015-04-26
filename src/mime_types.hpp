@@ -1,5 +1,5 @@
-#ifndef MICRO_MIME_TYPES_HPP
-#define MICRO_MIME_TYPES_HPP
+#ifndef __MICRO_MIME_TYPES_HPP__
+#define __MICRO_MIME_TYPES_HPP__
 
 #include <string>
 

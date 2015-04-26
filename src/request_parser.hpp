@@ -1,5 +1,5 @@
-#ifndef MICRO_REQUEST_PARSER_HPP
-#define MICRO_REQUEST_PARSER_HPP
+#ifndef __MICRO_REQUEST_PARSER_HPP__
+#define __MICRO_REQUEST_PARSER_HPP__
 
 #include <string>
 #include <boost/logic/tribool.hpp>

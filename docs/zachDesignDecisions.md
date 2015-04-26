@@ -20,5 +20,6 @@
 ###Considerations
 - Difficult to parse the content
 - Version 1.2 should sign cookies to keep them safe
+- Better to search by key rather than return dictionary. More clunky
 
 ##Notes
