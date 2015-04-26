@@ -26,9 +26,6 @@ namespace micro {
             new_regex = std::regex_replace(new_regex, std::regex("<int:[A-Za-z0-9_\\-]+>"), "([0-9]+)");
             new_regex = std::regex_replace(new_regex, std::regex("[\\.]"), "\\.");
 
-            // TODO: For debugging only
-            std::cout << "Specifer " << specifier << " becomes regex " << new_regex << "\n";
-
             internal_regex_ = std::regex(new_regex);
 
             // Extract labels from the route specification

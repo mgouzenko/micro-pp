@@ -1,7 +1,7 @@
 #ifndef MICRO_APP_HPP
 #define MICRO_APP_HPP
-#include <thread>
 
+#include <thread>
 #include <boost/asio.hpp> 
 #include "work_queue.hpp"
 #include "types.hpp" 
@@ -12,6 +12,14 @@
 
 namespace micro {
 
+    /**
+     * **app** powers all micro++ web applications. This class encapsulates all client-server communication, including routing. 
+     * **app** is built upon Boost ASIO's io_service. It uses the io_service to asynchronously receive and reply to clients' requests. 
+     * When a client's request comes in, the app object matches that request to a callback function, depending on the request's URI. 
+     * **app** handles requests via a thread pool. That is, when a well-formed request arrives, the associate callback function is 
+     * evaluated on a separate thread. **app** also monitors its thread pool. If any thread's execution surpasses the timeout, that thread will
+     * be cancelled, removed from the thread pool, and replaced. 
+     */
     class app {
         
         private:

@@ -2,8 +2,6 @@
 #define __MICRO_THREAD_HPP
 
 #include <thread>
-#include <functional> 
-
 #include "stop_watch.hpp" 
 
 #define MICRO_THREAD_RUNNING 0

@@ -33,7 +33,6 @@ namespace micro {
         cookie_string.append(path_string);
 
         if (!domain_.empty()) {
-          std::cout << "adding domain\n";
           std::string domain_string = "; Domain=" + domain_;
           cookie_string.append(domain_string);
         }

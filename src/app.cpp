@@ -85,6 +85,7 @@ namespace micro {
     }
 
     void app::monitor_thread_pool(){
+        std::cout << "Shutting Down\n"; 
         int num_threads = thread_pool_.size();
         // Loop until shutdown
         while(!shutting_down_){
