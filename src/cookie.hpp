@@ -1,5 +1,5 @@
-#ifndef MICRO_COOKIE_HPP
-#define MICRO_COOKIE_HPP
+#ifndef __MICRO_COOKIE_HPP__
+#define __MICRO_COOKIE_HPP__
 
 #include <string>
 #include <ctime>
@@ -45,7 +45,7 @@ namespace micro {
         * @param path: path cookie will be sent for
         * @param domain: domain accessible by cookie
         */
-        Cookie(const std::string& key, const std::string& val, const std::time_t& expires, 
+        Cookie(const std::string& key, const std::string& val, const std::time_t& expires,
             const std::string path="/", const std::string domain="");
 
         /**

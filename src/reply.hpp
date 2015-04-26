@@ -1,5 +1,5 @@
-#ifndef MICRO_REPLY_HPP
-#define MICRO_REPLY_HPP
+#ifndef __MICRO_REPLY_HPP__
+#define __MICRO_REPLY_HPP__
 
 #include <string>
 #include <vector>
@@ -8,20 +8,20 @@
 
 namespace micro {
 
-    struct response; 
+    struct response;
     struct header;
-    
-    
+
+
     /**
      * A reply to be sent to a client.
      */
-   
-    
+
+
     class reply
     {
-        friend class server; 
-        friend class request_handler; 
-        friend class micro_thread; 
+        friend class server;
+        friend class request_handler;
+        friend class micro_thread;
         /**
         * The status of the reply.
         */

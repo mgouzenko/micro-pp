@@ -11,7 +11,7 @@ Micro++ is thus distributed under the Boost Software License, Version 1.0. (See 
 * All classes and non-class-member functions should be in the micro:: namespace
 * Soft tabs (4 spaces)
 * Class fields should end in "_"
-* Header files should contain include guards in the format "NAMESPACE_FILENAME_HPP"
+* Header files should contain include guards in the format "__NAMESPACE_FILENAME_HPP__"
 * Stroustrup indent style: http://en.wikipedia.org/wiki/Indent_style#Variant:_Stroustrup
 * See Indentation, Whitespace, and Comments http://www.stroustrup.com/Programming/PPP-style-rev3.pdf
 * Use Javadoc style comments when commenting on public methods and fields. The Doxygen is currently set up to parse Javadoc comments.

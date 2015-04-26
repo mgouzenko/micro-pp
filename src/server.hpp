@@ -1,5 +1,5 @@
-#ifndef MICRO_SERVER_HPP
-#define MICRO_SERVER_HPP
+#ifndef __MICRO_SERVER_HPP__
+#define __MICRO_SERVER_HPP__
 
 #include <boost/asio.hpp>
 #include <string>

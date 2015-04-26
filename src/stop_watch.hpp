@@ -1,5 +1,5 @@
-#ifndef __STOP_WATCH_HPP__
-#define __STOP_WATCH_HPP__
+#ifndef __MICRO_STOP_WATCH_HPP__
+#define __MICRO_STOP_WATCH_HPP__
 #include <ctime>
 
 namespace micro{
@@ -9,7 +9,7 @@ namespace micro{
         private:
             std::time_t last_recorded_time_;
 
-            bool is_running_ = false; 
+            bool is_running_ = false;
 
         public:
 

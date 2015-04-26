@@ -1,5 +1,5 @@
-#ifndef MICRO_REQUEST_HPP
-#define MICRO_REQUEST_HPP
+#ifndef __MICRO_REQUEST_HPP__
+#define __MICRO_REQUEST_HPP__
 
 #include <string>
 #include <vector>

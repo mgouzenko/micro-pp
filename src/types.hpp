@@ -1,12 +1,12 @@
-#ifndef MICRO_TYPES_HPP
-#define MICRO_TYPES_HPP
+#ifndef __MICRO_TYPES_HPP__
+#define __MICRO_TYPES_HPP__
 
 #include <functional>
-#include <vector> 
+#include <vector>
 
 namespace micro {
-    struct request; 
-    struct response; 
+    struct request;
+    struct response;
 
     typedef std::function<void(const micro::request& req, micro::response& res)> callback;
 }

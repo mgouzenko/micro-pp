@@ -1,5 +1,5 @@
-#ifndef MICRO_URL_ROUTE_HPP
-#define MICRO_URL_ROUTE_HPP
+#ifndef __MICRO_URL_ROUTE_HPP__
+#define __MICRO_URL_ROUTE_HPP__
 
 #include <regex>
 
@@ -12,8 +12,8 @@ namespace micro {
      */
     class url_route {
 
-        friend class app; 
-        friend class request_handler; 
+        friend class app;
+        friend class request_handler;
 
         /**
          * Specific URL constructor.
@@ -70,8 +70,8 @@ namespace micro {
         std::vector<std::string> methods_;
         std::vector<std::string> labels_;
         micro::callback callback_;
-        
-        std::string module_entry_point_; 
+
+        std::string module_entry_point_;
     };
 
 }

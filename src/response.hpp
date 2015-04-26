@@ -1,5 +1,5 @@
-#ifndef MICRO_RESPONSE_HPP
-#define MICRO_RESPONSE_HPP
+#ifndef __MICRO_RESPONSE_HPP__
+#define __MICRO_RESPONSE_HPP__
 
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@
 namespace micro {
 
     struct Cookie;
-    struct header; 
+    struct header;
     /**
      * A response object.
      * A response object is passed into a url route callback and is handled
@@ -19,7 +19,7 @@ namespace micro {
      */
     class response {
 
-        friend class url_route; 
+        friend class url_route;
     public:
 
         /**
@@ -133,9 +133,9 @@ namespace micro {
         std::string message_;
 
         /**
-         * Entry point that the module is bound to. 
+         * Entry point that the module is bound to.
          */
-        std::string* module_entry_point_; 
+        std::string* module_entry_point_;
 
         /**
          * Customizable vector or headers
