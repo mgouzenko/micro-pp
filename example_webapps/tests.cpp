@@ -126,8 +126,8 @@ void post_params(const micro::request& req, micro::response& res)
 */ 
 void get_params(const micro::request& req, micro::response& res)
 {
-    std::string username = req.get_get_param("username");
-    std::string password = req.get_get_param("password");
+    std::string username = req.get_query_param("username");
+    std::string password = req.get_query_param("password");
     std::string response_string = username + " " + password;
     res.render_string(response_string);
 }
@@ -137,7 +137,7 @@ void get_params(const micro::request& req, micro::response& res)
 */
 void dynamic_url(const micro::request& req, micro::response& res)
 {
-    std::string username = req.get_url_param("username");
+    std::string username = req.get_route_param("username");
     res.render_string(username);
 }
 
@@ -146,8 +146,8 @@ void dynamic_url(const micro::request& req, micro::response& res)
 */
 void dynamic_url2(const micro::request& req, micro::response& res)
 {
-    std::string username = req.get_url_param("username");
-    std::string id = req.get_url_param("id");
+    std::string username = req.get_route_param("username");
+    std::string id = req.get_route_param("id");
     res.render_string(username + " " + id);
 }
 
