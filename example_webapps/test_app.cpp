@@ -32,9 +32,9 @@ void bad_url(const micro::request& req, micro::response& res)
 
 void get_stuff(const micro::request& req, micro::response& res)
 {
-    auto param1 = req.get_get_param("param1");
-    auto param2 = req.get_get_param("param2");
-    auto param3 = req.get_get_param("param3");
+    auto param1 = req.get_query_param("param1");
+    auto param2 = req.get_query_param("param2");
+    auto param3 = req.get_query_param("param3");
     res.render_string("<html><body>param1 : " + param1 + "<br/>param2 : " + param2 + "<br/>param3 : " + param3);
 }
 
