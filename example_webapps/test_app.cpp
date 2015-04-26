@@ -11,7 +11,7 @@ void hello(const micro::request& req, micro::response& res)
 {
     time_t t = time(0) + 100;
     res.render_string("hello world");
-    micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
+    micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
     res.set_cookie(c);
 }
 
@@ -51,7 +51,7 @@ void nothing(const micro::request& req, micro::response& res)
 
 void serve_number(const micro::request& req, micro::response& res)
 {
-    res.render_string("User ID requested: " + req.label_values.at("id"));
+    res.render_string("User ID requested: " + req.get_query_param("id"));
 }
 
 int main(int argc, char** argv){

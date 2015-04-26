@@ -8,7 +8,7 @@
 
 namespace micro {
 
-    struct Cookie;
+    struct cookie;
     struct header;
     /**
      * A response object.
@@ -74,7 +74,7 @@ namespace micro {
          * Set the key and value of cookie to send back to client
          * @param c: Cookie object
          */
-        void set_cookie(const Cookie& c);
+        void set_cookie(const cookie& c);
 
         /**
         * Redirects browser to differnt url endpoint with 301 Found response
