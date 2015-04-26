@@ -23,7 +23,7 @@ namespace micro {
         }
     }
 
-    std::string request::get_get_param(const std::string& key) const
+    std::string request::get_query_param(const std::string& key) const
     {
         try {
             return get_params_.at(key);
@@ -33,7 +33,7 @@ namespace micro {
         }
     }
 
-    std::string request::get_url_param(const std::string& key) const
+    std::string request::get_route_param(const std::string& key) const
     {
         try {
             return label_values.at(key);
