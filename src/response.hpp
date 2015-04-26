@@ -20,6 +20,8 @@ namespace micro {
     class response {
 
         friend class url_route;
+        friend class reply;
+
     public:
 
         /**
@@ -28,24 +30,9 @@ namespace micro {
         response();
 
         /**
-         * Get the message string
-         */
-        const std::string& get_message() const;
-
-        /**
          * Append a string to the message content
          */
         void append_message(const std::string& message);
-
-        /**
-         * Get reference to vector of headers
-         */
-        const std::vector<header>& get_headers() const;
-
-        /**
-         * Add a header to the list of headers
-         */
-        void add_header(const header& new_header);
 
         /**
          * Sets the message content of a HTTP response
@@ -89,24 +76,9 @@ namespace micro {
         void render_status(int status_code, const std::string& message="");
 
         /**
-        * Get the status code
-        */
-        int get_status_code() const;
-
-        /**
         * Set the status code
         */
         void set_status_code(int status_code);
-
-        /**
-        * Return true if status code has been set in response
-        */
-        bool did_set_status() const;
-
-        /**
-        * Return true if message has been set in response
-        */
-        bool did_set_message() const;
 
         /**
         * Set the message for the HTTP response
@@ -118,12 +90,6 @@ namespace micro {
         * @param mime_type: Mime type for HTTP response
         */
         void set_mime_type(const std::string& mime_type);
-
-        /**
-        * Get the mime type set in the request
-        */
-        const std::string& get_mime_type() const;
-
 
     private:
 
@@ -161,6 +127,41 @@ namespace micro {
         * Mime type of HTTP response
         */
         std::string mime_type_;
+
+        /**
+        * Get the message string
+        */
+        const std::string& get_message() const;
+
+        /**
+        * Get reference to vector of headers
+        */
+        const std::vector<header>& get_headers() const;
+
+        /**
+        * Add a header to the list of headers
+        */
+        void add_header(const header& new_header);
+
+        /**
+        * Get the status code
+        */
+        int get_status_code() const;
+
+        /**
+        * Return true if status code has been set in response
+        */
+        bool did_set_status() const;
+
+        /**
+        * Return true if message has been set in response
+        */
+        bool did_set_message() const;
+
+        /**
+        * Get the mime type set in the request
+        */
+        const std::string& get_mime_type() const;
 
     };
 

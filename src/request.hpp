@@ -18,6 +18,7 @@ namespace micro {
       friend class request_parser;
       friend class server;
       friend class url_route; 
+      
       /**
        * The HTTP requst method: e.g. "GET", "POST", "POST", "DELETE".
        */
@@ -79,64 +80,64 @@ namespace micro {
       std::string hostname_;
 
 
-public:
-      /**
-      * Cookies are stored in key, value pairs.
-      * Search for a cookie given a key as a string.
-      * Returns an empty string if no cookie is availble for the given key.
-      * @param key: key value of the cookie
-      */
-      std::string get_cookie(const std::string& key) const;
+      public:
+            /**
+            * Cookies are stored in key, value pairs.
+            * Search for a cookie given a key as a string.
+            * Returns an empty string if no cookie is availble for the given key.
+            * @param key: key value of the cookie
+            */
+            std::string get_cookie(const std::string& key) const;
 
-      /**
-      * POST parameters are stored in key, value pairs.
-      * Search for a POST parameter issued by a client.
-      * Returns empty string if no get parameter is available for the given key.
-      * @param key: key value of the post param
-      */
-      std::string get_post_param(const std::string& key) const;
+            /**
+            * POST parameters are stored in key, value pairs.
+            * Search for a POST parameter issued by a client.
+            * Returns empty string if no get parameter is available for the given key.
+            * @param key: key value of the post param
+            */
+            std::string get_post_param(const std::string& key) const;
 
-      /**
-      * GET parameters are stored in key, value pairs.
-      * Search for a get paramter parsed from the querystring.
-      * Returns empty string if not found
-      * (eg. ?key=value)
-      * @param key: key value of the GET param
-      */
-      std::string get_query_param(const std::string& key) const;
+            /**
+            * GET parameters are stored in key, value pairs.
+            * Search for a get paramter parsed from the querystring.
+            * Returns empty string if not found
+            * (eg. ?key=value)
+            * @param key: key value of the GET param
+            */
+            std::string get_query_param(const std::string& key) const;
 
-      /**
-      * Dynamic url route parameters are stored in key, value pairs
-      * Access to dynamic url paramters are stored by the key registered
-      * in the route.
-      * Returns empty string if not found
-      * (eg. /api/<user>)
-      * @param key: key value of the url param
-      */
-      std::string get_route_param(const std::string& key) const;
+            /**
+            * Dynamic url route parameters are stored in key, value pairs
+            * Access to dynamic url paramters are stored by the key registered
+            * in the route.
+            * Returns empty string if not found
+            * (eg. /api/<user>)
+            * @param key: key value of the url param
+            */
+            std::string get_route_param(const std::string& key) const;
 
-      /**
-      * Get the hostname from the HTTP Host header
-      */
-      const std::string& get_hostname() const;
+            /**
+            * Get the hostname from the HTTP Host header
+            */
+            const std::string& get_hostname() const;
 
-      /**
-      * Get the URI of the request. The URI represents the path that the 
-      * path for which the client issued the HTTP request.
-      */
-      const std::string& get_uri() const;
+            /**
+            * Get the URI of the request. The URI represents the path that the 
+            * path for which the client issued the HTTP request.
+            */
+            const std::string& get_uri() const;
 
-      /**
-      * Get the ip address from the client that issued the request. 
-      * (eg. 160.39.251.11)
-      */
-      const std::string& get_ip() const;
+            /**
+            * Get the ip address from the client that issued the request. 
+            * (eg. 160.39.251.11)
+            */
+            const std::string& get_ip() const;
 
-      /**
-      * Get the method of the HTTP request. 
-      * (eg. GET, POST, PUT, DELETE)
-      */
-      const std::string& get_method() const;
+            /**
+            * Get the method of the HTTP request. 
+            * (eg. GET, POST, PUT, DELETE)
+            */
+            const std::string& get_method() const;
 
     };
 
