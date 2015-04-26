@@ -15,16 +15,34 @@ namespace micro {
 
     private:
 
+        /**
+        * Key of the cookie
+        */
         std::string key_;
 
+        /**
+        * Value of the cookie
+        */
         std::string val_;
 
+        /**
+        * The time you wish the cookie to expire
+        */
         std::time_t expires_;
 
+        /**
+        * The domian for which the the cookie has access to
+        */
         std::string domain_;
 
+        /*
+        * The path of on the domain the cookie has access to
+        */
         std::string path_;
 
+        /**
+        * Boolean to indicate if user set expiry time
+        */
         bool add_expires_ = false;
 
     public:
