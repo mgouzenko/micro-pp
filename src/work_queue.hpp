@@ -10,22 +10,25 @@ namespace micro{
     struct server; 
     class work_queue{
 		
-	private:
-		std::queue< std::shared_ptr<server> > queue; 
-        bool shutting_down_ = false; 
+    friend class app; 
+    friend class micro_thread; 
+    friend class server; 
 
-    public: 
-        std::mutex mut;
-        
-        std::condition_variable cond; 
+    std::queue< std::shared_ptr<server> > queue; 
+    
+    bool shutting_down_ = false; 
 
-        void prepare_for_shutdown(){ shutting_down_ = true; } 
+    std::mutex mut;
+    
+    std::condition_variable cond; 
 
-        void push(std::shared_ptr<server> serv);
+    void prepare_for_shutdown(){ shutting_down_ = true; } 
 
-        void poke();
-        
-        std::shared_ptr<server> pop();
+    void push(std::shared_ptr<server> serv);
+
+    void poke();
+    
+    std::shared_ptr<server> pop();
     
     }; 
 }
