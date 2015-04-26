@@ -21,11 +21,11 @@ namespace micro {
         if (add_expires_) {
           tm *gmtm = gmtime(&expires_);
           char *dt = asctime(gmtm);
-          std::string curr_time = std::string(dt);
+          std::string expiry_time = std::string(dt);
 
           //Remove newline
-          curr_time = curr_time.substr(0, curr_time.size()-1);
-          std::string time_string = "; Expires=" + curr_time;
+          expiry_time = expiry_time.substr(0, expiry_time.size()-1);
+          std::string time_string = "; Expires=" + expiry_time;
           cookie_string.append(time_string);
         }
 
