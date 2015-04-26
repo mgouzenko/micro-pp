@@ -7,14 +7,17 @@
 
 #include "header.hpp"
 namespace micro {
-
     /**
      * The **request** object provides an API that allows developers access to data from a HTTP request. 
      * The **requst** object can be thought of as a wrapper for a HTTP request. The web-framework parses 
      * the HTTP request and populates the appropriate data in the request object. 
      */
-    struct request
+    class request
     {
+      friend class request_handler;
+      friend class request_parser;
+      friend class server;
+      friend class url_route; 
       /**
        * The HTTP requst method: e.g. "GET", "POST", "POST", "DELETE".
        */
@@ -75,6 +78,8 @@ namespace micro {
       */
       std::string hostname_;
 
+
+public:
       /**
       * Cookies are stored in key, value pairs.
       * Search for a cookie given a key as a string.
