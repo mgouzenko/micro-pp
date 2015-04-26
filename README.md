@@ -10,7 +10,7 @@ Micro++ is thus distributed under the Boost Software License, Version 1.0. (See 
 
 * All classes and non-class-member functions should be in the micro:: namespace
 * Soft tabs (4 spaces)
-* Class fields should end in "_"
+* Class fields should end in "\_"
 * Header files should contain include guards in the format "\__NAMESPACE_FILENAME_HPP\__"
 * Stroustrup indent style: http://en.wikipedia.org/wiki/Indent_style#Variant:_Stroustrup
 * See Indentation, Whitespace, and Comments http://www.stroustrup.com/Programming/PPP-style-rev3.pdf
