@@ -21,6 +21,7 @@ namespace micro {
 
         friend class url_route;
         friend class reply;
+        friend class request_handler;
 
     public:
 
