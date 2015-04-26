@@ -7,23 +7,23 @@
 - Features for the convenience of users
 - Ideas for release 1.2
 
-#Design Document
+# Design Document
 
-##Our Project
+## Our Project
 
 In this project we built a micro web-framework for C++. Rather than building a web-framework that interfaced with a web server like Apache or Nginx we took the challenge to build our own web-server. To build the server we used Boost.Asio which is a C++ networking library providing developers with an asynchronous model for network and I/O operations.
 
 
-##What is a Web Framework
+## What is a Web Framework
 
-At its core, a web-framework provides an interface to build web based applications. The interface provides application developers a clean and easy way to handle requests and send responses without dealing with the complexities of the strict HTTP protocol. 
+At its core, a web-framework provides an interface to build web based applications. The interface provides application developers a clean and easy way to handle requests and send responses without dealing with the complexities of the strict HTTP protocol.
 
-Web-Frameworks today work off the Model-View-Controller paradigm which modularizes code into three distinct sections. The Model represents the fundamental data structures that are persisted in a database. These objects are often modeled to be stored in SQL databases like MySQL or document databases like MongoDB. A View is a html page or template that gets rendered to the user. The are the web pages that a user of the web application will see. The controller is where the logic of the web application takes place. The controller maps callback functions to url routes which allow users to handle a request sent to the route and serve a response to the user who accessed the web application. Within the controller a developer typically performs CRUD (Create, Read, Update, and Delete) operations on objects defined by the model. 
+Web-Frameworks today work off the Model-View-Controller paradigm which modularizes code into three distinct sections. The Model represents the fundamental data structures that are persisted in a database. These objects are often modeled to be stored in SQL databases like MySQL or document databases like MongoDB. A View is a html page or template that gets rendered to the user. The are the web pages that a user of the web application will see. The controller is where the logic of the web application takes place. The controller maps callback functions to url routes which allow users to handle a request sent to the route and serve a response to the user who accessed the web application. Within the controller a developer typically performs CRUD (Create, Read, Update, and Delete) operations on objects defined by the model.
 
 
 Some of the most popular services for web application frameworks include Django and Flask for Python, Rails for Ruby, and Express for NodeJs. Django and Rails are more complicated choices with more features while Flask and Express are more lightweight. For our web-framework, we used Flask and Express as inspiration and references in making design decisions.
 
-##Web-Framework vs Web Server
+## Web-Framework vs Web Server
 
 A web server is a computer which stores, processes, and serves web pages to clients using the HTTP protocol. Although this sounds very similar to a web-framework, the key difference is that the framework sits on top of the web server providing a much more user friendly API for handling HTTP requests and serving HTTP responses.
 
@@ -31,25 +31,26 @@ Web-frameworks like Flask provide a simple web-server for development purposes. 
 
 “You can use the builtin server during development, but you should use a full deployment option for production applications. (Do not use the builtin development server in production.)""  
 
-Consequently, web-frameworks like Flask interface with servers which implement WSGI (Web Server Gateway Interface). WSGI is an interface between web servers and web applications written in Python. This allows Flask applications to interface with much more robust servers like Apache or Nginx. 
+Consequently, web-frameworks like Flask interface with servers which implement WSGI (Web Server Gateway Interface). WSGI is an interface between web servers and web applications written in Python. This allows Flask applications to interface with much more robust servers like Apache or Nginx.
 
-##Building a Web-App
+## Building a Web-App
 
-The foundation of building a web-application begins with constructing an `micro::app` object, which essentially wraps an underlying web-server. We will discuss interfacing with the web server later. 
+The foundation of building a web-application begins with constructing an `micro::app` object, which essentially wraps an underlying web-server. We will discuss interfacing with the web server later.
 
-###Basic Structure
+### Basic Structure
 
-The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed web application which essentially wraps an underlying web-server that serves static files. 
+The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed web application which essentially wraps an underlying web-server that serves static files.
 
-```cpp
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
     application.run();
 }
-```
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although this program runs an instance of the server it is limited to only serving static files from the route designated by the function `set_static_route("./static"). 
+
+Although this program runs an instance of the server it is limited to only serving static files from the route designated by the function `set_static_route("./static").
 
 ###Adding a Route
 
@@ -68,14 +69,14 @@ int main(int argc, char** argv) {
     application.add_route("/hello", hello);
     application.run();
 }
-``` 
+```
 
 ##Routing
 
 Url routing requires two steps:
 
-1. Registering a route 
-2. Defining a calback function for the route 
+1. Registering a route
+2. Defining a calback function for the route
 
 ###Registering a Route
 
@@ -102,7 +103,7 @@ application.add_route("/api/user/<int:id>", api_callback);
 
 ```
 
-A user can define a route with an string or integer which is possible do to regex parsing on a url. 
+A user can define a route with an string or integer which is possible do to regex parsing on a url.
 
 ```"^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$"```
 
@@ -144,7 +145,7 @@ void api_callback(const micro::request& req, micro::response& res)
 }
 
 // Set calback function to dynamic route
-application.add_route("/api/user/<username>", api_callback); 
+application.add_route("/api/user/<username>", api_callback);
 
 ```
 In this example, if a user accesses the url `www.example.com/api/bjarne`, the application developer has access to the username "bjarne" which gets stored in the request object.
@@ -164,7 +165,7 @@ void api_callback(const micro::request& req, micro::response& res)
 
     std::string message = "Hello " + user;
 
-    res.render_string(message) 
+    res.render_string(message)
 }
 ```
 
@@ -197,5 +198,3 @@ For user convienence we added the ability to build route modules so that applica
 - Templating
 - Interface with industry server like Nginx or Apache
 - Allow iterface for middlewear (eg. parsing complex post request params)
-
-
