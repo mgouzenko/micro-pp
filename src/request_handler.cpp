@@ -74,13 +74,24 @@ namespace micro {
             resp.set_status_code(200);
 
             // Attempt to match the URL to a callback
+            auto callback_it = callback_routes_.begin();
             if(!matched) {
-                auto callback_it = callback_routes_.begin();
-                while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req, resp)))
+                while(callback_it != callback_routes_.end() && !(matched = callback_it->match(req)))
                     ++callback_it;
             }
 
-            if(!matched) resp.set_status_code(404);
+            if(matched) {
+
+            // Execute the callback that populates the response
+            resp = callback_it->callback_(req);
+
+            // Set the module entry point of the response. 
+            resp.module_entry_point_ = &(callback_it->module_entry_point_); 
+
+            }
+            else {
+                resp.set_status_code(404);
+            }
 
             // At this point, the response will contain a file, the contents as set by a callback, or a 401 as set by render_file
             //TODO: May want create a response handler to be consitent with request handler
