@@ -3,9 +3,7 @@
 
 #include <boost/asio.hpp>
 #include <string>
-#include <boost/array.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <array>
 #include <unordered_map>
 #include <boost/asio/coroutine.hpp>
 #include <utility>
@@ -52,22 +50,22 @@ namespace micro {
       /**
        * Acceptor used to listen for incoming connections.
        */
-      boost::shared_ptr<tcp::acceptor> acceptor_;
+      std::shared_ptr<tcp::acceptor> acceptor_;
 
       /**
        * The current connection from a client.
        */
-      boost::shared_ptr<tcp::socket> socket_;
+      std::shared_ptr<tcp::socket> socket_;
 
       /**
        * Buffer for incoming data.
        */
-      boost::shared_ptr<boost::array<char, 8192> > buffer_;
+      std::shared_ptr<std::array<char, 8192> > buffer_;
 
       /**
        * The incoming request.
        */
-      boost::shared_ptr<request> request_;
+      std::shared_ptr<request> request_;
 
       /**
        * Whether the request is valid or not.
@@ -82,7 +80,7 @@ namespace micro {
       /**
        * The reply to be sent back to the client.
        */
-      boost::shared_ptr<reply> reply_;
+      std::shared_ptr<reply> reply_;
     };
 
 } // namespace micro

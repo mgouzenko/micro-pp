@@ -118,7 +118,6 @@ namespace micro {
 
     void response::set_status_code(int status_code)
     {
-        //TODO::Assert that status code exists
         did_set_status_ = true;
         status_code_ = status_code;
     }

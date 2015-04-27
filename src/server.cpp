@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <memory>
+#include <array> 
 
 #include "server.hpp"
 #include "work_queue.hpp"
@@ -57,7 +58,7 @@ namespace micro {
           while (is_parent());
 
           // Create the objects needed to receive a request on the connection.
-          buffer_.reset(new boost::array<char, 8192>);
+          buffer_.reset(new std::array<char, 8192>);
           request_.reset(new request);
 
           // Loop until a complete request (or an invalid one) has been received.
