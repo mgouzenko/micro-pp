@@ -1,7 +1,7 @@
 CXX = clang++
 CC = clang++
 LDLIBS = -lmicro -lboost_system -lboost_log-mt -lpthread
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=gnu++11
 
 test_app:
 

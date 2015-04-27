@@ -181,10 +181,11 @@ For user convienence we added the ability to build route modules so that applica
 ##The Server
 
 ###Boost.Asio Library
-- How does the aysnc model work
-- May want to compare to Node aync event loop which uses libuv written in C
+The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, cancelling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
 
 ###Optimizaions
+Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads because this leaves the task of delegati
+
 - Mitchell talk about optimizations with server with threading and queue
 
 ###Error Handling and Resource Management
