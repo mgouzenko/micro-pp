@@ -7,51 +7,67 @@
 #include <fstream>
 
 
-void hello(const micro::request& req, micro::response& res)
+micro::response hello(const micro::request& req)
 {
+    micro::response res;
     time_t t = time(0) + 100;
     res.render_string("hello world");
     micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
     res.set_cookie(c);
+    return res;
 }
 
-void test_redirect(const micro::request& req, micro::response& res)
+micro::response test_redirect(const micro::request& req)
 {
+    micro::response res;
     res.redirect("/other");
+    return res;
 }
 
-void other(const micro::request& req, micro::response& res)
+micro::response other(const micro::request& req)
 {
+    micro::response res;
     res.render_string("you have been redirected");
+    return res;
 }
 
-void bad_url(const micro::request& req, micro::response& res)
+micro::response bad_url(const micro::request& req)
 {
+    micro::response res;
     res.render_status(503);
+    return res;
 }
 
-void get_stuff(const micro::request& req, micro::response& res)
+micro::response get_stuff(const micro::request& req)
 {
+    micro::response res;
     auto param1 = req.get_query_param("param1");
     auto param2 = req.get_query_param("param2");
     auto param3 = req.get_query_param("param3");
     res.render_string("<html><body>param1 : " + param1 + "<br/>param2 : " + param2 + "<br/>param3 : " + param3);
+    return res;
 }
 
-void bad_url_custom(const micro::request& req, micro::response& res)
+micro::response bad_url_custom(const micro::request& req)
 {
+    micro::response res;
     res.render_status(501, "Sorry Bro, its Broken");
+    return res;
 }
 
-void nothing(const micro::request& req, micro::response& res)
+micro::response nothing(const micro::request& req)
 {
+    micro::response res;
     //User returns nothing
     //Browser will stay on same page
+    return res;
 }
 
-void serve_number(const micro::request& req, micro::response& res)
+micro::response serve_number(const micro::request& req)
 {
+    micro::response res;
     res.render_string("User ID requested: " + req.get_query_param("id"));
+    return res;
 }
 
 int main(int argc, char** argv){

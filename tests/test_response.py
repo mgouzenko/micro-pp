@@ -37,10 +37,11 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.headers['Content-Type'], content_type)
 
     # Server should send one cookie from route1 and two cookies from route2
+    # Has no content so status code should be 204
     def test_cookies(self):
         route1 = "test_one_cookie"
         route2 = "test_two_cookies"
-        status_code = 200
+        status_code = 204
 
         # Should receive one cookie from server
         r = requests.get(url+route1)
