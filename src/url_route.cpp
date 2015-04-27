@@ -3,6 +3,7 @@
 
 #include "url_route.hpp"
 #include "request.hpp"
+#include "response.hpp"
 
 namespace micro {
 
@@ -53,7 +54,7 @@ namespace micro {
 
     // Should return true if it matches the request and populates the request with the relevant
     // returns false if the URL doesn't match the request
-    bool url_route::match(micro::request& req)
+    bool url_route::match(micro::request& req, micro::response& resp)
     {
         bool allowable = false;
 
@@ -76,6 +77,12 @@ namespace micro {
             while (label_it != labels_.end()) {
                 req.label_values.emplace(*label_it++, *val_it++);
             }
+
+            // Set the module entry point of the response. 
+            resp.module_entry_point_ = &module_entry_point_; 
+
+            // Execute the callback that populates the response
+            resp = callback_(req);
 
             return true;
         }
