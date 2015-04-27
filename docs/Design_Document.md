@@ -57,7 +57,7 @@ Although this program runs an instance of the server it is limited to only servi
 Imagine we want to send a "hello world" message to any user who accesses our web application with the url and route `www.example.com/hello`. To do this we call `application.add_route("./hello" hello_callback)` which will register the callback function `hello_callback` with the route `/hello`. When a client sends a request to the server with the route `www.example.com/hello`, `hello_callback` will be called, printing "hello world" in the browser of the user.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-void hello_callback(const micro::request& req, micro::response& res)
+micro::response hello_callback(const micro::request& req)
 {
     res.render_string("hello world");
 }
@@ -81,7 +81,7 @@ Url routing requires two steps:
 
 ###Registering a Route
 
-In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to differnt callback function:
+In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to different callback function:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 application.add_route("/api", api_callback);
@@ -90,7 +90,7 @@ application.add_route("/api/users/admin", admin_callback)
 application.add_route("/api/groups", groups_callback);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to add convienece to users we provide a system for generating dynamic routes. It would be ridiculous if you had to define a route for each user. Insted, you define a dynamic route like so:
+In order to add convenience to users we provide a system for generating dynamic routes. It would be ridiculous if you had to define a route for each user. Instead, you define a dynamic route like so:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 application.add_route("/api/user/<username>", api_callback);
@@ -108,18 +108,18 @@ A user can define a route with an string or integer which is possible do to rege
 "^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With dynamic routes the application developer can define a route and extract the variable parameters in the request object passed into the callback function. Routes such as `www.example.com/api/user/1` and `www.example.com/api/user/2` can be processed differently within the same callback. This allows for more concice and modular code.
+With dynamic routes the application developer can define a route and extract the variable parameters in the request object passed into the callback function. Routes such as `www.example.com/api/user/1` and `www.example.com/api/user/2` can be processed differently within the same callback. This allows for more concise and modular code.
 
 ###The Callback Function
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-void example_callback(const micro::request& req, micro::response& res)
+micro::response example_callback(const micro::request& req)
 {
     // Handle request and response here
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Every route has an associated callback function with two parameters: a `request` and `response` object. The `request` and `response` can be thought of as wrappers for the strict HTTP request and response protocol. The request object is passed in by const refrence given that a user does not modify a request. The application developer only extracts data stored in the request object and provides logic in the callback to handle the request appropriatly. The reponse object is modifiable with a provided API that allows users to send back customized responses to the client. Notice that the return type of the callback function is void. **WHY??** The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
+Every route has an associated callback function with a single parameter: a `micro::request` object. The `micro::request` can be thought of as a wrapper for the strict HTTP request protocol. The request object is passed in by const reference given that a user does not modify a request. The application developer only extracts data stored in the request object and provides logic in the callback to handle the request appropriately. The response object is modifiable with a provided API that allows users to send back customized responses to the client. Notice that the return type of the callback function is micro::response. A response object must always be constructed and returned in the callback. We made this design choice because a server is always supposed to respond to a request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
 ####Express Callback Example
 
@@ -129,29 +129,62 @@ app.get('/', function(req, res){
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code required to construct and return a response object, it is also more error prone.
+
+####Express Callback Potential Bug
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.js}
+app.get('/', function(req, res){
+    if("bug") {
+        res.redirect("/bug")
+    }
+
+    // Do other stuff
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this example, the callback will call any functions after the if statement even if `res.redirect("/bug")`. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response. 
+
+
 ###The Request Object
 
-The request object is populated with data parsed from the HTTP request and transformed into a more user freindly C++ object.
+The request object is populated with data parsed from the HTTP request and transformed into a more user friendly C++ object.
 
 ####Example: Getting data From the Request Object
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 // Define callback
-void api_callback(const micro::request& req, micro::response& res)
+micro::response api_callback(const micro::request& req, micro::response& res)
 {
     std::string user = req.get_url_param("username"); // user becomes "bjarne"
 
     // Logic on for handling the user
 }
 
-// Set calback function to dynamic route
+// Set callback function to dynamic route
 application.add_route("/api/user/<username>", api_callback);
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this example, if a user accesses the url `www.example.com/api/bjarne`, the application developer has access to the username "bjarne" which gets stored in the request object.
 
-Information on accessing data stored in the request object is provided in the API.
+####Request API
+
+`micro::request::get_cookie`
+
+`micro::request::get_post_param`
+
+`micro::request::get_query_param`
+
+`micro::request::get_route_param`
+
+`micro::request::get_hostname`
+
+`micro::request::get_uri`
+
+`micro::request::get_ip`
+
+`micro::request::get_method`
 
 ###The Response Object
 
@@ -160,7 +193,7 @@ The response object is modified within the callback and will be sent as an appro
 ####Example: Setting Data in the Response Object
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-void api_callback(const micro::request& req, micro::response& res)
+micro::response api_callback(const micro::request& req)
 {
     std::string user = req.get_url_param("username");
 
@@ -170,21 +203,37 @@ void api_callback(const micro::request& req, micro::response& res)
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the example above, if a client accesses the url `www.example.com/api/bjarne`, the client would recieve a message "hello bjarne".
+In the example above, if a client accesses the url `www.example.com/api/bjarne`, the client would receive a message "hello bjarne".
 
-Information on setting data in the response object is provided in the API.
+####Response API
+
+`micro::response::append_message`
+
+`micro::response::render_string`
+
+`micro::response::render_filestream`
+
+`micro::response::render_file`
+
+`micro::response::set_cookie`
+
+`micro::response::redirect`
+
+`micro::response::render_status`
+
+`micro::response::set_mime_type`
 
 ###Route Modules
 
-For user convienence we added the ability to build route modules so that application devopers can create more modular code with associated routes in seperate files. For example if you have a route `/api/` with additional paramers such as `/api/users` or `api/groups` these routes can be put into a module and registered more conviently together.  
+For user convenience we added the ability to build route modules so that application developers can create more modular code with associated routes in separate files. For example if you have a route `/api/` with additional parameters such as `/api/users` or `api/groups` these routes can be put into a module and registered more conveniently together.  
 
 ##The Server
-The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, cancelling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
+The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, canceling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
 
 ###Boost.Asio Library
 The asynchronous portion of micro++ is built upon the Asio io_service. The io_service forms an asynchronous queue, constantly accepting new sockets, reading from open sockets, and sending responses back to clients. The asynchronous loop only rests when there is no work to be done. 
 
-###Optimizaions
+###Optimizations
 Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads. This allows us to take true advantage of multiple processors and monitor the execution time of threads (so that they do not exceed the timeout). It must be noted that micro knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
 
 ###Error Handling
@@ -193,14 +242,20 @@ We take care to make sure that exceptions within callback functions do not bring
 
 ##Installation
 - Adam discuss fancy installation
-- Focus on how this is a feature of convience for users
+- Focus on how this is a feature of convenience for users
 
 ##Additions for 1.2
-- Json handling
+
+###JSON handling
+One of the main advantages of writing a web-application in python or javascript is the easy conversion of objects into JSON. JSON has become the most popular convention for buiding public APIs. For python, different data types including strings, numbers, and arrays can all be stored in the same dictionary and easily converted into a JSON object. For javascript, any javascript object can be converted into JSON. Although custom methods could be created to parse C++ objects to JSON, this requires a lot of extra work compared to python and javascript. In version 1.2 we would like to build an interface that can assist with JSON serialization.  
 
 ###Templating
 One missing feature from our framework is the ability to easily template HTML. Other languages have robust templating engines (such as Jinja for Python). However, we have not found a templating engine for C++ that is both well-maintained and simple. Since templating engines are of utmost importance to web development, we hope to address this issue in the future. One option is to write our own templating engine. Another option is to use an already existing - and perhaps orphaned - open-source templating engine, and incorporate it into our library with a simplified wrapper.  
 
 
-- Interface with industry server like Nginx or Apache
-- Allow iterface for middlewear (eg. parsing complex post request params)
+###Interface with industry server like Nginx or Apache
+As discussed above, most web-frameworks have interfaces to connect to production strength servers. In the future we would like to provide users with the abiliy to interface with a CGI protocol so that application developers can connect the web framework to servers like Apache or Nginx 
+
+
+###Allow interface for middle-wear
+Adding an interface to connect middleware so that other developers can develop for this web framework. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
