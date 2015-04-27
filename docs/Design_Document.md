@@ -39,7 +39,7 @@ The foundation of building a web-application begins with constructing an `micro:
 
 ### Basic Structure
 
-The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be iterfaced through the `micro::app` API. In this this example we have developed web application which essentially wraps an underlying web-server that serves static files.
+The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be interfaced with through the `micro::app` API. In this example we have developed web application which serves static files.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 int main(int argc, char** argv) {
@@ -57,7 +57,7 @@ Although this program runs an instance of the server it is limited to only servi
 Imagine we want to send a "hello world" message to any user who accesses our web application with the url and route `www.example.com/hello`. To do this we call `application.add_route("./hello" hello_callback)` which will register the callback function `hello_callback` with the route `/hello`. When a client sends a request to the server with the route `www.example.com/hello`, `hello_callback` will be called, printing "hello world" in the browser of the user.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-void hello(const micro::request& req, micro::response& res)
+void hello_callback(const micro::request& req, micro::response& res)
 {
     res.render_string("hello world");
 }
@@ -67,7 +67,7 @@ void hello(const micro::request& req, micro::response& res)
 int main(int argc, char** argv) {
     micro::app application;
     application.set_static_root("./static");
-    application.add_route("/hello", hello);
+    application.add_route("/hello", hello_callback);
     application.run();
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,24 +179,28 @@ Information on setting data in the response object is provided in the API.
 For user convienence we added the ability to build route modules so that application devopers can create more modular code with associated routes in seperate files. For example if you have a route `/api/` with additional paramers such as `/api/users` or `api/groups` these routes can be put into a module and registered more conviently together.  
 
 ##The Server
-
-###Boost.Asio Library
 The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, cancelling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
 
+###Boost.Asio Library
+The asynchronous portion of micro++ is built upon the Asio io_service. The io_service forms an asynchronous queue, constantly accepting new sockets, reading from open sockets, and sending responses back to clients. The asynchronous loop only rests when there is no work to be done. 
+
 ###Optimizaions
-Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads because this leaves the task of delegati
+Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads. This allows us to take true advantage of multiple processors and monitor the execution time of threads (so that they do not exceed the timeout). It must be noted that micro knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
 
-- Mitchell talk about optimizations with server with threading and queue
+###Error Handling
+We take care to make sure that exceptions within callback functions do not bring down the whole server. To achieve this, all callbacks are invoked in try-catch blocks. When debug mode is on, any exception that results from hitting a specific url endpoint is displayed in the browser. When debug mode is off, all exceptions result in the server returning a "500: internal server error" status. In either case, the exception is logged to the console. We hope to make error handling and debug mode more robust in the future.   
 
-###Error Handling and Resource Management
-- Mitchell talk about fancy error handling
 
 ##Installation
 - Adam discuss fancy installation
 - Focus on how this is a feature of convience for users
 
-##Addions for 1.2
+##Additions for 1.2
 - Json handling
-- Templating
+
+###Templating
+One missing feature from our framework is the ability to easily template HTML. Other languages have robust templating engines (such as Jinja for Python). However, we have not found a templating engine for C++ that is both well-maintained and simple. Since templating engines are of utmost importance to web development, we hope to address this issue in the future. One option is to write our own templating engine. Another option is to use an already existing - and perhaps orphaned - open-source templating engine, and incorporate it into our library with a simplified wrapper.  
+
+
 - Interface with industry server like Nginx or Apache
 - Allow iterface for middlewear (eg. parsing complex post request params)
