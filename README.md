@@ -28,12 +28,10 @@ in this directory.
 ## Prerequisites for the library
 To install and use the micro++ library, you will need the following packages installed:
 
-
     automake
     autoconf
     libtool
     boost
-
 
 If you're on OS X, you can easily install all of these packages with homebrew. Micro was tested on OS X using clang++
 
@@ -41,32 +39,34 @@ On any Linux system, these packages are also easily installable with your distri
 
 Micro++ was not tested on a Windows system.
 
-## Installing the library
-The following four commands will install the library and its headers in /usr/local
+If you're using a prepackaged version of the micro++ library with the configure script already included, the only preqrequisite is the `boost` library.
 
+## Installing the library
+The following four commands will install the micro++ library and its headers in /usr/local
 
     autoreconf -i
     ./configure
     make
     make install
 
+Depending on your system configuration you may need to run make install with sudo/root.
 
 When updating library code, run
 
     make uninstall && make && make install
 
-If you are packaging the project for end user use, you can run autoreconf -i before packaging so the user will just have to run ./configure
+If you are packaging the project for end user use, you can run `autoreconf -if` before packaging so the user will just have to run ./configure
 
 ## Using the library
-To link libmicro with your project, you need the following linker flags on Mac OS X:
+To link micro++ with your project, use the following linker flags on Mac OS X:
 
     -lmicro -lboost_system -lboost_log-mt -lpthread
 
-and the following linker flags on Linux
+or the following linker flags on Linux
 
     -lmicro -lboost_system -lboost_log -lpthread
 
-You will also likely need to run the following command on Linux to get your webapp to compile.
+On Linux, you may also need to run the following command for the `-lmicro` flag to work.
 
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 

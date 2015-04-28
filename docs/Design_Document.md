@@ -221,39 +221,53 @@ In the example above, if a client accesses the url `www.example.com/api/bjarne`,
 
 `micro::response::set_mime_type`
 
-###Route Modules
+### Route Modules
 
 For user convenience we added the ability to build route modules so that application developers can create more modular code with associated routes in separate files. For example if you have a route `/api/` with additional parameters such as `/api/users` or `api/groups` these routes can be put into a module and registered more conveniently together.  
 
-##The Server
+## The Server
 The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, canceling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
 
-###Boost.Asio Library
+### Boost.Asio Library
 The asynchronous portion of micro++ is built upon the Asio io_service. The io_service forms an asynchronous queue, constantly accepting new sockets, reading from open sockets, and sending responses back to clients. The asynchronous loop only rests when there is no work to be done.
 
-###Optimizations
+### Optimizations
 Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads. This allows us to take true advantage of multiple processors and monitor the execution time of threads (so that they do not exceed the timeout). It must be noted that micro knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
 
-###Error Handling
+### Error Handling
 We take care to make sure that exceptions within callback functions do not bring down the whole server. To achieve this, all callbacks are invoked in try-catch blocks. When debug mode is on, any exception that results from hitting a specific url endpoint is displayed in the browser. When debug mode is off, all exceptions result in the server returning a "500: internal server error" status. In either case, the exception is logged to the console. We hope to make error handling and debug mode more robust in the future.
 
 
-##Installation
-- Adam discuss fancy installation
-- Focus on how this is a feature of convenience for users
+## Installation
+To make it easy to build, install, and use this library on virtually any Unix-like system, we used GNU autotools to manage our build chain. The Makefile.am file in the src/ directory defines all of the source files that are needed to build micro++, as well as all of the header files that need to be included on a user's system. With this file, and the boilerplate configure.ac file, a user simply needs to generate a configure script (along with other associated files) using `autoreconf -i`, and after running that configure script, they will have Makefiles that are generated correctly for their system.
 
-##Additions for 1.2
+These Makefiles let a user build the library with a simple `make` command, as well as conveniently install it and its headers in the /usr/local/ directory without any further configuration.
 
-###JSON handling
+Using autotools makes it easy for a user to port the micro++ library to any Unix-like architecture that is capable of running boost. This means micro++ can run on anything from a Raspberry Pi to a supercomputer.
+
+## Additions for 1.2
+
+### JSON handling
 One of the main advantages of writing a web-application in python or javascript is the easy conversion of objects into JSON. JSON has become the most popular convention for buiding public APIs. For python, different data types including strings, numbers, and arrays can all be stored in the same dictionary and easily converted into a JSON object. For javascript, any javascript object can be converted into JSON. Although custom methods could be created to parse C++ objects to JSON, this requires a lot of extra work compared to python and javascript. In version 1.2 we would like to build an interface that can assist with JSON serialization.  
 
-###Templating
+### Templating
 One missing feature from our framework is the ability to easily template HTML. Other languages have robust templating engines (such as Jinja for Python). However, we have not found a templating engine for C++ that is both well-maintained and simple. Since templating engines are of utmost importance to web development, we hope to address this issue in the future. One option is to write our own templating engine. Another option is to use an already existing - and perhaps orphaned - open-source templating engine, and incorporate it into our library with a simplified wrapper.  
 
-
-###Interface with industry server like Nginx or Apache
+### Interface with industry server like Nginx or Apache
 As discussed above, most web-frameworks have interfaces to connect to production strength servers. In the future we would like to provide users with the abiliy to interface with a CGI protocol so that application developers can connect the web framework to servers like Apache or Nginx
 
 
-###Allow interface for middle-wear
+### Allow interface for middle-wear
 Adding an interface to connect middleware so that other developers can develop for this web framework. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
+
+### Per-thread database connection
+TODO
+
+### Threadsafe metrics
+TODO
+
+### Secure session handling (HTTPS)
+TODO
+
+### Full HTTP 1.1 compliance
+TODO
