@@ -1,6 +1,7 @@
 example_webapps/test_app
 example_webapps/exception_test
 example_webapps/tests
+example_webapps/blog_app/blog_app
 url_demo
 mak
 docs/html

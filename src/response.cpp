@@ -68,13 +68,12 @@ namespace micro {
             render_filestream(f);
 
             // Determine the file extension.
-            std::size_t last_slash_pos = file_path.find_last_of("/");
-            std::size_t last_dot_pos = file_path.find_last_of(".");
+            int last_slash_pos = file_path.find_last_of("/");
+            int last_dot_pos = file_path.find_last_of(".");
             std::string extension;
             if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos) {
               extension = file_path.substr(last_dot_pos + 1);
             }
-
             set_mime_type(micro::mime_types::extension_to_type(extension));
             return true;
         }
