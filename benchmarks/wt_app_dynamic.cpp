@@ -36,11 +36,17 @@ public:
 HelloApplication::HelloApplication(const WEnvironment& env)
   : WApplication(env)
 {
-  setTitle("Hello world");                               // application title
+  const std::string none = "NONE"; 
+  setTitle("Hello world");// application title
   const std::string *fname = env.getParameter("fname"); 
   const std::string *lname = env.getParameter("lname");
-  std::string color = env.getCookie("color"); 
-  root()->addWidget(new WText("Hello " + *fname + " " + *lname + ", your favorite color is " + color+ "."));
+  const std::string *color = env.getParameter("color"); 
+  
+  if(fname == 0) fname = &none; 
+  if(lname == 0) lname = &none;
+  if(color == 0) color = &none; 
+
+  root()->addWidget(new WText("Hello " + *fname + " " + *lname + ", your favorite color is " + *color+ "."));
 }
 
 WApplication *createApplication(const WEnvironment& env)

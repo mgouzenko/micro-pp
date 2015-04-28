@@ -1,17 +1,15 @@
 #include <micro/app.hpp> 
 #include <micro/request.hpp> 
 #include <micro/response.hpp>
-#include <micro/cookie.hpp>
 
-using namespace std; 
 micro::response home(const micro::request& req){
     micro::response resp; 
     
-    string fname = request.get_cookie("fname"); 
-    string lname = request.get_cookie("lname"); 
-    string color = request.get_post_param("color"); 
+    std::string fname = req.get_query_param("fname"); 
+    std::string lname = req.get_query_param("lname"); 
+    std::string color = req.get_cookie("color"); 
 
-    rep.render_string("Hello " + fname + " " + lname ", your favorite color is " + color + ".");
+    resp.render_string("Hello " + fname + " " + lname + ", your favorite color is " + color + ".");
     return resp; 
 }
 
