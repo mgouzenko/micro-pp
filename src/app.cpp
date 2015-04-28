@@ -85,7 +85,6 @@ namespace micro {
     }
 
     void app::monitor_thread_pool(){
-        std::cout << "Shutting Down\n"; 
         int num_threads = thread_pool_.size();
         // Loop until shutdown
         while(!shutting_down_){
@@ -111,6 +110,7 @@ namespace micro {
 
     void app::shut_down() {
         try{
+            std::cout << "Shutting Down\n"; 
             shutting_down_ = true;
             // Prepare the queue for shutdown, making sure threads will no longer wait for jobs.
             q_.prepare_for_shutdown();
