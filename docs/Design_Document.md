@@ -1,3 +1,5 @@
+# Design Document
+
 *Requirements*
 - 5-15 pages
 - Error handling resource management
@@ -6,8 +8,6 @@
 - Optimizations
 - Features for the convenience of users
 - Ideas for release 1.2
-
-# Design Document
 
 ## Our Project
 
@@ -141,7 +141,7 @@ app.get('/', function(req, res){
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this example, the callback will call any functions after the if statement even if `res.redirect("/bug")`. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response. 
+In this example, the callback will call any functions after the if statement even if `res.redirect("/bug")`. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response.
 
 
 ###The Request Object
@@ -229,13 +229,13 @@ For user convenience we added the ability to build route modules so that applica
 The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, canceling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
 
 ###Boost.Asio Library
-The asynchronous portion of micro++ is built upon the Asio io_service. The io_service forms an asynchronous queue, constantly accepting new sockets, reading from open sockets, and sending responses back to clients. The asynchronous loop only rests when there is no work to be done. 
+The asynchronous portion of micro++ is built upon the Asio io_service. The io_service forms an asynchronous queue, constantly accepting new sockets, reading from open sockets, and sending responses back to clients. The asynchronous loop only rests when there is no work to be done.
 
 ###Optimizations
 Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads. This allows us to take true advantage of multiple processors and monitor the execution time of threads (so that they do not exceed the timeout). It must be noted that micro knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
 
 ###Error Handling
-We take care to make sure that exceptions within callback functions do not bring down the whole server. To achieve this, all callbacks are invoked in try-catch blocks. When debug mode is on, any exception that results from hitting a specific url endpoint is displayed in the browser. When debug mode is off, all exceptions result in the server returning a "500: internal server error" status. In either case, the exception is logged to the console. We hope to make error handling and debug mode more robust in the future.   
+We take care to make sure that exceptions within callback functions do not bring down the whole server. To achieve this, all callbacks are invoked in try-catch blocks. When debug mode is on, any exception that results from hitting a specific url endpoint is displayed in the browser. When debug mode is off, all exceptions result in the server returning a "500: internal server error" status. In either case, the exception is logged to the console. We hope to make error handling and debug mode more robust in the future.
 
 
 ##Installation
@@ -252,7 +252,7 @@ One missing feature from our framework is the ability to easily template HTML. O
 
 
 ###Interface with industry server like Nginx or Apache
-As discussed above, most web-frameworks have interfaces to connect to production strength servers. In the future we would like to provide users with the abiliy to interface with a CGI protocol so that application developers can connect the web framework to servers like Apache or Nginx 
+As discussed above, most web-frameworks have interfaces to connect to production strength servers. In the future we would like to provide users with the abiliy to interface with a CGI protocol so that application developers can connect the web framework to servers like Apache or Nginx
 
 
 ###Allow interface for middle-wear

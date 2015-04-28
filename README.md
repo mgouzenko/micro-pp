@@ -1,6 +1,6 @@
 # micro-pp
 
-A tiny but fast, scalable and multithreaded web framework for C++.
+Micro++ is a tiny but fast, scalable and multithreaded web framework for C++.
 
 Micro++ is a derivative work of the example ASIO HTTP Server 4 (Copyright (c) 2003-2011 Chris Kohlhoff)
 
@@ -20,20 +20,20 @@ Micro++ is thus distributed under the Boost Software License, Version 1.0. (See 
 Use Javadoc style comments when coding.
 
 If you have doxygen installed on your system, generating the docs for this project is as simple as running
-```
-  doxygen
-```
+
+    doxygen
+
 in this directory.
 
 ## Prerequisites for the library
 To install and use the micro++ library, you will need the following packages installed:
 
-```
+
     automake
     autoconf
     libtool
     boost
-```
+
 
 If you're on OS X, you can easily install all of these packages with homebrew. Micro was tested on OS X using clang++
 
@@ -44,40 +44,36 @@ Micro++ was not tested on a Windows system.
 ## Installing the library
 The following four commands will install the library and its headers in /usr/local
 
-```
+
     autoreconf -i
     ./configure
     make
     make install
-```
+
 
 When updating library code, run
-```
+
     make uninstall && make && make install
-```
 
 If you are packaging the project for end user use, you can run autoreconf -i before packaging so the user will just have to run ./configure
 
 ## Using the library
 To link libmicro with your project, you need the following linker flags on Mac OS X:
-```
+
     -lmicro -lboost_system -lboost_log-mt -lpthread
-```
 
 and the following linker flags on Linux
-```
+
     -lmicro -lboost_system -lboost_log -lpthread
-```
 
 You will also likely need to run the following command on Linux to get your webapp to compile.
-```
+
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-```
 
 Include this line in your .bashrc if you don't want to run this every time you reboot.
 
 Your headers should be accessible in source files with macros like `#include <micro/app.hpp>`
 
-Refer to the generated doxygen output and the example_webapps directory for details on how to build webapps using micro++.
+Refer to the generated doxygen output and the example_webapps directory for details on how to build webapps using micro++. The Design Document and Tutorial can be found in the docs/ directory, as well as on the "Related Pages" tab in the Doxygen output.
 
 Please note that the Makefiles included with the example_webapps are designed for use on OS X and may need to be edited if using Linux.
