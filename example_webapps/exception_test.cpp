@@ -7,17 +7,20 @@
 
 
 
-void excep(const micro::request& req, micro::response& res){
+micro::response excep(const micro::request&){
+    micro::response res;
     throw std::exception();
-    return;
+    return res;
 }
 
-void hello(const micro::request& req, micro::response& res)
+micro::response hello(const micro::request& req)
 {
+    micro::response res;
     time_t t = time(0) + 100;
     res.render_string("hello world");
     micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
     res.set_cookie(c);
+    return res;
 }
 
 int main(){

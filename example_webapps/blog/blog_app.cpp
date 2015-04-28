@@ -6,7 +6,8 @@
 
 std::vector<blog_entry> entries;
 
-void homepage(const micro::request &req, micro::response &resp) {
+micro::response homepage(const micro::request &req) {
+    micro::response resp;
     std::ostringstream page;
     page << "<html><body><h1>Welcome to the blog!!</h1>";
 
@@ -18,16 +19,22 @@ void homepage(const micro::request &req, micro::response &resp) {
     page << "</body></html>";
 
     resp.render_string(page.str());
+
+    return resp;
 }
 
-void new_entry(const micro::request &req, micro::response &resp) {
+micro::response new_entry(const micro::request &req) {
+    micro::response resp;
+
     if(req.get_method() == "POST") {
         blog_entry new_entry{req.get_post_param("title"), req.get_post_param("body"), req.get_post_param("name")};
         entries.push_back(new_entry);
         resp.redirect("/");
+        return resp;
     }
     else {
         resp.render_file("new_entry.html");
+        return resp;
     }
 }
 

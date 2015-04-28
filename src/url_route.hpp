@@ -60,7 +60,6 @@ namespace micro {
          * registered callback, and return true. Otherwise match will return false.
          *
          * @param request: a request containing a sanitized (no query string) URI object
-         * @param response: the response object that the callback should populate
          * @return true if the request matches the URL, false otherwise.
                    If match() returns true, the request object will also be populated with any captured label-value pairs
          */
