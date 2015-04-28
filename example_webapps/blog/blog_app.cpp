@@ -17,7 +17,9 @@ void render_fragment(std::ostringstream& page, std::string fragment_path)
     ifs.close();
 }
 
-void homepage(const micro::request &req, micro::response &resp) {
+
+micro::response homepage(const micro::request &req) {
+    micro::response resp;
     std::ostringstream page;
 
     render_fragment(page, "fragments/homepage_header.html");
@@ -30,9 +32,12 @@ void homepage(const micro::request &req, micro::response &resp) {
     render_fragment(page, "fragments/homepage_footer.html");
 
     resp.render_string(page.str());
+
+    return resp;
 }
 
-void new_entry(const micro::request &req, micro::response &resp) {
+micro::response new_entry(const micro::request &req) {
+    micro::response resp;
     blog_entry new_entry{req.get_post_param("title"), req.get_post_param("body"), req.get_post_param("name")};
     entries.push_back(new_entry);
     resp.redirect("/");

@@ -82,7 +82,7 @@ namespace micro {
             resp.module_entry_point_ = &module_entry_point_;
 
             // Execute the callback that populates the response
-            callback_(req, resp);
+            resp = callback_(req);
 
             return true;
         }

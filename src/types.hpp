@@ -8,7 +8,7 @@ namespace micro {
     struct request;
     struct response;
 
-    typedef std::function<void(const micro::request& req, micro::response& res)> callback;
+    typedef std::function<micro::response(const micro::request& req)> callback;
 }
 
 #endif
