@@ -18,7 +18,7 @@ namespace micro {
     url_route::url_route(std::string specifier, micro::callback callback, std::vector<std::string> methods)
     : callback_ {callback}, methods_ {methods}
     {
-        std::regex specifier_format ("^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$");
+        std::regex specifier_format ("^(/((<[A-Za-z0-9\\-_]+>)|(<int:[A-Za-z0-9\\-_]+>)|([A-Za-z0-9\\-_\\.]+)))*/?$");
 
         if(std::regex_match(specifier, specifier_format)) {
             std::string new_regex = "^" + specifier + "$";
@@ -78,8 +78,8 @@ namespace micro {
                 req.label_values.emplace(*label_it++, *val_it++);
             }
 
-            // Set the module entry point of the response. 
-            resp.module_entry_point_ = &module_entry_point_; 
+            // Set the module entry point of the response.
+            resp.module_entry_point_ = &module_entry_point_;
 
             // Execute the callback that populates the response
             resp = callback_(req);
