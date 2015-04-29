@@ -141,7 +141,7 @@ With the theme of adding more security to the app, we’ve also put checks on th
 
 Now we have a simple, nice-looking blogging app with basic authentication!
 
-## Producing permalinks to blog entries (URL route params)
+## Producing permalinks to blog entries with URL route params
 If a user sees a blog post that they want to remember for future reference, it would be nice if they could get a permanent link to it. We can easily accomplish this with URL route parameters.
 
 Let’s create a new route and callback so the end user can access a blog entry by its id.
@@ -198,7 +198,7 @@ page << "</ul>";
 
 Now, each entry on the homepage will come with an associated permalink that actually works! If you want to make this look prettier (or you just want more practice with micro++), try embedding the entry id in blog_entry object, and making the title of the rendered blog entry a link to the correct permalink.
 
-## Getting all of the articles written by a certain user (GET params)
+## Displaying all of the articles written by a certain user with GET params
 
 It would also be nice if you could easily get all of the blog entries written by a particular user. We’re going to accomplish this with query string GET parameters. By doing this, we don’t even need to add any callbacks. By the end of this section, the query `localhost:8080/?u=Bjarne` should only display blog entries written by the user Bjarne.
 
