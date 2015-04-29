@@ -431,7 +431,7 @@ This means we’ll put fragments of HTML files in a subdirectory called fragment
 ~~~{.html}
 <!doctype html>
 <title>bjarneblog</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="/style.css">
 <body><div class="page">
 <h1>Welcome to the bjarneblog!!</h1>
 ~~~
