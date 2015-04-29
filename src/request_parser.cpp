@@ -225,8 +225,6 @@ namespace micro {
                 while (char_it != cookie_list.end() && *char_it != ';') {
                     val += *char_it++;
                 }
-                
-                std::cout << "Cookie = { " << key << " : " << val << " }\n"; 
         
                 req.cookies_.emplace(key, val);
                 
