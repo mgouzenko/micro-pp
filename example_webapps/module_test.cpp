@@ -3,7 +3,6 @@
 #include <micro/request.hpp>
 #include <micro/response.hpp>
 #include <micro/module.hpp>
-#include <micro/cookie.hpp>
 #include <ctime>
 #include <fstream>
 
@@ -11,10 +10,7 @@
 micro::response hello(const micro::request& req)
 {
     micro::response res;
-    time_t t = time(0) + 100;
     res.render_string("hello world");
-    micro::Cookie c = micro::Cookie("fifth", "5", t, "/hello");
-    res.set_cookie(c);
     return res;
 }
 

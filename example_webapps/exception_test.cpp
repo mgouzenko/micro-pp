@@ -1,7 +1,6 @@
 #include <micro/app.hpp>
 #include <micro/request.hpp>
 #include <micro/response.hpp>
-#include <micro/cookie.hpp>
 #include <ctime>
 #include <fstream>
 
@@ -16,10 +15,7 @@ micro::response excep(const micro::request&){
 micro::response hello(const micro::request& req)
 {
     micro::response res;
-    time_t t = time(0) + 100;
     res.render_string("hello world");
-    micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
-    res.set_cookie(c);
     return res;
 }
 

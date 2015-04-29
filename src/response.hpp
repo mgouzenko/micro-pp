@@ -63,10 +63,11 @@ namespace micro {
         bool render_file(std::string file_path);
 
         /**
-         * Set the key and value of cookie to send back to client
+         * Set the key and value of cookie to send back to client.
+         * It is possible to add more than one cookie in a single response
          * @param c: Cookie object
          */
-        void set_cookie(const cookie& c);
+        void add_cookie(const cookie& c);
 
         /**
         * Redirects browser to differnt url endpoint with 307 redirect response

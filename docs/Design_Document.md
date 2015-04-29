@@ -213,7 +213,7 @@ In the example above, if a client accesses the url `www.example.com/api/bjarne`,
 
 `micro::response::render_file`
 
-`micro::response::set_cookie`
+`micro::response::add_cookie`
 
 `micro::response::redirect`
 
