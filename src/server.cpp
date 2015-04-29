@@ -19,7 +19,8 @@ namespace micro {
       tcp::resolver resolver(io_service);
       tcp::resolver::query query(address, port);
       acceptor_.reset(new tcp::acceptor(io_service, *resolver.resolve(query)));
-    }
+      acceptor_->listen(1000);
+	}
 
     #include <boost/asio/yield.hpp> // Enable the pseudo-keywords reenter, yield and fork.
     void server::operator()(boost::system::error_code ec, std::size_t length)
