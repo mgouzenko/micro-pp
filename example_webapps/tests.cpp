@@ -217,6 +217,20 @@ micro::response get_json(const micro::request)
     return res;
 }
 
+micro::response post(const micro::request)
+{
+    micro::response res;
+    res.render_string("POST");
+    return res;
+}
+
+micro::response get(const micro::request)
+{
+    micro::response res;
+    res.render_string("GET");
+    return res;
+}
+
 int main(int argc, char** argv){
     if(argc != 2) {
         std::cout << "Usage: test_app <static_file_root>\n";
@@ -243,5 +257,7 @@ int main(int argc, char** argv){
     application.add_route("/api/<username>/<int:id>", dynamic_url2);
     application.add_route("/get_static", get_static);
     application.add_route("/get_json", get_json);
+    application.add_route("/get_or_post", get, {"GET"});
+    application.add_route("/get_or_post", post, {"POST"});
     application.run();
 }

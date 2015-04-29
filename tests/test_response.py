@@ -214,6 +214,7 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.text, html_content)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
+    # Server should be able to send json with proper mime type
     def test_json(self):
         route = 'get_json'
         status_code = 200
@@ -224,6 +225,27 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.status_code, status_code)
         self.assertEqual(r.headers['Content-Type'], content_type)
         self.assertEqual(r.text, content)
+
+    # Server should respond differntly to post and get even though registered on same url
+    def test_get_or_post(self):
+        route = 'get_or_post'
+        status_code = 200
+        content_type = 'text/html'
+
+        # Should recieve response string GET
+        r = requests.get(url+route)
+        self.assertEqual(r.text, 'GET')
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+        # Should receive response string POST
+        r = requests.post(url+route)
+        self.assertEqual(r.text, 'POST')
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+
+
+
 
 
 
