@@ -5,8 +5,6 @@
 #include <ctime>
 #include <fstream>
 
-
-
 micro::response excep(const micro::request& req){
     micro::response res;
     throw std::exception();
