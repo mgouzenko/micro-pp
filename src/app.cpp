@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <boost/log/trivial.hpp>
+#include <signal.h>
 
 #include "app.hpp"
 #include "url_route.hpp"
@@ -18,9 +19,11 @@ namespace micro {
         handler_(), port_{port}, address_{address}
     {}
 
+
     void app::run()
     {
         try {
+			signal(SIGPIPE, SIG_IGN); 
 
             /* Create a thread pool */
             for(int i=0; i<thread_pool_size_; i++){
@@ -48,7 +51,7 @@ namespace micro {
             #endif
 
             signals.async_wait(boost::bind(&app::shut_down, this));
-
+			
             /* Run the io_service to start the webapp. */
             io_service_.run();
         }

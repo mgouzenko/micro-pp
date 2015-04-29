@@ -3,6 +3,10 @@ example_webapps/exception_test
 example_webapps/tests
 example_webapps/blog_app/blog_app
 url_demo
+blog_app
+module_test
+timeout_test
+*.info
 mak
 docs/html
 *.a
