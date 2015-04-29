@@ -15,6 +15,7 @@ micro::response home(const micro::request& req){
 
 int main(){
     micro::app application;
+    application.set_static_root("../static"); 
     application.add_route("/", home); 
     application.run(); 
 }
