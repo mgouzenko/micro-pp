@@ -4,11 +4,10 @@ namespace micro {
 
     std::string request::get_cookie(const std::string& key) const
     {
-        auto search = cookies_.find(key);
-        if (search != cookies_.end()) {
-            return std::string(search->second);
+        try {
+            return cookies_.at(key);
         }
-        else {
+        catch (const std::out_of_range &oor) {
             return "";
         }
     }
