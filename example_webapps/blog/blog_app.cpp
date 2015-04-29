@@ -17,19 +17,19 @@ void render_fragment(std::ostringstream& page, std::string fragment_path)
     ifs.close();
 }
 
-
 micro::response homepage(const micro::request &req) {
     micro::response resp;
     std::ostringstream page;
 
-    render_fragment(page, "fragments/homepage_header.html");
+    render_fragment(page, "fragments/header.html");
+    render_fragment(page, "fragments/new_entry_form.html");
 
     page << "<ul class=\"entries\">";
     for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry)
         page << *entry;
     page << "</ul>";
 
-    render_fragment(page, "fragments/homepage_footer.html");
+    render_fragment(page, "fragments/footer.html");
 
     resp.render_string(page.str());
 
@@ -41,6 +41,13 @@ micro::response new_entry(const micro::request &req) {
     blog_entry new_entry{req.get_post_param("title"), req.get_post_param("body"), req.get_post_param("name")};
     entries.push_back(new_entry);
     resp.redirect("/");
+    return resp;
+}
+
+micro::response hello(const micro::request& req) {
+    micro::response resp;
+    resp.render_string("<h1>Hello World!</h1>");
+    return resp;
 }
 
 int main(int argc, char **argv) {
