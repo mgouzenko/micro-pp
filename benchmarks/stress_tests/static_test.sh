@@ -1,2 +1,2 @@
 #!/bin/bash
-ab -n 10000 -c 100 "http://localhost:8080/?fname=Mitchell&lname=Gouzenko"
+/usr/local/Cellar/ab/2.4.12/bin/ab -r -n 10000 -c 10 "http://vbox:8080/static_test.jpg"
