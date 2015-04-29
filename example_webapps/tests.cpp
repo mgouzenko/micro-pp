@@ -210,21 +210,21 @@ micro::response get_static(const micro::request& req)
 /**
 * Should return a json object and set mime type to application/json
 */
-micro::response get_json(const micro::request)
+micro::response get_json(const micro::request& req)
 {
     micro::response res;
     res.render_string("{\"message\": \"hello\"}", "application/json");
     return res;
 }
 
-micro::response post(const micro::request)
+micro::response post(const micro::request& req)
 {
     micro::response res;
     res.render_string("POST");
     return res;
 }
 
-micro::response get(const micro::request)
+micro::response get(const micro::request& req)
 {
     micro::response res;
     res.render_string("GET");
@@ -259,5 +259,12 @@ int main(int argc, char** argv){
     application.add_route("/get_json", get_json);
     application.add_route("/get_or_post", get, {"GET"});
     application.add_route("/get_or_post", post, {"POST"});
+
+    application.add_route("/lambda", [](const micro::request& req) {
+        micro::response res;
+        res.render_string("hello lambda");
+        return res;
+    });
+
     application.run();
 }

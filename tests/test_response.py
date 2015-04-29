@@ -245,6 +245,18 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.headers['Content-Type'], content_type)
 
 
+    # Server should be able to handle lambda expressions
+    def test_lambda(self):
+        route = 'lambda'
+        status_code = 200
+        content_type = 'text/html'
+        content = "hello lambda"
+
+        # Route lambda should return string "hello lambda"
+        r = requests.get(url+route)
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+        self.assertEqual(r.text, content)
 
 
 
