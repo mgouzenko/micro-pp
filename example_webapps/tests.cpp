@@ -6,6 +6,7 @@
 #include <ctime>
 #include <fstream>
 #include <unordered_map>
+#include <cassert>
 
 /**
 * Recieves GET, POST, PUT, or DELETE request from client and returns
@@ -47,11 +48,28 @@ micro::response test_one_cookie(const micro::request& req)
 micro::response test_two_cookies(const micro::request& req)
 {
     micro::response res;
-    time_t t = time(0) + 100;
-    micro::cookie c1 = micro::cookie("cookie_key1", "cookie_value1", t, "/hello");
-    micro::cookie c2 = micro::cookie("cookie_key2", "cookie_value2", t, "/hello");
+    micro::cookie c1 = micro::cookie("cookie_key1", "cookie_value1");
+    micro::cookie c2 = micro::cookie("cookie_key2", "cookie_value2");
     res.add_cookie(c1);
     res.add_cookie(c2);
+    return res;
+}
+
+/**
+* Should get the cookie that the web browswer sends back to server
+*/
+micro::response test_get_cookies(const micro::request& req)
+{
+    micro::response res;
+    //Python script sends two cookies, "cookie_key1" and "cookie_key2"
+    std::string cookie_1 = req.get_cookie("cookie_key1");
+    std::string cookie_2 = req.get_cookie("cookie_key2");
+    std::string bad_cookie = req.get_cookie("cjdfkjf");
+    assert(cookie_1 == "cookie_value1");
+    assert(cookie_2 == "cookie_value2");
+    assert(bad_cookie == "");
+
+    res.render_string("cookie tests");
     return res;
 }
 
@@ -189,6 +207,16 @@ micro::response get_static(const micro::request& req)
     return res;
 }
 
+/**
+* Should return a json object and set mime type to application/json
+*/
+micro::response get_json(const micro::request)
+{
+    micro::response res;
+    res.render_string("{\"message\": \"hello\"}", "application/json");
+    return res;
+}
+
 int main(int argc, char** argv){
     if(argc != 2) {
         std::cout << "Usage: test_app <static_file_root>\n";
@@ -201,6 +229,7 @@ int main(int argc, char** argv){
     application.add_route("/test_methods", test_methods);
     application.add_route("/test_one_cookie", test_one_cookie);
     application.add_route("/test_two_cookies", test_two_cookies);
+    application.add_route("/test_get_cookies", test_get_cookies);
     application.add_route("/test_redirect", test_redirect);
     application.add_route("/other", other);
     application.add_route("/test_bad_url", test_bad_url);
@@ -213,5 +242,6 @@ int main(int argc, char** argv){
     application.add_route("/api/<username>", dynamic_url);
     application.add_route("/api/<username>/<int:id>", dynamic_url2);
     application.add_route("/get_static", get_static);
+    application.add_route("/get_json", get_json);
     application.run();
 }

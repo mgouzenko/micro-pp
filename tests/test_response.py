@@ -54,6 +54,17 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.cookies['cookie_key2'], 'cookie_value2')
         self.assertEqual(r.status_code, status_code)
 
+    # Should send cookies server and server should be able to handle them
+    def test_get_cookies(self):
+        route = "test_get_cookies"
+        status_code = 200
+
+        # Should send two cookies. Server has assert to check that cookies are processed
+        cookies = dict(cookie_key1='cookie_value1', cookie_key2='cookie_value2')
+        r = requests.get(url+route, cookies=cookies)
+        self.assertEqual(r.status_code, status_code)
+
+
     # Server should properly redirect
     def test_redirect(self):
         route = "test_redirect"
@@ -183,11 +194,6 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.text, user3)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
-        #Should send name Zach Gleicher as user and respond with name Zach Gleicher
-        # r = requests.get(url+route2)
-        # self.assertEqual(r.status_code, status_code)
-        # self.assertEqual(r.text, user2)
-        # self.assertEqual(r.headers['Content-Type'], content_type)
 
         #Should send name zach and user_id 123 and respond with zach 123
         r = requests.get(url+route3)
@@ -208,7 +214,16 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.text, html_content)
         self.assertEqual(r.headers['Content-Type'], content_type)
 
+    def test_json(self):
+        route = 'get_json'
+        status_code = 200
+        content_type = 'application/json'
+        content = "{\"message\": \"hello\"}"
 
+        r = requests.get(url+route)
+        self.assertEqual(r.status_code, status_code)
+        self.assertEqual(r.headers['Content-Type'], content_type)
+        self.assertEqual(r.text, content)
 
 
 
