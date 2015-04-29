@@ -38,14 +38,46 @@ micro::response homepage(const micro::request &req) {
     }
     
     page << "<ul class=\"entries\">";
-    for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry)
-        page << *entry;
+    int i = entries.size();
+    auto user = req.get_query_param("u");
+    for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry) {
+        if(user == "" || user == entry->get_author()) {
+            page << *entry;
+            page << "<a href=/entry/" << i << ">Permalink</a><br/>";
+        }
+        --i;
+    }
     page << "</ul>";
 
     render_fragment(page, "fragments/footer.html");
 
     resp.render_string(page.str());
 
+    return resp;
+}
+
+micro::response get_entry(const micro::request &req) {
+    micro:: response resp;
+    std::ostringstream page;
+   
+    int id = std::stoi(req.get_route_param("id"));
+    
+    render_fragment(page, "fragments/header.html");
+    page << "<a href=\"/\"><< Homepage</a><br/>";
+    
+    if(id > entries.size() || id < 1) {
+        page << "<br/><h2>404 - Entry not found </h2>";
+        render_fragment(page, "fragments/footer.html");
+        resp.render_status(404, page.str());
+    }
+    else {
+        page << "<ul class=\"entries\">";
+        page << entries[id - 1];
+        page << "</ul>";
+        render_fragment(page, "fragments/footer.html");
+        resp.render_string(page.str());
+    }
+    
     return resp;
 }
 
@@ -96,6 +128,8 @@ int main(int argc, char **argv) {
     app.add_route("/", homepage);
     app.add_route("/new", new_entry, {"POST"});
     app.add_route("/login", login, {"POST"});
+    app.add_route("/entry/<int:id>", get_entry);
+    
 
     app.run();
 }

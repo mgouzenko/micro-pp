@@ -13,6 +13,7 @@ public:
 
     blog_entry(std::string title, std::string contents, std::string author);
 
+    std::string get_author() { return author; }
     /**
      * Renders the blog entry as an HTML <li> item
      */
