@@ -224,10 +224,6 @@ micro::response timeout(const micro::request& req)
 }
 
 int main(int argc, char** argv){
-    if(argc != 2) {
-        std::cout << "Usage: test_app <static_file_root>\n";
-        exit(1);
-    }
 
     micro::module mod = { {"/module_redirect_destination", module_redirect_destination},
                           {"/module_redirect_source", module_redirect_source}
@@ -236,7 +232,7 @@ int main(int argc, char** argv){
     micro::app application;
     application.set_timeout(1); 
     application.set_pool_size(8);
-    application.set_static_root(argv[1]);
+    application.set_static_root("static/");
     application.add_module(mod, "/module");
     application.add_route("/timeout", timeout);
     application.add_route("/test_methods", test_methods);

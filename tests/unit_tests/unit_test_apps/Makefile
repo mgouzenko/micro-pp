@@ -3,11 +3,11 @@ CC = clang++
 LDLIBS = -lmicro -lboost_system -lboost_log-mt -lpthread
 CXXFLAGS = -std=gnu++11
 
-timeout_test:
+unit_test_app:
 
 .PHONY: all
-all: clean timeout_test
+all: clean unit_test_app
 
 .PHONY: clean
 clean:
-	rm -f *.o  timeout_test > /dev/null
+	rm -f *.o  unit_test_app > /dev/null
