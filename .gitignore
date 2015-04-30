@@ -11,7 +11,8 @@ docs/html
 *.a
 *.o
 *.swp
-
+*.pdf
+micro_app
 /Makefile
 /Makefile.in
 /aclocal.m4
