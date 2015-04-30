@@ -59,7 +59,7 @@ class Test_Server(unittest.TestCase):
         route = "test_redirect"
         content_type = 'text/html'
 
-        # Should send 301 response
+        # Should send 307 response
         r = requests.get(url+route, allow_redirects=False)
         self.assertEqual(r.status_code, 307)
 
@@ -207,10 +207,31 @@ class Test_Server(unittest.TestCase):
         self.assertEqual(r.status_code, status_code)
         self.assertEqual(r.text, html_content)
         self.assertEqual(r.headers['Content-Type'], content_type)
+    
+    #Server should register module, and redirect correctly within that module.
+    def test_module(self):
+        destination_route = 'module/module_redirect_destination'
+        source_route = 'module/module_redirect_source'
+        status_code = 307
+        content_type = 'text/html'
+        
+        #Should get to the module's redirect destination. 
+        r = requests.get(url+destination_route)
+        self.assertEqual(r.text, "You have been redirected within the module.")
+        
+        #Should be redirected. 
+        r = requests.get(url+source_route, allow_redirects=False)
+        self.assertEqual(r.status_code, 307)
 
-
-
-
+        #Should route to the redirect destination. 
+        r = requests.get(url+source_route)
+        self.assertEqual(r.text,"You have been redirected within the module.")
+    
+    #Server should send 500 response on timeout. 
+    def test_timeout(self):
+        route = 'timeout'
+        r = requests.get(url + route)
+        self.assertEqual(r.status_code, 500) 
 
 if __name__ == '__main__':
     unittest.main()

@@ -92,14 +92,8 @@ namespace micro {
     void response::redirect(const std::string& path, bool relative_to_module_entry)
     {
         set_status_code(307);
-        header h = header();
-        h.name = "Location";
-        if(relative_to_module_entry){
-            h.value = *module_entry_point_ + path;
-        }else{
-            h.value = path;
-        }
-        add_header(h);
+        redirect_path_ = path;  
+        module_redirect_ = relative_to_module_entry;   
     }
 
     void response::render_status(int status_code, const std::string& message)

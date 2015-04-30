@@ -98,9 +98,11 @@ namespace micro {
         std::string message_;
 
         /**
-         * Entry point that the module is bound to.
+         * Flag to indicate redirect relative to module.
          */
-        std::string* module_entry_point_;
+        bool module_redirect_ = false;
+
+        std::string redirect_path_ = ""; 
 
         /**
          * Customizable vector or headers

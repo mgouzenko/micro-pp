@@ -4,6 +4,7 @@
 #include "url_route.hpp"
 #include "request.hpp"
 #include "response.hpp"
+#include "header.hpp"
 
 namespace micro {
 
@@ -78,12 +79,15 @@ namespace micro {
                 req.label_values.emplace(*label_it++, *val_it++);
             }
 
-            // Set the module entry point of the response.
-            resp.module_entry_point_ = &module_entry_point_;
-
             // Execute the callback that populates the response
             resp = callback_(req);
-
+            if(resp.status_code_ == 307){
+                header h = header();
+                h.name = "Location";
+                if(resp.module_redirect_) h.value = module_entry_point_ + resp.redirect_path_;
+                else h.value = resp.redirect_path_; 
+                resp.add_header(h);
+            }
             return true;
         }
         return false;

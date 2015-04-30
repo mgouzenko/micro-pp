@@ -189,15 +189,56 @@ micro::response get_static(const micro::request& req)
     return res;
 }
 
+
+/**
+ * Should be accessible from /module entrypoint. 
+ */
+micro::response module_redirect_destination(const micro::request& req)
+{
+    micro::response res;
+    res.render_string("You have been redirected within the module.");
+    return res;
+}
+
+/**
+ * Should redirect within the module. 
+ */
+micro::response module_redirect_source(const micro::request& req)
+{
+    micro::response res;
+    res.redirect("/module_redirect_destination", true);
+    return res;
+}
+
+/**
+ * Should time out.
+ */
+micro::response timeout(const micro::request& req)
+{
+    micro::response res;
+    while(1){
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+    res.render_string("should not be reached"); 
+    return res;
+}
+
 int main(int argc, char** argv){
     if(argc != 2) {
         std::cout << "Usage: test_app <static_file_root>\n";
         exit(1);
     }
 
+    micro::module mod = { {"/module_redirect_destination", module_redirect_destination},
+                          {"/module_redirect_source", module_redirect_source}
+                        };
+
     micro::app application;
+    application.set_timeout(1); 
     application.set_pool_size(8);
     application.set_static_root(argv[1]);
+    application.add_module(mod, "/module");
+    application.add_route("/timeout", timeout);
     application.add_route("/test_methods", test_methods);
     application.add_route("/test_one_cookie", test_one_cookie);
     application.add_route("/test_two_cookies", test_two_cookies);
