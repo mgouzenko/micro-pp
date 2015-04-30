@@ -42,8 +42,12 @@ namespace micro {
              */
             std::thread overseer_;
             int timeout_ = 3;
+            
+            /**
+             * The thread pool to process requests. 
+             */
             std::vector<micro_thread> thread_pool_;
-            int thread_pool_size_ = 8;
+            int thread_pool_size_ = 1;
 
             /**
              * IO service that communicates asynchronously wih clients.
@@ -143,9 +147,10 @@ namespace micro {
 
             /**
              * Sets the thread pool size. When a request is received, the callback function associated with it is processed on a separate thread.
-             * The thread pool size is the number of threads available to process incoming requests. By default, there are 8 threads in the thread pool.
+             * The thread pool size is the number of threads available to process incoming requests. By default, there is 1 thread in the thread pool.
              *
-             * @param size: A positive number, indicating the number of threads to dedicate to the thread pool. If size is negative, the behavior is undefined.
+             * @param size: A positive number, indicating the number of threads to dedicate to the thread pool. 
+             * If size is negative, the behavior is undefined.
              */
             void set_pool_size(int size) { thread_pool_size_ = size; }
 
