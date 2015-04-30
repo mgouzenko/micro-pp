@@ -1,14 +1,14 @@
 # Tutorial: Building the basic bjarneblog
 
-In this tutorial, we will teach you how to build a basic blogging app, step-by-step, using micro++. This tutorial will assume that you have installed micro++. If you haven’t already, follow the installation instructions in README.md or on the homepage of the Doxygen output.
+In this tutorial, we will teach you how to build a basic blogging application, step-by-step, using micro++. This tutorial will assume that you have installed micro++. If you haven't already, follow the installation instructions in README.md or on the homepage of the Doxygen output.
 
 ## Getting Started
 
-A web-application is actually very simple and micro++ will help you get your application running very quickly. At its core a web-framework provides developers with an easy way to handle requests from users and send responses to these users. The micro++ framework defines a clean interface where you register a callback function to a specified route. Within a callback, the developer can easily access the contents of the request through the `micro::request` object api and construct a `micro::response` object that will be sent back to the client. This idea—though simple—lets you build incredibly flexible and even complex web applications that will run blazingly fast.
+A web-application is actually very simple and micro++ will help you get your application running very quickly. At its core a web-framework provides developers with an easy way to handle requests from users and send responses to these users. The micro++ framework defines a clean interface where you register a callback function to a specified route. Within a callback, the developer can easily access the contents of the request through the `micro::request` API and construct a `micro::response` that will be sent back to the client. This idea, though simple, lets you build incredibly flexible and even complex web applications that will run blazingly fast.
 
 To get started, create a new directory where you will build the app, open up a new file named `blog_app.cpp`, and write the following code:
 
-### blog_app.cpp
+**blog_app.cpp**
 
 ~~~{.cpp}
 #include <micro/app.hpp>
