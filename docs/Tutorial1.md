@@ -4,7 +4,7 @@ In this tutorial, we will teach you how to build a basic blogging app, step-by-s
 
 ## Getting Started
 
-A web-application is actually very simple and micro++ will help you get your application running very quickly. At its core a web-framework provides developers with an easy way to handle requests from users and send responses to these users. The micro++ framework defines a clean interface where you register a callback function to a specified route. Within a callback, the developer can easily access the contents of the request through the `request` object api and construct a `micro::response` object that will be sent back to the client. This idea—though simple—lets you build incredibly flexible and even complex web applications that will run blazingly fast.
+A web-application is actually very simple and micro++ will help you get your application running very quickly. At its core a web-framework provides developers with an easy way to handle requests from users and send responses to these users. The micro++ framework defines a clean interface where you register a callback function to a specified route. Within a callback, the developer can easily access the contents of the request through the `micro::request` object api and construct a `micro::response` object that will be sent back to the client. This idea—though simple—lets you build incredibly flexible and even complex web applications that will run blazingly fast.
 
 To get started, create a new directory where you will build the app, open up a new file named `blog_app.cpp`, and write the following code:
 
@@ -33,6 +33,7 @@ And create the following Makefile:
 ### Makefile
 
 ~~~{Makefile}
+CXXFLAGS = -std=c++11
 LDLIBS = -lmicro -lboost_system -lboost_log-mt -lpthread
 
 blog_app: 
@@ -42,7 +43,7 @@ If you are on Linux, replace `lboost_log-mt` with `lboost_log`.
 
 Now, when you run the compiled blog_app with `./blog_app`, opening up the url localhost:8080/ in your browser will display “Hello World!” in an h1 header.
 
-This might look seem like a lot of code for something so simple, but let’s go through the code in `main()` line by line in so you can understand exactly what’s going on.
+This might seem like a lot of code for something so simple, but let’s go through the code in `main()` line by line in so you can understand exactly what’s going on.
 
 ~~~{.cpp}
 micro::app app;
@@ -51,7 +52,7 @@ micro::app app;
 The foundation of building a web-application begins with constructing a `micro::app` object. The `micro::app` object can be thought of as a wrapper for a more complicated HTTP server. By default, the server `port` is set to `8080` but is easily customizable. Let’s try setting the server to our favorite port, “3000.” 
 
 ~~~{.cpp}
-micro::app app = micro::app(“3000”); 
+micro::app app("3000"); 
 ~~~
 
 Recompile `blog_app.cpp` and run `./blog_app.` Your app will now be available on localhost:3000.
@@ -220,12 +221,10 @@ micro::response new_entry(const micro::request &req) {
 Don’t forget to register the new route with the app.
 
 ### blog_app.cpp
+
 ~~~{.cpp}
 int main(int argc, char **argv) {
     micro::app app;
-
-    app.set_pool_size(8);
-
     app.add_route("/", homepage);
     app.add_route("/new", new_entry);
 
@@ -258,7 +257,7 @@ Our callback for `new_entry` is not very exciting. We create a response, do noth
 </html>
 ~~~
 
-Above you will see a simple html form that allows users to make entries into the blog. A generic template for an html form can be found with a simple google search. You can see that we have defined certain input types such as name, title, and body, which we defined as the model attributes in our `blog_entry` object above. I would also like to note the line `<form action="new" method="POST">`. This key line defines what happens when you press the submit button. When you click submit, it will send a `POST` request to the route `new`. We will discuss the implications of this later, but first let’s make this form visible to users who access the route `localhost:8080/new`, by adding a new method in our callback, `response::render_file`.
+Above you will see a simple html form that allows users to make entries into the blog. A generic template for an html form can be found with a simple google search. You can see that we have defined certain input types such as name, title, and body, which we defined as the model attributes in our `blog_entry` object above. Note the line `<form action="new" method="POST">`. This key line defines what happens when you press the submit button. When you click submit, it will send a `POST` request to the route `new`. We will discuss the implications of this later, but first let’s make this form visible to users who access the route `localhost:8080/new`, by adding a new method in our callback, `response::render_file`.
 
 ### blog_app.cpp
 
@@ -289,12 +288,12 @@ micro::response new_entry(const micro::request &req) {
         blog_entry new_entry{req.get_post_param("title"), req.get_post_param("body"), req.get_post_param("name")};
         entries.push_back(new_entry);
         resp.redirect("/");
-        return resp;
     }
     else {
         resp.render_file("new_entry.html");
-        return resp;
     }
+
+    return resp; 
 }
 
 ~~~
