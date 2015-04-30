@@ -235,9 +235,48 @@ def login():
 
 ### Route Modules
 
-For user convenience we added the ability to build route modules so that application developers can create more modular code with associated routes in separate files. For example if you have a route `/api/` with additional parameters such as `/api/users` or `api/groups` these routes can be put into a module and registered more conveniently together.  
+For user convenience we added the ability to build route modules so that application developers can create more modular code with associated routes in separate files. The `micro::module` allows programmers to register routes to callbacks, but bind them to the application at a later time. For instance, suppose you want to include an admin module, which has a login, dashboard, and edit_user page. All of these things can be logically grouped together in an "admin" module. Suppose you already have callback functions for these three pages. Then, you can do: 
 
-**EXAMPLE**
+~~~{.cpp}
+micro::module mod = { {"/login", admin_login},
+                      {"/dashboard", admin_dashboard},
+                      {"/edit_user", admin_edit_user} 
+                    };
+~~~
+
+Later, we can register this module with the application, under the prefix "/admin/", as follows: 
+
+~~~{.cpp}
+app.add_module(mod, "/admin");
+~~~
+
+Now, all of the urls in the module will be accessible from the "admin" entry point. For instance, we can access `http://www.example.com/admin/login`. Suppose that from the login page, you want to redirect to the dashboard. This is a redirect within the module, so doing the following will not work:  
+
+~~~{.cpp}
+micro::response admin_login(micro::request& req){
+    micro::response resp; 
+    //Do login stuff.. 
+
+    if(authorized) resp.redirect(/dashboard); 
+    return resp;
+}
+~~~
+
+The example above will not work, because it redirects to `/dashboard` instead of `/admin/dashboard`. Instead, modify the code as follows: 
+
+~~~{.cpp}
+micro::response admin_login(micro::request& req){
+    micro::response resp; 
+    //Do login stuff.. 
+
+    if(authorized) resp.redirect(/dashboard, true); 
+    return resp;
+}
+~~~
+
+The `true` flag added to the redirect function indicates that we intend to redirect within the module. Now, the function will redirect to `/admin/dashboard`. 
+
+The entire module can be constructed in a separate header file, which can be imported by the progammer. Thus, the intricacies of the module functionality are abstracted away. All that the end user of a module needs to do is to bind that module to the application! 
 
 ## The Server
 The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, canceling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
