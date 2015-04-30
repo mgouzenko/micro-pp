@@ -1,45 +1,33 @@
 # Design Document
 
-*Requirements*
-- 5-15 pages
-- Error handling resource management
-- Feature set
-- Interface design
-- Optimizations
-- Features for the convenience of users
-- Ideas for release 1.2
-
 ## Our Project
 
-In this project we built a micro web-framework for C++. Rather than building a web-framework that interfaced with a web server like Apache or Nginx we took the challenge to build our own web-server. To build the server we used Boost.Asio which is a C++ networking library providing developers with an asynchronous model for network and I/O operations.
+In this project we built Micro++, a C++ web-framework with a built in web-server. To build the server we used Boost.Asio which is a C++ networking library providing developers with an asynchronous model for network and I/O operations.
 
 
 ## What is a Web Framework
 
 At its core, a web-framework provides an interface to build web based applications. The interface provides application developers a clean and easy way to handle requests and send responses without dealing with the complexities of the strict HTTP protocol.
 
-Web-Frameworks today work off the Model-View-Controller paradigm which modularizes code into three distinct sections. The Model represents the fundamental data structures that are persisted in a database. These objects are often modeled to be stored in SQL databases like MySQL or document databases like MongoDB. A View is a html page or template that gets rendered to the user. The are the web pages that a user of the web application will see. The controller is where the logic of the web application takes place. The controller maps callback functions to url routes which allow users to handle a request sent to the route and serve a response to the user who accessed the web application. Within the controller a developer typically performs CRUD (Create, Read, Update, and Delete) operations on objects defined by the model.
+Web-Frameworks today work off the Model-View-Controller paradigm which modularizes code into three distinct sections. The Model represents the fundamental data structures that are persisted in a database. These objects are often modeled to be stored in SQL databases like MySQL or document databases like MongoDB. A View is a html page or template that gets rendered to the user. These are the web pages that a user of the web application will see in his or her browser. The controller is where the logic of the web application resides. The controller maps callback functions to URL routes which allow application developers to handle the request sent to the designated route and serve a custom response to the user who accessed the web application. Within the controller a developer typically performs CRUD (Create, Read, Update, and Delete) operations on objects defined by the model.
 
-
-Some of the most popular services for web application frameworks include Django and Flask for Python, Rails for Ruby, and Express for NodeJs. Django and Rails are more complicated choices with more features while Flask and Express are more lightweight. For our web-framework, we used Flask and Express as inspiration and references in making design decisions.
+Some of the most popular services for web application frameworks include Django and Flask for Python, Rails for Ruby, and Express for NodeJs. Django and Rails are more complicated choices with more features while Flask and Express are more lightweight. Currently, the most popular web-framework for C++ is WT, which has a complicated "widget-centric" design unlike any popular framework on the market. Therefore, we decided to build our own micro framework in C++, using Flask and Express as inspiration given their lightweight yet robust design.
 
 ## Web-Framework vs Web Server
 
-A web server is a computer which stores, processes, and serves web pages to clients using the HTTP protocol. Although this sounds very similar to a web-framework, the key difference is that the framework sits on top of the web server providing a much more user friendly API for handling HTTP requests and serving HTTP responses.
+A HTTP web server is a software program which stores, processes, and serves web pages to clients using the HTTP protocol. Although this sounds very similar to a web-framework, the key difference is that the framework sits on top of a web server providing a much more user friendly API for handling HTTP requests and serving HTTP responses.
 
-Web-frameworks like Flask provide a simple web-server for development purposes. This server, however, is not intended for production use. The documentation reads:
+Web-frameworks like Flask provide simple built in web-servers for development purposes. This server, however, is not intended for production use. The documentation reads:
 
-“You can use the builtin server during development, but you should use a full deployment option for production applications. (Do not use the builtin development server in production.)""  
+> “You can use the builtin server during development, but you should use a full deployment option for production applications. (Do not use the builtin development server in production.)""  
 
-Consequently, web-frameworks like Flask interface with servers which implement WSGI (Web Server Gateway Interface). WSGI is an interface between web servers and web applications written in Python. This allows Flask applications to interface with much more robust servers like Apache or Nginx.
+In order to scale, web-frameworks like Flask interface with production servers by implementing CGI (Common Gateway Interface) protocols. Python uses a slightly different protocol for python called WSGI (Web Server Gateway Interface). With WSGI, Flask applications can be run on robust, production ready servers like Apache or Nginx.
 
 ## Building a Web-App
 
-The foundation of building a web-application begins with constructing an `micro::app` object, which essentially wraps an underlying web-server. We will discuss interfacing with the web server later.
-
 ### Basic Structure
 
-The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. You can construct an app with a custom port and address but it defaults to port `8080` and address `0.0.0.0`. `micro::app` essentially wraps our web server which can be interfaced with through the `micro::app` API. In this example we have developed web application which serves static files.
+The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. Underneath the hood, `micro::app` starts an underlying web-server, which has its own API. The default `micro::app` constructor sets the `8080` and address `0.0.0.0`. The constructor allows you to set the port and address to custom values. The `micro::app` has other customizable features documented in the API such as setting the thread count for the server, turning on debug mode, and setting the route for the route for a static file directory. Below, we give an example of a simple web application which serves static files contained within the directory `./static`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 int main(int argc, char** argv) {
@@ -49,64 +37,14 @@ int main(int argc, char** argv) {
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-Although this program runs an instance of the server it is limited to only serving static files from the route designated by the function `set_static_route("./static").
-
-###Adding a Route
-
-Imagine we want to send a "hello world" message to any user who accesses our web application with the url and route `www.example.com/hello`. To do this we call `application.add_route("./hello" hello_callback)` which will register the callback function `hello_callback` with the route `/hello`. When a client sends a request to the server with the route `www.example.com/hello`, `hello_callback` will be called, printing "hello world" in the browser of the user.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-micro::response hello_callback(const micro::request& req)
-{
-    res.render_string("hello world");
-}
-
-int main(int argc, char** argv) {
-    micro::app application;
-    application.set_static_root("./static");
-    application.add_route("/hello", hello_callback);
-    application.run();
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Given a that an file exists in the directory `./static` such as example_image.jpg, you can access this image through the browser at `localhost:8080/example_image.jpg`.
 
 ##Routing
 
-Url routing requires two steps:
+The advantage of using a web-framework is that it provides a easy and clean method to attach callback function to URL endpoints. To make URL routing as user-friendly as possible, we require a two-step process:
 
-1. Registering a route
-2. Defining a calback function for the route
-
-###Registering a Route
-
-In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to different callback function:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-application.add_route("/api", api_callback);
-application.add_route("/api/users", users_callback);
-application.add_route("/api/users/admin", admin_callback)
-application.add_route("/api/groups", groups_callback);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In order to add convenience to users we provide a system for generating dynamic routes. It would be ridiculous if you had to define a route for each user. Instead, you define a dynamic route like so:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-application.add_route("/api/user/<username>", api_callback);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-OR
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-application.add_route("/api/user/<int:id>", api_callback);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A user can define a route with an string or integer which is possible do to regex parsing on a url.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-"^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-With dynamic routes the application developer can define a route and extract the variable parameters in the request object passed into the callback function. Routes such as `www.example.com/api/user/1` and `www.example.com/api/user/2` can be processed differently within the same callback. This allows for more concise and modular code.
+1. Defining a callback function.
+2. Register a route with the callback function.
 
 ###The Callback Function
 
@@ -117,7 +55,9 @@ micro::response example_callback(const micro::request& req)
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Every route has an associated callback function with a single parameter: a `micro::request` object. The `micro::request` can be thought of as a wrapper for the strict HTTP request protocol. The request object is passed in by const reference given that a user does not modify a request. The application developer only extracts data stored in the request object and provides logic in the callback to handle the request appropriately. The response object is modifiable with a provided API that allows users to send back customized responses to the client. Notice that the return type of the callback function is micro::response. A response object must always be constructed and returned in the callback. We made this design choice because a server is always supposed to respond to a request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
+Every route has an associated callback function which passes a`micro::request` and returns a `micro::response`. `micro::request` is passed in by const reference given that a user does not modify a request. The application developer only extracts data stored in the request object, using this information to provide an appropriate `micro::response`. The `micro::response` object is modifiable and has an API providing customization for the `micro::response`.
+
+A response object must always be constructed and returned in the callback. We made this design choice because the HTTP protocol require web servers to always respond to a HTTP request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
 ####Express Callback Example
 
@@ -166,23 +106,6 @@ application.add_route("/api/user/<username>", api_callback);
 
 In this example, if a user accesses the url `www.example.com/api/bjarne`, the application developer has access to the username "bjarne" which gets stored in the request object.
 
-####Request API
-
-`micro::request::get_cookie`
-
-`micro::request::get_post_param`
-
-`micro::request::get_query_param`
-
-`micro::request::get_route_param`
-
-`micro::request::get_hostname`
-
-`micro::request::get_uri`
-
-`micro::request::get_ip`
-
-`micro::request::get_method`
 
 ###The Response Object
 
@@ -203,23 +126,37 @@ micro::response api_callback(const micro::request& req)
 
 In the example above, if a client accesses the url `www.example.com/api/bjarne`, the client would receive a message "hello bjarne".
 
-####Response API
 
-`micro::response::append_message`
+###Registering a Route
 
-`micro::response::render_string`
+In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to different callback function:
 
-`micro::response::render_filestream`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+application.add_route("/api", api_callback);
+application.add_route("/api/users", users_callback);
+application.add_route("/api/users/admin", admin_callback)
+application.add_route("/api/groups", groups_callback);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`micro::response::render_file`
+In order to add convenience to users we provide a system for generating dynamic routes. It would be ridiculous if you had to define a route for each user. Instead, you define a dynamic route like so:
 
-`micro::response::set_cookie`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+application.add_route("/api/user/<username>", api_callback);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`micro::response::redirect`
+OR
 
-`micro::response::render_status`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+application.add_route("/api/user/<int:id>", api_callback);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`micro::response::set_mime_type`
+A user can define a route with an string or integer which is possible do to regex parsing on a url.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+"^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With dynamic routes the application developer can define a route and extract the variable parameters in the request object passed into the callback function. Routes such as `www.example.com/api/user/1` and `www.example.com/api/user/2` can be processed differently within the same callback. This allows for more concise and modular code.
 
 ### Route Modules
 
