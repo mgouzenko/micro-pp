@@ -23,7 +23,8 @@ namespace micro {
     public:
 
         /**
-        * Handle a request and produce a reply.
+        * Handle a request and produce a reply. The request_handler will access the server's 
+        * internal request and create the server's internal reply. 
         */
         void operator()(server& serv);
 
