@@ -46,3 +46,87 @@ This is an important conclusion: **wt** was not slower than **micro** due to the
 Why is micro so fast? We hypothesize that it was due to our design decision to store **url_route**s in a vector. As explained in the documentation, a **url_route** is one of our custom classes that groups callback function together with a regex statement. When a client requests a url enpoint that matches that regex statement, the associated callback gets invoked. Matching a url endpoint takes place in the **url_route::match** member function. That is, the url_route checks itself to see if it can be matched with the supplied endpoint. The **url_routes** are iterated over linearly until a match is found.  
 
 It is important that all of this is done in a vector. Because the **url_routes** are stored contiguously in memory, they are prefetched into the cache together. Thus, iterating over all of the url_routes is blazingly fast because the match function operates on objects sitting in cache. Earlier, we implemented the data structure for **url_route**s as an unordered map of regex expressions to url objects. This version was much slower - though we do not currently have the exact numbers. In the future, we hope to test our framework with the hashmap implementation to see if the vectorization of **url_route**s is really the source of speed in URL resolution.
+
+##Convenience and Ease of Use
+In this section, we have posted the code that we wrote for each web framework to serve the dynamic and static pages. "Ease of use" is a rather subjective term, so you can decide for yourself which framework is the most simple! 
+
+### Flask
+
+~~~{.cpp}
+
+#!/usr/bin/python
+from flask import Flask, render_template, request, session, redirect, url_for
+import os 
+
+app = Flask(__name__, static_folder= os.path.abspath("../static" ), static_url_path="")
+
+print os.path.abspath("../static" )
+@app.route('/', methods=['GET', 'POST']) 
+def home():
+    fname = request.args.get("fname")
+    lname = request.args.get("lname")
+    color = request.form.get('color')
+    return "Hello %(fname)s %(lname)s, your favorite color is %(color)s" % {'fname':fname, 'lname':lname, 'color':color}  
+
+@app.route('/static_test', methods=['GET', 'POST'])
+def stat():
+    return app.send_static_file('static_test.jpg')
+
+if __name__ == "__main__":
+    app.run("0.0.0.0", port=8080)
+~~~
+
+### micro
+
+~~~{.cpp}
+#include <micro/app.hpp> 
+#include <micro/request.hpp> 
+#include <micro/response.hpp>
+
+micro::response home(const micro::request& req){
+    micro::response resp; 
+    
+    std::string fname = req.get_query_param("fname"); 
+    std::string lname = req.get_query_param("lname"); 
+    std::string color = req.get_cookie("color"); 
+
+    resp.render_string("Hello " + fname + " " + lname + ", your favorite color is " + color + ".");
+    return resp; 
+}
+
+int main(){
+    micro::app application;
+    application.set_static_root("../static/"); 
+    application.add_route("/", home); 
+    application.run(); 
+}
+~~~
+
+###Wt
+~~~{.cpp}
+HelloApplication::HelloApplication(const WEnvironment& env)
+  : WApplication(env)
+{
+  const std::string none = "NONE"; 
+  setTitle("Hello world");// application title
+  const std::string *fname = env.getParameter("fname"); 
+  const std::string *lname = env.getParameter("lname");
+  const std::string *color = env.getParameter("color"); 
+  
+  if(fname == 0) fname = &none; 
+  if(lname == 0) lname = &none;
+  if(color == 0) color = &none; 
+
+  root()->addWidget(new WText("Hello " + *fname + " " + *lname + ", your favorite color is " + *color+ "."));
+}
+
+WApplication *createApplication(const WEnvironment& env)
+{
+  return new HelloApplication(env);
+}
+
+int main(int argc, char **argv)
+{
+  return WRun(argc, argv, &createApplication);
+}
+~~~
