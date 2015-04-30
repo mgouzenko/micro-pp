@@ -5,17 +5,9 @@ CXXFLAGS = -std=gnu++11
 
 test_app:
 
-exception_test:
-
-timeout_test:
-
-module_test:
-
-tests:
-
 .PHONY: all
-all: clean exception_test test_app tests
+all: clean test_app
 
 .PHONY: clean
 clean:
-	rm -f *.o  exception_test test_app tests > /dev/null
+	rm -f *.o  test_app > /dev/null

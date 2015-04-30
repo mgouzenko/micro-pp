@@ -207,10 +207,32 @@ namespace micro {
 
         //Fill the map of cookies
         if(h.name == "Cookie") {
-            int equal_idx = h.value.find("=");
-            std::string key = h.value.substr(0, equal_idx);
-            std::string val = h.value.substr(equal_idx+1);
-            req.cookies_[key] = val;
+            std::string cookie_list = h.value;
+            
+            auto char_it = cookie_list.begin();
+            while(char_it != cookie_list.end()) {
+                std::string key("");
+                std::string val("");
+    
+                while (char_it != cookie_list.end() && *char_it != '=') {
+                    key += *char_it++;
+                }
+    
+                if (char_it == cookie_list.end())
+                    break;
+                ++char_it;
+                
+                while (char_it != cookie_list.end() && *char_it != ';') {
+                    val += *char_it++;
+                }
+        
+                req.cookies_.emplace(key, val);
+                
+                if(char_it != cookie_list.end())
+                    ++char_it;
+                    while (*char_it == ' ')
+                        ++char_it;
+                }
         }
 
         //Fill the hostname
@@ -225,7 +247,6 @@ namespace micro {
       }
 
       // Extract GET params
-
       int query_loc = req_path.rfind('?');
 
       if(query_loc != std::string::npos) {

@@ -77,3 +77,14 @@ Your headers should be accessible in source files with macros like `#include <mi
 Refer to the generated doxygen output and the example_webapps directory for details on how to build webapps using micro++. The Design Document and Tutorial can be found in the docs/ directory, as well as on the "Related Pages" tab in the Doxygen output.
 
 Please note that the Makefiles included with the example_webapps are designed for use on OS X and may need to be edited if using Linux.
+
+## Included examples
+Micro++ is packaged with several examples that showcase some of the library's functionality. Here are some brief descriptions of each example.
+
+* blog - This is the simple blog app that the tutorial carefully builds.
+* tests - This is the app that should be running if you want to use the Python test script in the tests/ directory. the Python test script contains a wide variety of assertions, testing various aspects of micro++'s functionality.
+* web_server - This is a very simple app that acts as a basic web server that can serve static files. It takes two command line arguments. The first is the desired root to serve files from, and the second is the port on which to run the server.
+* exception_test - TODO?
+* module_test - TODO? not currently compiling
+* timeout_test - TODO? not currently compiling
+* test_app - TODO?

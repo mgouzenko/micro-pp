@@ -1,11 +1,10 @@
-example_webapps/test_app
-example_webapps/exception_test
-example_webapps/tests
-example_webapps/blog_app/blog_app
-url_demo
-blog_app
-module_test
-timeout_test
+example_webapps/test_app/test_app
+example_webapps/exception_test/exception_test
+example_webapps/tests/tests
+example_webapps/blog/blog_app
+example_webapps/module_test/module_test
+example_webapps/timeout_test/timeout_test
+example_webapps/web_server/web_server
 *.info
 mak
 docs/html
@@ -30,6 +29,7 @@ docs/html
 .deps/
 .dirstamp
 .libs/
+.settings/
 *.l[ao]
 *~
 
