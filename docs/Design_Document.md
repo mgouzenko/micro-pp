@@ -27,7 +27,7 @@ In order to scale, web-frameworks like Flask interface with production servers b
 
 ### Basic Structure
 
-The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. Underneath the hood, `micro::app` starts an underlying web-server, which has its own API. The default `micro::app` constructor sets the `8080` and address `0.0.0.0`. The constructor allows you to set the port and address to custom values. The `micro::app` has other customizable features documented in the API such as setting the thread count for the server, turning on debug mode, and setting the route for the route for a static file directory. Below, we give an example of a simple web application which serves static files contained within the directory `./static`.
+The foundation of building a web-application begins with constructing an `micro::app` object, setting the route of a static file directory, and running the application. Underneath the hood, `micro::app` initiates an underlying web-server which can be interfaced through the `micro::app`. The default `micro::app` constructor sets the port to `8080` and address `0.0.0.0`. The constructor allows you to set the port and address to custom values. The `micro::app` has other customizable features documented in the API such as setting the thread count for the server, turning on debug mode, and setting the route for your static file directory. Below, we give an example of a simple web application which serves static files contained within the directory `./static`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 int main(int argc, char** argv) {
@@ -39,17 +39,17 @@ int main(int argc, char** argv) {
 
 Given a that an file exists in the directory `./static` such as example_image.jpg, you can access this image through the browser at `localhost:8080/example_image.jpg`.
 
-##Routing
+## Routing
 
-The advantage of using a web-framework is that it provides a easy and clean method to attach callback function to URL endpoints. To make URL routing as user-friendly as possible, we require a two-step process:
+The advantage of using a web-framework is that it provides an easy and clean method to attach callback function to URL endpoints. To make URL routing as user-friendly as possible, we require a two-step process:
 
 1. Defining a callback function.
 2. Register a route with the callback function.
 
-###The Callback Function
+### Step 1: The Callback Function
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-micro::response example_callback(const micro::request& req)
+micro::response callback(const micro::request& req)
 {
     // Handle request and response here
 }
@@ -59,7 +59,7 @@ Every route has an associated callback function which passes a`micro::request` a
 
 A response object must always be constructed and returned in the callback. We made this design choice because the HTTP protocol require web servers to always respond to a HTTP request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
-####Express Callback Example
+#### Express Callback Example
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.js}
 app.get('/', function(req, res){
@@ -69,7 +69,7 @@ app.get('/', function(req, res){
 
 Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code required to construct and return a response object, it is also more error prone.
 
-####Express Callback Potential Bug
+#### Express Callback Potential Bug
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.js}
 app.get('/', function(req, res){
@@ -83,53 +83,72 @@ app.get('/', function(req, res){
 
 In this example, the callback will call any functions after the if statement even if `res.redirect("/bug")`. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response.
 
+### Anonymous Callbacks
 
-###The Request Object
+Like Express, users can provide an anonymous callback using a lambda expression, but we recommend users to define their callback functions for clearer coding style. In the example below, accessing the route `/lambda` returns the message "hello lambda."
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+
+  application.add_route("/lambda", [](const micro::request& req) {
+        micro::response res;
+        res.render_string("hello lambda");
+        return res;
+    });
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+### The Request Object
 
 The request object is populated with data parsed from the HTTP request and transformed into a more user friendly C++ object.
 
-####Example: Getting data From the Request Object
+#### Example: Getting data From the Request Object
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 // Define callback
-micro::response api_callback(const micro::request& req, micro::response& res)
+micro::response api_callback(const micro::request& req)
 {
-    std::string user = req.get_url_param("username"); // user becomes "bjarne"
+    micro::response res;
+    std::string user = req.get_url_param("username"); 
 
     // Logic on for handling the user
 }
 
-// Set callback function to dynamic route
+// In the main, set callback function to dynamic route
 application.add_route("/api/user/<username>", api_callback);
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this example, if a user accesses the url `www.example.com/api/bjarne`, the application developer has access to the username "bjarne" which gets stored in the request object.
+In the example above, if a user accesses the URL `www.example.com/api/bjarne`, the application developer has access to the username "bjarne".
+
+Other methods for the `micro::request` can be viewed in the API.
 
 
-###The Response Object
+### The Response Object
 
-The response object is modified within the callback and will be sent as an appropriately formatted HTTP response after the callback function.
+The response object is modified within the callback and will be sent as an appropriately formatted HTTP response after the callback function has been executed.
 
-####Example: Setting Data in the Response Object
+#### Example: Setting Data in the Response Object
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 micro::response api_callback(const micro::request& req)
 {
+    micro::response res;
     std::string user = req.get_url_param("username");
-
     std::string message = "Hello " + user;
-
     res.render_string(message)
+    return res;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the example above, if a client accesses the url `www.example.com/api/bjarne`, the client would receive a message "hello bjarne".
 
+Other methods for the `micro::response` can be viewed in the API.
 
-###Registering a Route
 
-In order to register a route, you must call `add_route("/path", callback)` on the micro::app object. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to different callback function:
+### Step 2: Registering a Route
+
+After defining a callback function, the callback can be registered for a particular route. In order to register a route, you must call `add_route("/path", callback)` on the `micro::app` instance. The path string can have multiple forward slashes in order to allow for flexibility in how routes are defined. Here are examples of various valid routes that can be registered to different callback functions:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 application.add_route("/api", api_callback);
@@ -137,6 +156,8 @@ application.add_route("/api/users", users_callback);
 application.add_route("/api/users/admin", admin_callback)
 application.add_route("/api/groups", groups_callback);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Dynamic Routes
 
 In order to add convenience to users we provide a system for generating dynamic routes. It would be ridiculous if you had to define a route for each user. Instead, you define a dynamic route like so:
 
@@ -150,7 +171,7 @@ OR
 application.add_route("/api/user/<int:id>", api_callback);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A user can define a route with an string or integer which is possible do to regex parsing on a url.
+A user can define a route with an string or integer which is possible do to through regex parsing on a url.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 "^(/((<[A-Za-z0-9_\\-]+>)|(<int:[A-Za-z0-9_\\-]+>)|([A-Za-z0-9_\\-\\.]+)))*/?$"
@@ -158,9 +179,66 @@ A user can define a route with an string or integer which is possible do to rege
 
 With dynamic routes the application developer can define a route and extract the variable parameters in the request object passed into the callback function. Routes such as `www.example.com/api/user/1` and `www.example.com/api/user/2` can be processed differently within the same callback. This allows for more concise and modular code.
 
+### Defining the HTTP Method
+
+Within the callback, users can check the HTTP method and respond to different methods using `if` statements.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+
+micro::response test_methods(const micro::request& req)
+{
+    micro::response res;
+    if (req.get_method() == "GET") {
+        // Respond to GET request
+        return res;
+    }
+    if (req.get_method() == "POST") {
+        // Respond toe POST request
+        return res;
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We found that this leads to messy and unnecessarily long callback function. To encourage better code design, we give users the ability to define the HTTP method when registering the route so that multiple callbacks can be pointed at the same URL.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+micro::response post(const micro::request& req)
+{
+    micro::response res;
+    res.render_string("POST");
+    return res;
+}
+
+micro::response get(const micro::request& req)
+{
+    micro::response res;
+    res.render_string("GET");
+    return res;
+}
+
+int main(int argc, char** argv){
+    micro::app application;
+    application.add_route("/get_or_post", get, {"GET"});
+    application.add_route("/get_or_post", post, {"POST"});
+    application.run();
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example shows the encouraged usage of multiple callbacks for the same URL. Such practices lead to less complicated callbacks. This design was borrowed from Flask, which allows you to define the method for the route.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.py}
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        do_the_login()
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ### Route Modules
 
 For user convenience we added the ability to build route modules so that application developers can create more modular code with associated routes in separate files. For example if you have a route `/api/` with additional parameters such as `/api/users` or `api/groups` these routes can be put into a module and registered more conveniently together.  
+
+**EXAMPLE
 
 ## The Server
 The server is built on a hybrid between an asynchronous and multi-threaded model. All client-server communication is done asynchronously. That is, new sockets are accepted asynchronously, data is read from these sockets asynchronously, and the response is sent back asynchronously. After a request is received in full, it is added to a thread safe work queue. Threads from a pool process each request, determine which callback to use, and then invoke that callback on the request. When the callback completes, the thread schedules the response for asynchronous write-back to the client. An ancillary thread periodically tracks the progress of the thread pool, canceling any threads that have run longer than allowed by the user-specified (or else, default) timeout.  
