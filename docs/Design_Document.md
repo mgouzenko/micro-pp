@@ -264,23 +264,22 @@ Using autotools makes it easy for a user to port the micro++ library to any Unix
 ### JSON handling
 One of the main advantages of writing a web-application in python or javascript is the easy conversion of objects into JSON. JSON has become the most popular convention for buiding public APIs. For python, different data types including strings, numbers, and arrays can all be stored in the same dictionary and easily converted into a JSON object. For javascript, any javascript object can be converted into JSON. Although custom methods could be created to parse C++ objects to JSON, this requires a lot of extra work compared to python and javascript. In version 1.2 we would like to build an interface that can assist with JSON serialization.  
 
+
 ### Templating
 One missing feature from our framework is the ability to easily template HTML. Other languages have robust templating engines (such as Jinja for Python). However, we have not found a templating engine for C++ that is both well-maintained and simple. Since templating engines are of utmost importance to web development, we hope to address this issue in the future. One option is to write our own templating engine. Another option is to use an already existing - and perhaps orphaned - open-source templating engine, and incorporate it into our library with a simplified wrapper.  
+
 
 ### Interface with industry server like Nginx or Apache
 As discussed above, most web-frameworks have interfaces to connect to production strength servers. In the future we would like to provide users with the abiliy to interface with a CGI protocol so that application developers can connect the web framework to servers like Apache or Nginx
 
 
-### Allow interface for middle-wear
-Adding an interface to connect middleware so that other developers can develop for this web framework. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
+### Allow interface for middleware
+Add an interface to connect middleware so that other developers can build libraries that work with Micro++. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
 
 ### Per-thread database connection
 TODO
 
 ### Threadsafe metrics
-TODO
-
-### Secure session handling (HTTPS)
 TODO
 
 ### Full HTTP 1.1 compliance
