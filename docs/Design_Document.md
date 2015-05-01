@@ -2,7 +2,7 @@
 
 ## Our Project
 
-In this project we built Micro++, a C++ web-framework with a built in web-server. To build the server we used Boost.Asio which is a C++ networking library providing developers with an asynchronous model for network and I/O operations.
+Micro++ is a lightweight web-framework that allows for rapid production of web-applications written in C++. The web-framework wraps a multithreaded HTTP server which is built using the asynchronous C++ networking library, ASIO. Micro++ provides a user friendly interface that allows web developers to register callback functions with associated url routes. These callbacks provide a user-friendly API to handle HTTP requests and send back HTTP responses.
 
 
 ## What is a Web Framework
@@ -59,7 +59,7 @@ Every route has an associated callback function which passes a`micro::request` a
 
 A response object must always be constructed and returned in the callback. We made this design choice because the HTTP protocol require web servers to always respond to a HTTP request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
-#### Express Callback Example
+### Express Callback Example
 
 ~~~{.js}
 app.get('/', function(req, res){
@@ -67,21 +67,8 @@ app.get('/', function(req, res){
 });
 ~~~
 
-Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code, we noticed an increased potential for bugs.
+Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code, we thought that that returning a `micro::response` led to clearer programming style.
 
-#### Express Callback Potential Bug
-
-~~~{.js}
-app.get('/', function(req, res){
-    if("bug") {
-        res.redirect("/bug")
-    }
-
-    // Do other stuff
-});
-~~~
-
-In the example above, all function calls after `res.redirect("/bug")` will be called. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response.
 
 ### Anonymous Callbacks
 
@@ -289,12 +276,12 @@ The asynchronous portion of micro++ is built upon the Asio io_service. The io_se
 ### Optimizations
 Asynchronous client-server communication ensures that our server never blocks when receiving and responding to requests. Furthermore, we made the design decision to execute callbacks on separate threads. This allows us to monitor the execution time of threads (so that they do not exceed the timeout). Furthermore, threads that issue file IO requests can sleep and immediately hand off control to other threads, so that file IO never blocks. 
 
-To make **micro** fast, we paid particular attention to url resolution. That is, when our framework receives a request, we attempt to match it with a callback function as quickly as possible. At first, we maintained an unordered map, which mapped url strings to callback functions. We had a separate function that would test incoming requests and attempt to match them to the appropriate callback. Due to the indirection associated with unordered map lookups, we believe that this approach slowed **micro** down.
+To make micro++ fast, we paid particular attention to url resolution. That is, when our framework receives a request, we attempt to match it with a callback function as quickly as possible. At first, we maintained an unordered map, which mapped url strings to callback functions. We had a separate function that would test incoming requests and attempt to match them to the appropriate callback. Due to the indirection associated with unordered map lookups, we believe that this approach slowed micro++ down.
 
-Later, we implemented the **url_route** object, which stores the a regex and associated callback function. **url_route**s are stored in a vector, so iterating over them and finding a match is likely done in cache. While we do not yet have exact measurements, we believe that this approach made **micro** faster. See the accompanying document titled "Benchmarks: Speed Tests, Clarity, and Ease of Use" for more discussion. 
+Later, we implemented the `url_route` object, which stores the a regex and associated callback function. `url_route`s are stored in a vector, so iterating over them and finding a match is likely done in cache. While we do not yet have exact measurements, we believe that this approach made micro++ faster. See the accompanying document titled "Benchmarks: Speed Tests, Clarity, and Ease of Use" for more discussion. 
 
 ### Blocking Callback Functions: A Potential Speed Drawback
-It must be noted that micro knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
+It must be noted that micro++ knows nothing about the implementation of callbacks, so it is up to the user to make sure that callback functions do not block. For network communications that may block - like querying a third-party API - users are encouraged to maintain a separate asynchronous io thread, perhaps using boost::asio::io_service.  
 
 ### Error Handling
 We take care to make sure that exceptions within callback functions do not bring down the whole server. To achieve this, all callbacks are invoked in try-catch blocks. When debug mode is on, any exception that results from hitting a specific url endpoint is displayed in the browser. When debug mode is off, all exceptions result in the server returning a "500: internal server error" status. In either case, the exception is logged to the console. We hope to make error handling and debug mode more robust in the future.
@@ -322,13 +309,5 @@ As discussed above, most web-frameworks have interfaces to connect to production
 
 
 ### Allow interface for middleware
-Add an interface to connect middleware so that other developers can build libraries that work with Micro++. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
+Add an interface to connect middleware so that other developers can build libraries that work with micro++. Express has an extensive collection of middleware libraries that provide useful functionality such as cookie signing and encryption and more robust multi-part HTTP content body parsers.
 
-### Per-thread database connection
-TODO
-
-### Threadsafe metrics
-TODO
-
-### Full HTTP 1.1 compliance
-TODO

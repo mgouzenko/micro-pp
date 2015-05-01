@@ -81,7 +81,7 @@ namespace micro {
         return false;
     }
 
-    void response::set_cookie(const cookie& c)
+    void response::add_cookie(const cookie& c)
     {
         header h = header();
         h.name = "Set-Cookie";

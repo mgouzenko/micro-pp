@@ -3,11 +3,11 @@ CC = clang++
 LDLIBS = -lmicro -lboost_system -lboost_log-mt -lpthread
 CXXFLAGS = -std=gnu++11
 
-test_app:
+example_app:
 
 .PHONY: all
-all: clean test_app
+all: clean example_app
 
 .PHONY: clean
 clean:
-	rm -f *.o  test_app > /dev/null
+	rm -f *.o  example > /dev/null

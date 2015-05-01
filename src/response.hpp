@@ -66,7 +66,7 @@ namespace micro {
          * Set the key and value of cookie to send back to client
          * @param c: Cookie object
          */
-        void set_cookie(const cookie& c);
+        void add_cookie(const cookie& c);
 
         /**
         * Redirects browser to differnt url endpoint with 307 redirect response
