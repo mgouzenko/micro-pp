@@ -13,7 +13,7 @@ micro::response hello(const micro::request& req)
     time_t t = time(0) + 100;
     res.render_string("hello world");
     micro::cookie c = micro::cookie("fifth", "5", t, "/hello");
-    res.set_cookie(c);
+    res.add_cookie(c);
     return res;
 }
 
