@@ -5,7 +5,6 @@ blog_app
 unit_test_app
 *.info
 mak
-docs/html
 *.a
 *.o
 *.swp
