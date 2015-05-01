@@ -2,6 +2,7 @@ example_webapps/example_app/test_app
 example_webapps/example_module/module_example
 example_webapps/example_web_server/web_server
 blog_app
+unit_test_app
 *.info
 mak
 docs/html
