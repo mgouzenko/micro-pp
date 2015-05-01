@@ -81,10 +81,10 @@ Please note that the Makefiles included with the example_webapps are designed fo
 ## Included examples
 Micro++ is packaged with several examples that showcase some of the library's functionality. Here are some brief descriptions of each example.
 
-* blog - This is the simple blog app that the tutorial carefully builds.
-* tests - This is the app that should be running if you want to use the Python test script in the tests/ directory. the Python test script contains a wide variety of assertions, testing various aspects of micro++'s functionality.
-* web_server - This is a very simple app that acts as a basic web server that can serve static files. It takes two command line arguments. The first is the desired root to serve files from, and the second is the port on which to run the server.
-* exception_test - TODO?
-* module_test - TODO? not currently compiling
-* timeout_test - TODO? not currently compiling
-* test_app - TODO?
+* example_web_server - This is a very simple app that acts as a basic web server that can serve static files. It takes two command line arguments. The first is the desired root to serve files from, and the second is the port on which to run the server.
+* example_module - an example of how to construct and bind a module. 
+* example_app - an assortment of callbacks that demonstrate micro's expected behavior. 
+* tutorial - source code for "Bjarneblog"; the end product of the tutorial. 
+
+## Tests 
+We have added a test suite that runs through micro's api and makes sure all functions are working as expected. These tests are accessible in tests/unit_tests. The script `tests/unit_tests/run_tests.sh` will build and run our test app, run the unit tests - which are written in Python - and then terminate the app.  
