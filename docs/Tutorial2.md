@@ -2,11 +2,11 @@
 
 ## Basic session handling with cookies
 
-In a blogging app, we might only want to let users share posts if they are logged in. Let’s create a very simple authentication system that will let users post entries for an hour if they type log in with the correct hardcoded password.
+In a blogging app, we might only want to let users share posts if they are logged in. Let’s create a very simple authentication system that will let users post entries for an hour if they log in with the correct hardcoded password.
 
 First let’s create a fragment for a basic login prompt:
 
-### fragments/login.html
+**fragments/login.html**
 
 ~~~{.html}
 <form action="login" method="POST" class="add-entry">
@@ -20,9 +20,9 @@ First let’s create a fragment for a basic login prompt:
 </form>
 ~~~
 
-and let’s remove the name field in the new entry form:
+Let’s also remove the name field in the new entry form:
 
-### new_entry_form.html
+**new_entry_form.html**
 
 ~~~{.html}
 <form action="new" method="POST" class="add-entry">
@@ -36,10 +36,11 @@ and let’s remove the name field in the new entry form:
 </form>
 ~~~
 
-What we want to do now is set up a callback for the “login” action, we want to conditionally display a login form or a new entry form on the homepage depending on whether or not you are logged in, and we want to make sure that new entries set the name of the author to the name of the author in the cookie from when the author logged in.
+Now we set up a callback for the “login” action. We want to conditionally display a login form or a new entry form on the homepage depending on whether or not you are logged in. We also want to make sure that the author's name of the new blog entries are set to the name set in the cookie from logging in.
 
-Let’s start by setting up a callback for “login” with the following changes to blog_app.cpp. Add the following line to main before `app.run()`:
+Let’s start by defining a callback for `login` with the following changes to `blog_app.cpp`.
 
+Add the following line to main before `app.run`:
 ~~~{.cpp}
 app.add_route("/login", login, {"POST"});
 ~~~
@@ -50,12 +51,12 @@ Add the following includes to the top of the file:
 #include <ctime>
 ~~~
 
-Add this constant somewhere in the top of the file:
+Add this constant in the top of the file:
 ~~~{.cpp}
 static const std::string blog_passwd = "ILoveCplusplus";
 ~~~
 
-And finally add the following callback somewhere else in the file:
+And finally add the following callback in the file:
 ~~~{.cpp}
 micro::response login(const micro::request& req) {
     micro::response resp;
@@ -77,16 +78,17 @@ micro::response login(const micro::request& req) {
 }
 ~~~
 
-What this callback does is accept a username and password as POST parameters, and depending on their contents, either authenticates the client to use the blog or not, using cookies.
+The callback accepts a username and password as POST parameters, and authenticates the user if the credentials are correct.
 
-If the post parameter given as the password matches the password, we will give the client a cookie that asserts that they are authenticated for one hour (current time + 3600 seconds), and a cookie with their name from the POST param. This name cookie will only be sent to the server when accessing “/new”
+If the post parameter given as the password matches the hard coded password, we will give the client a cookie that asserts that they are authenticated for one hour (current time + 3600 seconds), and a cookie with his or her name that was supplied in the POST param. This name cookie will only be sent to the server when the browser accesses the route “/new” as defined by the additional "path" paramter in the cookie constructor.
 
-If the password doesn’t match, the client gets an authentication failed cookie for 60 seconds, just so the homepage will tell the end user that authentication failed.
+If the password doesn’t match, the client gets an authentication failed cookie for 60 seconds, where the homepage will notify the end user that authentication failed.
 
-Obviously this is not secure whatsoever, but it’s a foundation on which you can build a more secure authentication system. An example of such a system is one where you have a table of hashes that are valid (each with expirations), and when a user types the correct password, you create a random hash, add it to the list, and give it to the client in a Cookie.
+Obviously this is not secure whatsoever, but it’s a foundation on which you can build a more secure authentication system.
 
-Now we just need to modify the homepage and new_page callbacks so that the user sees the prompt that is appropriate for them, and so that they can only post when authenticated.
+Now we just need to modify the homepage and `new_page` callbacks so that the user sees the appropriate prompt, and so that he or she can only post when authenticated.
 
+**blog_app.cpp**
 ~~~{.cpp}
 micro::response homepage(const micro::request &req) {
     micro::response resp;
@@ -133,15 +135,16 @@ micro::response new_entry(const micro::request &req) {
 
 ~~~
 
-As you can see in `homepage()`, we’ve added an if-else chain in the homepage that selectively renders a login form, a login form and authentication error, or a new entry form.
+As you can see in `homepage`, we’ve added an if-else chain that selectively renders a login form, a login form and authentication error, or a new entry form.
 
-In `new_entry()`, we’ve changed the author to `req.get_cookie(“name”)`, and we only create a new entry if the client is authenticated.
+In `new_entry`, we’ve changed the author to `req.get_cookie(“name”)`, and we only create a new entry if the client is authenticated. 
 
 With the theme of adding more security to the app, we’ve also put checks on the title and body to ensure that users can’t make posts with empty parameters.
 
 Now we have a simple, nice-looking blogging app with basic authentication!
 
 ## Producing permalinks to blog entries with URL route params
+
 If a user sees a blog post that they want to remember for future reference, it would be nice if they could get a permanent link to it. We can easily accomplish this with URL route parameters.
 
 Let’s create a new route and callback so the end user can access a blog entry by its id.
@@ -152,7 +155,7 @@ First create the following route specification in `main()`
 app.add_route("/entry/<int:id>", get_entry);
 ~~~
 
-This creates a route that will accept URLs in the form of /entry/1235 or /entry/897. The “id” value will be available in the request object in the callback by accessing req.get_route_param(“id”).
+This creates a route that will accept URLs in the form of `/entry/1235` or `/entry/897`. The “id” value will be available in the `micro::request` passed into the callback by accessing `req.get_route_param(“id”)`.
 
 You can do it like this:
 
@@ -183,7 +186,7 @@ micro::response get_entry(const micro::request &req) {
 }
 ~~~
 
-As you can see, here we render a blog entry as a list of one entry (to maintain the formatting), or render a 404 status with the custom page.str() message if the requested entry id is not found. Now if you have three entries in the blog, visiting `localhost:8080/entry/2` will give you the second entry on a nice formatted page. Now we just need to give users this permalink by changing the for loop in the `homepage()` callback to this:
+As you can see, we still render a blog entry as a list even though it is only one entry. This helps maintain nice CSS formatting. If the requested entry id is not found, we render a 404 status with the custom message. Now, if you have three entries in the blog, visiting `localhost:8080/entry/2` will give you the second entry on a nicely formatted page. We just need to give users this permalink by changing the for loop in the `homepage` callback to this:
 
 ~~~{.cpp}
 page << "<ul class=\"entries\">";
@@ -202,7 +205,7 @@ Now, each entry on the homepage will come with an associated permalink that actu
 
 It would also be nice if you could easily get all of the blog entries written by a particular user. We’re going to accomplish this with query string GET parameters. By doing this, we don’t even need to add any callbacks. By the end of this section, the query `localhost:8080/?u=Bjarne` should only display blog entries written by the user Bjarne.
 
-This is actually extremely simple. Go to the `homepage()` and make the following modifications to the main for loop
+This is actually extremely simple. Go to the `homepage` callback and make the following modifications to the main for loop
 
 ~~~{.cpp}
 page << "<ul class=\"entries\">";
@@ -228,3 +231,9 @@ Here you can see we get the query_param “u”, and if it isn’t blank, we onl
 Now you can simply type “localhost:8080/?u=SomeUser” in your browser and you’ll get selective results.
 
 As an exercise, try building a search bar on the homepage that will send a get request to the homepage with the u query so that users can easily search for posts from their favorite authors.
+
+## Concluding Remarks
+
+Congratulations on finishing the tutorial! We hope you have enjoyed the micro++ tutorial and use it to make a web application of your own.
+
+You can view all the source code for the completed tutorial in `example_webapps/tutorial/`
