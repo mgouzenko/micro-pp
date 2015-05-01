@@ -463,7 +463,7 @@ Let’s also create a style.css file in a new static/ subdirectory
 
 ~~~{.css}
 // Adapted from the stylesheet for the flask microblog example (flaskr)
-body            { font-family: sans-serif; background: #eee; }
+body            { font-family: sans-serif; background: #C4D8E2; }
 a, h1, h2       { color: #377BA8; }
 h1, h2          { font-family: 'Verdana', sans-serif; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
