@@ -2,7 +2,7 @@
 
 ## Our Project
 
-Micro++ is a lightweight web-framework that allows for rapid production of web-applications written in C++. The web-framework wraps a multithreaded HTTP server which is built using the asynchronous networking C++ library, ASIO. Micro++ provides a user friendly interface that allows web developers to register callback functions with associated url routes. These callbacks provide a user-friendly API to handle HTTP requests and send back HTTP responses.
+Micro++ is a lightweight web-framework that allows for rapid production of web-applications written in C++. The web-framework wraps a multithreaded HTTP server which is built using the asynchronous C++ networking library, ASIO. Micro++ provides a user friendly interface that allows web developers to register callback functions with associated url routes. These callbacks provide a user-friendly API to handle HTTP requests and send back HTTP responses.
 
 
 ## What is a Web Framework
