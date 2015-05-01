@@ -37,7 +37,7 @@ micro::response test_one_cookie(const micro::request& req)
     micro::response res;
     time_t t = time(0) + 100;
     micro::cookie c = micro::cookie("cookie_key", "cookie_value", t, "/hello");
-    res.set_cookie(c);
+    res.add_cookie(c);
     return res;
 }
 
@@ -50,8 +50,8 @@ micro::response test_two_cookies(const micro::request& req)
     time_t t = time(0) + 100;
     micro::cookie c1 = micro::cookie("cookie_key1", "cookie_value1", t, "/hello");
     micro::cookie c2 = micro::cookie("cookie_key2", "cookie_value2", t, "/hello");
-    res.set_cookie(c1);
-    res.set_cookie(c2);
+    res.add_cookie(c1);
+    res.add_cookie(c2);
     return res;
 }
 

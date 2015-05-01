@@ -64,16 +64,16 @@ micro::response login(const micro::request& req) {
     if(req.get_post_param("password") == blog_passwd) {
         micro::cookie authenticated{"auth", "true", std::time(nullptr) + 3600};
         micro::cookie name_cookie{"name", req.get_post_param("name"), "/new"};
-        resp.set_cookie(authenticated);
-        resp.set_cookie(name_cookie);
+        resp.add_cookie(authenticated);
+        resp.add_cookie(name_cookie);
     }
     else {
         micro::cookie authenticated{"auth", "failed", std::time(nullptr) + 60};
-        resp.set_cookie(authenticated);
+        resp.add_cookie(authenticated);
     }
-    
+
     resp.redirect("/");
-   
+
     return resp;
 }
 ~~~
@@ -95,7 +95,7 @@ micro::response homepage(const micro::request &req) {
     std::ostringstream page;
 
     render_fragment(page, "fragments/header.html");
-    
+
     if(req.get_cookie("auth") == "true") {
         render_fragment(page, "fragments/new_entry_form.html");
     }
@@ -106,7 +106,7 @@ micro::response homepage(const micro::request &req) {
     else {
         render_fragment(page, "fragments/login.html");
     }
-    
+
     page << "<ul class=\"entries\">";
     for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry)
         page << *entry;
@@ -121,10 +121,10 @@ micro::response homepage(const micro::request &req) {
 
 micro::response new_entry(const micro::request &req) {
     micro::response resp;
-    
-    if(req.get_cookie("auth") == "true" 
-        && !req.get_post_param("body").empty() 
-        && !req.get_post_param("title").empty()) 
+
+    if(req.get_cookie("auth") == "true"
+        && !req.get_post_param("body").empty()
+        && !req.get_post_param("title").empty())
     {
         blog_entry new_entry{req.get_post_param("title"), req.get_post_param("body"), req.get_cookie("name")};
         entries.push_back(new_entry);
@@ -163,12 +163,12 @@ You can do it like this:
 micro::response get_entry(const micro::request &req) {
     micro:: response resp;
     std::ostringstream page;
-   
+
     int id = std::stoi(req.get_route_param("id"));
-    
+
     render_fragment(page, "fragments/header.html");
     page << "<a href=\"/\"><< Homepage</a><br/>";
-    
+
     if(id > entries.size() || id < 1) {
         page << "<br/><h2>404 - Entry not found </h2>";
         render_fragment(page, "fragments/footer.html");
@@ -181,7 +181,7 @@ micro::response get_entry(const micro::request &req) {
         render_fragment(page, "fragments/footer.html");
         resp.render_string(page.str());
     }
-    
+
     return resp;
 }
 ~~~

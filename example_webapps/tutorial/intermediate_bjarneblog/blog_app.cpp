@@ -25,12 +25,12 @@ micro::response login(const micro::request& req) {
     if(req.get_post_param("password") == blog_passwd) {
         micro::cookie authenticated{"auth", "true", std::time(nullptr) + 3600};
         micro::cookie name_cookie{"name", req.get_post_param("name"), "/new"};
-        resp.set_cookie(authenticated);
-        resp.set_cookie(name_cookie);
+        resp.add_cookie(authenticated);
+        resp.add_cookie(name_cookie);
     }
     else {
         micro::cookie authenticated{"auth", "failed", std::time(nullptr) + 60};
-        resp.set_cookie(authenticated);
+        resp.add_cookie(authenticated);
     }
     resp.redirect("/");
     return resp;
