@@ -69,13 +69,6 @@ app.get('/', function(req, res){
 
 Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code, we thought that that returning a `micro::response` led to clearer programming style.
 
-#### Express Callback Example
-
-~~~{.js}
-app.get('/', function(req, res){
-    // Do some stuff
-});
-~~~
 
 ### Anonymous Callbacks
 
