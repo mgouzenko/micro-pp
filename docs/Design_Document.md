@@ -59,7 +59,7 @@ Every route has an associated callback function which passes a`micro::request` a
 
 A response object must always be constructed and returned in the callback. We made this design choice because the HTTP protocol require web servers to always respond to a HTTP request. The design of the callback is largely borrowed from the design of the Javascript Express web framework as illustrated here:
 
-#### Express Callback Example
+### Express Callback Example
 
 ~~~{.js}
 app.get('/', function(req, res){
