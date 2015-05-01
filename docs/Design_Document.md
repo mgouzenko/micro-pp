@@ -67,21 +67,15 @@ app.get('/', function(req, res){
 });
 ~~~
 
-Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code, we noticed an increased potential for bugs.
+Like Express, we originally passed the request and response as parameters into the callback. Although this may reduce two two lines of code, we thought that that returning a `micro::response` led to clearer programming style.
 
-#### Express Callback Potential Bug
+#### Express Callback Example
 
 ~~~{.js}
 app.get('/', function(req, res){
-    if("bug") {
-        res.redirect("/bug")
-    }
-
-    // Do other stuff
+    // Do some stuff
 });
 ~~~
-
-In the example above, all function calls after `res.redirect("/bug")` will be called. Although this bug could be avoided by having an else block or inserting an empty return statement, we believe it leads to bugs and can be avoided by the explicit return of a response.
 
 ### Anonymous Callbacks
 
