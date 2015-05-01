@@ -600,3 +600,9 @@ This seems like a lot, but we have actually made the blog a lot simpler and clea
 The `new_entry` callback will now extract the post requests for a new entry and redirect to the homepage. We can safely do this because we defined that the callback will only be reached when the request method is a POST.
 
 If you build and run the blog, you will see that it looks much nicer with all of the user functionality takes place on the homepage.
+
+## Concluding Remarks
+
+Congratulations on finishing the tutorial! To learn some more advanced features of micro++ and further improve your blog, try Tutorial 2!
+
+You can view all the source code for the completed tutorial in `example_webapps/tutorial/`
